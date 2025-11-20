@@ -66,12 +66,27 @@
 
 <h2>Select Your Taxi Seat</h2>
 <p>Only 2 seats available (comfortable back seats)</p>
+<div class="bus">
+  <!-- Front row with driver -->
+  <div class="row front-row">
+    <div class="driver-seat">
+      <span class="driver-icon">🧑‍✈️</span>
+      <span class="driver-label">Driver</span>
+    </div>
 
-<div class="seat-container">
-    <div class="seat" data-seat="Left Seat">L</div>
-    <div class="seat" data-seat="Right Seat">R</div>
-</div>
+    <button class="seat" data-seat="A1">A1</button>
+    <button class="seat" data-seat="A2">A2</button>
+    <button class="seat" data-seat="A3">A3</button>
+  </div>
 
+  <!-- Next rows -->
+  <div class="row">
+    <div class="spacer"></div>
+    <button class="seat" data-seat="B1">B1</button>
+    <button class="seat" data-seat="B2">B2</button>
+    <button class="seat" data-seat="B3">B3</button>
+  </div>
+  <!-- …more rows… -->
 <button class="confirm-btn" onclick="confirmBooking()">Confirm Booking</button>
 
 <script>

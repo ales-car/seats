@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Taxi Seat Booking</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f3f3f3;
+        padding: 40px;
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    .seat-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .seat {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        border: 2px solid #555;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        cursor: pointer;
+        background: white;
+        transition: 0.2s;
+    }
+
+    .seat.selected {
+        background: #ff3600;
+        color: white;
+        border-color: #ff3600;
+        transform: scale(1.1);
+    }
+
+    .confirm-btn {
+        margin-top: 40px;
+        padding: 15px 40px;
+        font-size: 20px;
+        border: none;
+        background: #222;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .confirm-btn:hover {
+        background: #ff3600;
+    }
+</style>
+</head>
+<body>
+
+<h2>Select Your Taxi Seat</h2>
+<p>Only 2 seats available (comfortable back seats)</p>
+
+<div class="seat-container">
+    <div class="seat" data-seat="Left Seat">L</div>
+    <div class="seat" data-seat="Right Seat">R</div>
+</div>
+
+<button class="confirm-btn" onclick="confirmBooking()">Confirm Booking</button>
+
+<script>
+let selectedSeat = null;
+
+document.querySelectorAll(".seat").forEach(seat => {
+    seat.addEventListener("click", () => {
+        document.querySelectorAll(".seat").forEach(s => s.classList.remove("selected"));
+        seat.classList.add("selected");
+        selectedSeat = seat.getAttribute("data-seat");
+    });
+});
+
+function confirmBooking() {
+    if (!selectedSeat) {
+        alert("Please select a seat first.");
+        return;
+    }
+
+    // CHANGE THIS TO YOUR NUMBER
+    const phone = "41767775898";  
+
+    const message = encodeURIComponent(
+        "Ahoj Aleši! Rezervoval jsem si sedadlo: " + selectedSeat
+    );
+
+    window.location.href = "https://wa.me/" + phone + "?text=" + message;
+}
+</script>
+
+</body>
+</html>

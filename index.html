@@ -2,29 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Aleš – Car Seat Selector</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Select Your Car Seat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root {
-      --bg: #05070a;
-      --card: #10141b;
-      --card-soft: #151b26;
-      --accent: #ff3600;
-      --accent-soft: #ff7a3b;
-      --text: #f5f7fa;
-      --muted: #9aa4b5;
-      --seat-free: #1c212d;
-      --seat-hover: #262d3b;
-      --seat-selected: #ffc857;
-      --seat-reserved: #3b4255;
-      --radius-xl: 20px;
-      --radius: 12px;
-      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.6);
-      --t-fast: 0.18s ease-out;
-    }
-
     * {
       box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
     }
 
     body {
@@ -33,855 +17,377 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: radial-gradient(circle at top, #1c2837 0, #02040b 55%);
-      color: var(--text);
+      background: #f5f5f5;
     }
 
     .app {
+      background: #ffffff;
+      padding: 32px 28px 40px;
+      border-radius: 14px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+      text-align: center;
+      max-width: 420px;
       width: 100%;
-      max-width: 780px;
-      background: linear-gradient(135deg, #06070f, #050506);
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.03);
-      box-shadow: var(--shadow-soft);
-      padding: 20px 22px 22px;
     }
 
-    @media (max-width: 640px) {
-      .app {
-        padding: 16px;
-      }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
     }
 
-    /* HEADER */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
+    .subtitle {
+      margin-bottom: 24px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .car-wrapper {
+      display: inline-block;
+      padding: 18px 20px 22px;
+      border-radius: 18px;
+      background: #f0f2f4;
+    }
+
+    .car {
+      display: grid;
+      grid-template-columns: repeat(2, 80px);
+      grid-template-rows: repeat(2, 80px);
+      gap: 14px;
+      justify-content: center;
       align-items: center;
     }
 
-    .brand {
+    /* Driver (front-left) */
+    .driver {
+      background: #222;
+      color: #fff;
+      border-radius: 18px;
       display: flex;
-      gap: 10px;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      position: relative;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
     }
 
-    .brand-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
+    .driver span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.75;
+      margin-top: 4px;
+    }
+
+    /* Seats */
+    .seat {
+      border-radius: 18px;
+      border: 2px solid #222;
+      background: #fff;
+      width: 80px;
+      height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: conic-gradient(
-        from 220deg,
-        #ff3600,
-        #ffd452,
-        #ff3600 55%,
-        #ff7b3a,
-        #ff3600
-      );
-      color: #050508;
-      font-weight: 700;
-      box-shadow: 0 0 16px rgba(255, 96, 0, 0.7);
-    }
-
-    .brand-text h1 {
-      margin: 0;
-      font-size: 17px;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
-
-    .brand-text span {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .trip-info {
-      text-align: right;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .trip-info strong {
-      display: block;
-      color: var(--text);
-      font-size: 13px;
-    }
-
-    /* TOP CONTROLS */
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 16px;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: 140px;
-      flex: 1 1 160px;
-    }
-
-    .field label {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .pill-input {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 11px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: radial-gradient(circle at top left, #171c28, #0c1018);
-      font-size: 13px;
-      color: var(--text);
-    }
-
-    .pill-input span.icon {
-      font-size: 15px;
-      opacity: 0.95;
-    }
-
-    .pill-input input {
-      border: none;
-      outline: none;
-      background: transparent;
-      color: inherit;
-      font: inherit;
-      width: 100%;
-    }
-
-    .pill-input input::placeholder {
-      color: #566072;
-    }
-
-    .route-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 11px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.02);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .route-pill strong {
-      color: var(--accent-soft);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    /* MAIN */
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(230px, 1.1fr);
-      gap: 18px;
-    }
-
-    @media (max-width: 720px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* CAR CARD */
-    .car-card {
-      background: radial-gradient(circle at top, #151b25, #05070c);
-      border-radius: var(--radius-xl);
-      padding: 16px 14px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 600;
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.1s ease,
+        box-shadow 0.15s ease,
+        border-color 0.2s ease;
+      user-select: none;
       position: relative;
     }
 
-    .car-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      font-size: 12px;
-      color: var(--muted);
+    .seat-label {
+      position: absolute;
+      bottom: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
     }
 
-    .car-name {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+    .seat.selected {
+      background: #ff3600;
+      color: #fff;
+      border-color: #ff3600;
+      box-shadow: 0 10px 20px rgba(255, 54, 0, 0.4);
+      transform: translateY(-2px);
     }
 
-    .car-name strong {
-      font-size: 13px;
-      color: var(--text);
+    .seat.booked {
+      background: #d2d7dd;
+      border-color: #b5bcc5;
+      color: #666;
+      cursor: not-allowed;
+      box-shadow: none;
     }
 
-    .car-tag {
+    .seat.booked::after {
+      content: "Booked";
+      position: absolute;
+      bottom: 6px;
       font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.13em;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.02);
+      letter-spacing: 0.08em;
+      color: #444;
     }
 
     .legend {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      font-size: 11px;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
-    .legend span {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .legend-dot {
-      width: 12px;
-      height: 10px;
-      border-radius: 999px;
-    }
-    .legend-dot.free {
-      background: var(--seat-free);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .legend-dot.selected {
-      background: var(--seat-selected);
-    }
-    .legend-dot.reserved {
-      background: var(--seat-reserved);
-    }
-
-    .car-body {
-      background: linear-gradient(145deg, #111722, #070910);
-      border-radius: 18px;
-      padding: 16px 14px 14px;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-      position: relative;
-    }
-
-    .car-top-label {
-      position: absolute;
-      top: 7px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--muted);
-      opacity: 0.7;
-    }
-
-    .car-grid {
-      margin-top: 10px;
-      display: grid;
-      grid-template-rows: repeat(2, 68px);
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px 14px;
-      align-items: center;
-    }
-
-    /* DRIVER */
-    .driver-seat {
-      grid-row: 1 / 2;
-      grid-column: 1 / 2;
-      border-radius: var(--radius);
-      background: radial-gradient(circle at top, #212a3c, #070910);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      text-align: center;
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.8);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .driver-seat::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 55%);
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .driver-icon {
-      font-size: 26px;
-      z-index: 1;
-    }
-
-    .driver-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      margin-top: 4px;
-      z-index: 1;
-    }
-
-    .driver-chip {
-      z-index: 1;
-      margin-top: 4px;
-      font-size: 9px;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-    }
-
-    /* SEATS */
-    .seat {
-      border-radius: var(--radius);
-      background: var(--seat-free);
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      color: var(--text);
+      gap: 16px;
+      margin: 14px 0 24px;
       font-size: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      position: relative;
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.75);
-      transition: background var(--t-fast), transform var(--t-fast),
-        box-shadow var(--t-fast), border-color var(--t-fast), color var(--t-fast);
-      padding: 7px 6px;
-      text-align: center;
+      color: #555;
     }
 
-    .seat:hover:not(.reserved):not(.selected) {
-      background: var(--seat-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.8);
-    }
-
-    .seat.selected {
-      background: var(--seat-selected);
-      color: #1b1302;
-      border-color: rgba(255, 255, 255, 0.65);
-      box-shadow: 0 16px 30px rgba(255, 200, 87, 0.32);
-      transform: translateY(-1px);
-    }
-
-    .seat.reserved {
-      background: var(--seat-reserved);
-      color: #737b8d;
-      border-style: dashed;
-      cursor: not-allowed;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.85);
-    }
-
-    .seat-code {
-      font-size: 11px;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      opacity: 0.9;
-    }
-
-    .seat-label {
-      font-size: 11px;
-      margin-top: 2px;
-    }
-
-    .seat-price {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    .seat.selected .seat-price {
-      color: #5b4106;
-    }
-
-    .seat.reserved .seat-price {
-      color: #58607a;
-    }
-
-    .seat-dot {
-      position: absolute;
-      top: 7px;
-      right: 7px;
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #1fe08d;
-      box-shadow: 0 0 10px rgba(31, 224, 141, 0.9);
-    }
-    .seat.selected .seat-dot {
-      background: #ffc857;
-      box-shadow: 0 0 10px rgba(255, 200, 87, 0.9);
-    }
-    .seat.reserved .seat-dot {
-      background: #ff4e4e;
-      box-shadow: 0 0 10px rgba(255, 78, 78, 0.9);
-    }
-
-    /* RIGHT SUMMARY */
-    .summary-card {
-      background: linear-gradient(145deg, rgba(255, 54, 0, 0.12), #080910);
-      border-radius: var(--radius-xl);
-      padding: 14px 14px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      margin-bottom: 12px;
-    }
-
-    .summary-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .summary-header h2 {
-      margin: 0;
-      font-size: 14px;
-    }
-
-    .summary-header span.badge {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--muted);
-    }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      margin-bottom: 5px;
-      color: var(--muted);
-    }
-
-    .summary-row strong {
-      color: var(--text);
-    }
-
-    .summary-row.total {
-      margin-top: 4px;
-      padding-top: 7px;
-      border-top: 1px dashed rgba(255, 255, 255, 0.22);
-      font-size: 14px;
-    }
-
-    .summary-row.total strong {
-      color: var(--accent-soft);
-      font-size: 16px;
-    }
-
-    .selected-box {
-      background: var(--card-soft);
-      border-radius: var(--radius);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 8px 9px;
-      min-height: 44px;
-      font-size: 12px;
-    }
-
-    .selected-pill {
+    .legend-item {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 200, 87, 0.65);
-      background: rgba(255, 200, 87, 0.08);
-      color: #f4c95a;
-      font-size: 11px;
-      margin: 2px;
     }
 
-    .selected-pill small {
-      font-size: 10px;
-      color: var(--muted);
+    .legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 5px;
+      border: 2px solid #222;
+      background: #fff;
     }
 
-    .selected-box span.empty {
-      font-size: 11px;
-      color: var(--muted);
+    .legend-dot.selected {
+      border-color: #ff3600;
+      background: #ff3600;
     }
 
-    .btn-primary {
-      width: 100%;
-      margin-top: 14px;
+    .legend-dot.booked {
+      border-color: #b5bcc5;
+      background: #d2d7dd;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 34px;
       border-radius: 999px;
       border: none;
-      background: linear-gradient(135deg, var(--accent), #ff8a3d);
-      color: #050505;
-      font-size: 14px;
+      background: #222;
+      color: #fff;
+      font-size: 16px;
       font-weight: 600;
-      padding: 11px 16px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      box-shadow: 0 18px 40px rgba(255, 96, 0, 0.55);
-      transition: transform var(--t-fast), box-shadow var(--t-fast),
-        filter var(--t-fast), opacity var(--t-fast);
+      margin-top: 4px;
+      transition:
+        background 0.2s ease,
+        transform 0.1s ease,
+        box-shadow 0.15s ease;
     }
 
-    .btn-primary span.icon {
-      font-size: 17px;
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.4;
+    .btn:disabled {
+      opacity: 0.45;
       cursor: default;
       box-shadow: none;
+      transform: none;
     }
 
-    .btn-primary:not(:disabled):hover {
+    .btn:not(:disabled):hover {
+      background: #000;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
       transform: translateY(-1px);
-      filter: brightness(1.05);
-      box-shadow: 0 20px 50px rgba(255, 96, 0, 0.65);
     }
 
-    .tiny-note {
-      margin-top: 7px;
-      font-size: 10px;
-      color: var(--muted);
-      line-height: 1.4;
+    .status {
+      margin-top: 14px;
+      font-size: 13px;
+      min-height: 18px;
+      color: #444;
     }
 
-    .status-line {
-      margin-top: 6px;
-      font-size: 11px;
-      color: var(--muted);
+    .status.ok {
+      color: #0a7a3f;
     }
-    .status-line strong {
-      color: var(--text);
+
+    .status.error {
+      color: #c62828;
+    }
+
+    @media (max-width: 480px) {
+      .app {
+        margin: 16px;
+        padding: 24px 18px 30px;
+      }
+      .car {
+        grid-template-columns: repeat(2, 72px);
+        grid-template-rows: repeat(2, 72px);
+        gap: 12px;
+      }
+      .seat,
+      .driver {
+        width: 72px;
+        height: 72px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <div class="header">
-      <div class="brand">
-        <div class="brand-logo">A</div>
-        <div class="brand-text">
-          <h1>Aleš Car</h1>
-          <span>3–seat taxi demo</span>
+    <h1>Select Your Car Seat</h1>
+    <p class="subtitle">1 front passenger seat + 2 back seats (3 in total)</p>
+
+    <!-- CAR LAYOUT -->
+    <div class="car-wrapper">
+      <div class="car">
+        <!-- Front row -->
+        <div class="driver">
+          🚗
+          <span>Driver</span>
         </div>
-      </div>
-      <div class="trip-info">
-        <strong>Private Car</strong>
-        <span>Driver + 3 passenger seats</span>
+
+        <div
+          class="seat"
+          data-seat-id="front"
+          data-seat-name="Front Passenger"
+        >
+          FP
+          <div class="seat-label">Front</div>
+        </div>
+
+        <!-- Back row -->
+        <div
+          class="seat"
+          data-seat-id="back-left"
+          data-seat-name="Back Left"
+        >
+          BL
+          <div class="seat-label">Back L</div>
+        </div>
+
+        <div
+          class="seat"
+          data-seat-id="back-right"
+          data-seat-name="Back Right"
+        >
+          BR
+          <div class="seat-label">Back R</div>
+        </div>
       </div>
     </div>
 
-    <div class="controls">
-      <div class="field">
-        <label for="date">Ride date</label>
-        <div class="pill-input">
-          <span class="icon">📅</span>
-          <input id="date" type="date" required />
-        </div>
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item">
+        <span class="legend-dot"></span> Free
       </div>
-
-      <div class="field">
-        <label>Route</label>
-        <div class="route-pill">
-          <strong>Demo</strong>
-          <span>City A → City B</span>
-        </div>
+      <div class="legend-item">
+        <span class="legend-dot selected"></span> Selected
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot booked"></span> Booked
       </div>
     </div>
 
-    <div class="layout">
-      <!-- LEFT: car layout -->
-      <section class="car-card">
-        <div class="car-card-header">
-          <div class="car-name">
-            <strong>Compact Taxi</strong>
-            <span>1 driver • 3 passenger seats</span>
-          </div>
-          <div class="legend">
-            <span><span class="legend-dot free"></span> Free</span>
-            <span><span class="legend-dot selected"></span> Selected</span>
-            <span><span class="legend-dot reserved"></span> Reserved</span>
-          </div>
-        </div>
-
-        <div class="car-body">
-          <div class="car-top-label">Front</div>
-          <div class="car-grid">
-            <!-- row 1: driver + front passenger -->
-            <div class="driver-seat">
-              <div class="driver-icon">🧑‍✈️</div>
-              <div class="driver-label">Driver</div>
-              <div class="driver-chip">Steering</div>
-            </div>
-
-            <button
-              class="seat"
-              data-seat="P1"
-              data-label="Front passenger"
-              data-price="15"
-            >
-              <div class="seat-dot"></div>
-              <div class="seat-code">P1</div>
-              <div class="seat-label">Front passenger</div>
-              <div class="seat-price">CHF 15</div>
-            </button>
-
-            <!-- row 2: back seats -->
-            <button
-              class="seat"
-              data-seat="B1"
-              data-label="Back left"
-              data-price="10"
-            >
-              <div class="seat-dot"></div>
-              <div class="seat-code">B1</div>
-              <div class="seat-label">Back left</div>
-              <div class="seat-price">CHF 10</div>
-            </button>
-
-            <button
-              class="seat"
-              data-seat="B2"
-              data-label="Back right"
-              data-price="10"
-            >
-              <div class="seat-dot"></div>
-              <div class="seat-code">B2</div>
-              <div class="seat-label">Back right</div>
-              <div class="seat-price">CHF 10</div>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- RIGHT: summary -->
-      <section>
-        <div class="summary-card">
-          <div class="summary-header">
-            <h2>Reservation summary</h2>
-            <span class="badge">Local demo only</span>
-          </div>
-          <div class="summary-row">
-            <span>Selected seats</span>
-            <strong id="summary-seats-count">0</strong>
-          </div>
-          <div class="summary-row">
-            <span>Base fare (CHF)</span>
-            <strong id="summary-base">0</strong>
-          </div>
-          <div class="summary-row total">
-            <span>Total</span>
-            <strong id="summary-total">CHF 0</strong>
-          </div>
-        </div>
-
-        <div class="selected-box" id="selected-list">
-          <span class="empty">No seats selected yet.</span>
-        </div>
-
-        <button class="btn-primary" id="reserve-btn" disabled>
-          <span class="icon">✅</span>
-          <span>Confirm reservation</span>
-        </button>
-
-        <div class="tiny-note">
-          Reservations are stored in your browser only using
-          <code>localStorage</code> – this is a front-end demo, not a real
-          payment/booking system. To go “real”, you’d connect this to a backend
-          and database.
-        </div>
-        <div class="status-line" id="status-line">
-          <strong>Status:</strong> choose a date and click on seats.
-        </div>
-      </section>
-    </div>
+    <button id="confirmBtn" class="btn" disabled>Confirm Booking</button>
+    <div id="status" class="status"></div>
   </div>
 
   <script>
-    // --- Simple "fake backend" using localStorage ---
-    const STORAGE_KEY = "ales_car_reservations_v1";
+    // Very simple “storage”: all reservations in localStorage under this key.
+    const STORAGE_KEY = "taxi_seat_reservations_v1";
 
     function loadReservations() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : {};
-      } catch (e) {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch {
         return {};
       }
     }
 
-    function saveReservations(data) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    function saveReservations(reservations) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(reservations));
     }
 
-    const state = {
-      reservations: loadReservations(), // { dateString: ["P1", "B1"] }
-      selectedSeats: new Set(),
-      date: null,
-    };
+    // You could use a real ride id / date; for now it's a static example trip:
+    const TRIP_ID = "2025-11-20_Boston-Chicago";
 
-    const dateInput = document.getElementById("date");
-    const seatButtons = Array.from(document.querySelectorAll(".seat"));
-    const reserveBtn = document.getElementById("reserve-btn");
-    const statusLine = document.getElementById("status-line");
-    const summarySeats = document.getElementById("summary-seats-count");
-    const summaryBase = document.getElementById("summary-base");
-    const summaryTotal = document.getElementById("summary-total");
-    const selectedList = document.getElementById("selected-list");
+    const reservations = loadReservations();
+    const seats = document.querySelectorAll(".seat");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const statusEl = document.getElementById("status");
+    let selectedSeat = null;
 
-    // Set default date = today
-    (function initDate() {
-      const today = new Date();
-      const y = today.getFullYear();
-      const m = String(today.getMonth() + 1).padStart(2, "0");
-      const d = String(today.getDate()).padStart(2, "0");
-      const iso = `${y}-${m}-${d}`;
-      dateInput.value = iso;
-      state.date = iso;
-      refreshForDate();
-    })();
-
-    dateInput.addEventListener("change", () => {
-      state.date = dateInput.value;
-      state.selectedSeats.clear();
-      refreshForDate();
-      updateSummary();
-      updateSelectedList();
+    // Mark already booked seats from localStorage
+    const bookedForTrip = reservations[TRIP_ID] || [];
+    seats.forEach((seat) => {
+      const id = seat.dataset.seatId;
+      if (bookedForTrip.includes(id)) {
+        seat.classList.add("booked");
+      }
     });
 
-    seatButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        if (!state.date) {
-          alert("Choose a date first.");
+    function clearSelection() {
+      seats.forEach((s) => s.classList.remove("selected"));
+      selectedSeat = null;
+      confirmBtn.disabled = true;
+    }
+
+    seats.forEach((seat) => {
+      seat.addEventListener("click", () => {
+        if (seat.classList.contains("booked")) {
+          statusEl.textContent = "This seat is already booked.";
+          statusEl.className = "status error";
           return;
         }
-        if (btn.classList.contains("reserved")) return;
 
-        const id = btn.dataset.seat;
-        if (state.selectedSeats.has(id)) {
-          state.selectedSeats.delete(id);
-          btn.classList.remove("selected");
-        } else {
-          state.selectedSeats.add(id);
-          btn.classList.add("selected");
+        if (selectedSeat === seat) {
+          // unselect
+          clearSelection();
+          statusEl.textContent = "";
+          statusEl.className = "status";
+          return;
         }
-        updateSummary();
-        updateSelectedList();
-        updateStatus();
+
+        // select this one, deselect others
+        seats.forEach((s) => s.classList.remove("selected"));
+        seat.classList.add("selected");
+        selectedSeat = seat;
+        confirmBtn.disabled = false;
+        statusEl.textContent =
+          "Selected: " + seat.dataset.seatName + ". Click confirm to book.";
+        statusEl.className = "status";
       });
     });
 
-    reserveBtn.addEventListener("click", () => {
-      if (!state.date || state.selectedSeats.size === 0) return;
+    confirmBtn.addEventListener("click", () => {
+      if (!selectedSeat) return;
 
-      const list = Array.from(state.selectedSeats);
-      const reservations = loadReservations();
-      const existing = new Set(reservations[state.date] || []);
+      const id = selectedSeat.dataset.seatId;
+      const name = selectedSeat.dataset.seatName;
 
-      list.forEach((seat) => existing.add(seat));
-      reservations[state.date] = Array.from(existing);
+      // Mark as booked in memory
+      const current = reservations[TRIP_ID] || [];
+      if (!current.includes(id)) {
+        current.push(id);
+      }
+      reservations[TRIP_ID] = current;
       saveReservations(reservations);
-      state.reservations = reservations;
 
-      // Clear selection & re-render
-      state.selectedSeats.clear();
-      refreshForDate();
-      updateSummary();
-      updateSelectedList();
-      updateStatus("Seats reserved for this date (in this browser).");
+      // Update UI
+      selectedSeat.classList.remove("selected");
+      selectedSeat.classList.add("booked");
+      selectedSeat = null;
+      confirmBtn.disabled = true;
+
+      statusEl.textContent =
+        "Seat booked: " +
+        name +
+        ". (Stored in your browser – not a real backend.)";
+      statusEl.className = "status ok";
     });
-
-    function refreshForDate() {
-      const reservedForDate = new Set(state.reservations[state.date] || []);
-      seatButtons.forEach((btn) => {
-        const id = btn.dataset.seat;
-        btn.classList.remove("reserved", "selected");
-        if (reservedForDate.has(id)) {
-          btn.classList.add("reserved");
-        }
-      });
-      updateStatus();
-    }
-
-    function updateSummary() {
-      let count = state.selectedSeats.size;
-      let base = 0;
-      state.selectedSeats.forEach((id) => {
-        const btn = seatButtons.find((b) => b.dataset.seat === id);
-        if (btn) base += Number(btn.dataset.price || 0);
-      });
-
-      summarySeats.textContent = count;
-      summaryBase.textContent = base.toFixed(2);
-      summaryTotal.textContent = `CHF ${base.toFixed(2)}`;
-
-      reserveBtn.disabled = !state.date || count === 0;
-    }
-
-    function updateSelectedList() {
-      selectedList.innerHTML = "";
-      if (state.selectedSeats.size === 0) {
-        const span = document.createElement("span");
-        span.className = "empty";
-        span.textContent = "No seats selected yet.";
-        selectedList.appendChild(span);
-        return;
-      }
-      state.selectedSeats.forEach((id) => {
-        const btn = seatButtons.find((b) => b.dataset.seat === id);
-        const label = btn?.dataset.label || id;
-        const price = btn?.dataset.price || "0";
-
-        const pill = document.createElement("span");
-        pill.className = "selected-pill";
-        pill.innerHTML = `<strong>${id}</strong> ${label} <small>CHF ${Number(
-          price
-        ).toFixed(2)}</small>`;
-        selectedList.appendChild(pill);
-      });
-    }
-
-    function updateStatus(message) {
-      if (!state.date) {
-        statusLine.innerHTML =
-          "<strong>Status:</strong> choose a date and click on seats.";
-        return;
-      }
-
-      const reservedCount = (state.reservations[state.date] || []).length;
-      const selectedCount = state.selectedSeats.size;
-      const msg =
-        message ||
-        `Selected: ${selectedCount}, reserved on this date in this browser: ${reservedCount}.`;
-      statusLine.innerHTML = `<strong>Status:</strong> ${msg}`;
-    }
   </script>
 </body>
 </html>

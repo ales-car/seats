@@ -61,19 +61,6 @@
       text-shadow: 0 8px 24px rgba(0,0,0,0.45);
     }
 
-    h1 {
-      margin: 0 0 8px;
-      text-align: center;
-      font-size: 28px;
-    }
-
-    p.subtitle {
-      margin: 0 0 24px;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 15px;
-    }
-
     /* Layout */
     .content {
       display: flex;
@@ -274,19 +261,13 @@
   <div class="page">
     <!-- TOP BANNER -->
     <header class="hero">
-      <!-- Replace banner.jpg with your Canva-exported image file name or external URL -->
+      <!-- Use your uploaded Canva banner file name here -->
       <img src="banner.jpg" alt="Car ride banner">
-      <div class="hero-title">Checkout</div>
+      <div class="hero-title">Select Your Car Seat</div>
     </header>
 
     <main class="content">
-      <div>
-        <h1>Select Your Car Seat</h1>
-        <p class="subtitle">
-          1 front passenger seat + 2 back seats (3 in total)
-        </p>
-      </div>
-
+      <!-- Seat selection card -->
       <section class="car-layout-card" aria-label="Seat selection">
         <div class="car-grid">
           <!-- DRIVER (not selectable) -->
@@ -347,4 +328,119 @@
     <script>
       // --- CONFIG ----------------------------------------------------
       const TOTAL_SEATS = 3; // FP, BL, BR
-      const STORAGE_KEY = "carSeatBookings_v1"; // change if you want a fresh
+      const STORAGE_KEY = "carSeatBookings_v1";
+
+      // --- STATE -----------------------------------------------------
+      const defaultState = { FP: "free", BL: "free", BR: "free" };
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return { ...defaultState };
+          const parsed = JSON.parse(raw);
+          return { ...defaultState, ...parsed };
+        } catch (e) {
+          console.warn("Failed to load seat state:", e);
+          return { ...defaultState };
+        }
+      }
+
+      function saveState(state) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          console.warn("Failed to save seat state:", e);
+        }
+      }
+
+      let seatState = loadState();
+      let selectedSeatId = null;
+
+      const seatStatusEl = document.getElementById("seatStatus");
+      const confirmBtn = document.getElementById("confirmBtn");
+      const messageEl = document.getElementById("message");
+
+      const seatElements = Array.from(
+        document.querySelectorAll(".seat[data-seat-id]")
+      );
+
+      // --- DOM HELPERS ----------------------------------------------
+      function applySeatClasses(id) {
+        const el = document.querySelector(`.seat[data-seat-id="${id}"]`);
+        if (!el) return;
+        el.classList.remove("selected", "booked");
+        if (seatState[id] === "booked") {
+          el.classList.add("booked");
+        }
+      }
+
+      function clearSelectedClass() {
+        seatElements.forEach(el => el.classList.remove("selected"));
+      }
+
+      function updateStatus() {
+        const booked = Object.values(seatState).filter(s => s === "booked").length;
+        const free = TOTAL_SEATS - booked;
+        const selText = selectedSeatId ? ` | Selected: ${selectedSeatId}` : "";
+        seatStatusEl.textContent =
+          `Free seats: ${free} • Booked: ${booked}${selText}`;
+        confirmBtn.disabled = !selectedSeatId;
+      }
+
+      function showMessage(text, type) {
+        messageEl.textContent = text || "";
+        messageEl.className = "message" + (type ? " " + type : "");
+      }
+
+      // --- INIT ------------------------------------------------------
+      seatElements.forEach(el => {
+        const id = el.dataset.seatId;
+
+        // Apply initial booked class
+        applySeatClasses(id);
+
+        el.addEventListener("click", () => {
+          if (el.classList.contains("booked")) return; // can't select booked
+
+          // toggle selection
+          if (selectedSeatId === id) {
+            selectedSeatId = null;
+            el.classList.remove("selected");
+          } else {
+            clearSelectedClass();
+            selectedSeatId = id;
+            el.classList.add("selected");
+          }
+
+          showMessage("", "");
+          updateStatus();
+        });
+      });
+
+      confirmBtn.addEventListener("click", () => {
+        if (!selectedSeatId) {
+          showMessage("Please select a seat first.", "error");
+          return;
+        }
+
+        // mark selected seat as booked
+        seatState[selectedSeatId] = "booked";
+        saveState(seatState);
+        applySeatClasses(selectedSeatId);
+
+        const seatLabelMap = { FP: "Front passenger", BL: "Back left", BR: "Back right" };
+        const label = seatLabelMap[selectedSeatId] || selectedSeatId;
+
+        showMessage(`Seat "${label}" is now booked for you.`, "ok");
+
+        selectedSeatId = null;
+        clearSelectedClass();
+        updateStatus();
+      });
+
+      // first status update
+      updateStatus();
+    </script>
+  </div>
+</body>
+</html>

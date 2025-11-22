@@ -86,10 +86,11 @@
     }
 
     .car-top-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 620px;
-    }
+  position: relative;
+  width: 100%;
+  max-width: 460px;   /* smaller */
+  margin: 0 auto;
+}
 
     .car-top-image {
       width: 100%;
@@ -123,9 +124,10 @@
 
     /* Seat dots (minimal, 50% transparent style) */
     .seat {
+      .seat {
       position: absolute;
-      width: 78px;
-      height: 78px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       border: 3px solid var(--seat-free-border);
       background: var(--seat-free-bg);
@@ -296,19 +298,20 @@
     .message.error { color: #dc2626; }
 
     @media (max-width: 640px) {
-      .seat-section {
-        padding: 18px 16px 24px;
-      }
+  .seat-section {
+    padding: 18px 16px 24px;
+  }
 
-      .seat {
-        width: 64px;
-        height: 64px;
-      }
+  .seat {
+    width: 52px;
+    height: 52px;
+  }
 
-      .seat-code {
-        font-size: 10px;
-      }
-    }
+  .seat-code {
+    font-size: 9px;
+  }
+}
+
   </style>
 </head>
 

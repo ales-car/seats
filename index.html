@@ -13,9 +13,9 @@
       --primary: #ff3600;
       --primary-dark: #d42d00;
       --bg: #f4f4f6;
-      --seat-free: rgba(255, 255, 255, 0.65);
+      --seat-free: rgba(255, 255, 255, 0.25);
       --seat-selected: #ff3600;
-      --seat-booked: rgba(15, 23, 42, 0.86);
+      --seat-booked: rgba(15, 23, 42, 0.56);
       --text-dark: #222;
       --text-muted: #666;
       --card-radius: 28px;
@@ -69,22 +69,22 @@
     }
 
     /* Two-column main layout */
-    .main-layout {
-      display: flex;
-      gap: 24px;
-      align-items: flex-start;
-      flex-wrap: wrap;
-    }
+      .main-layout {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+        flex-wrap: nowrap;         /* force two columns */
+      }
 
-    .col-driver {
-      flex: 0 1 40%;
-      min-width: 260px;
-    }
-
-    .col-seats {
-      flex: 1 1 60%;
-      min-width: 320px;
-    }
+      .col-driver {
+        flex: 0 1 40%;
+        min-width: 260px;
+      }
+      
+      .col-seats {
+        flex: 1 1 60%;
+        min-width: 320px;
+      }
 
     /* Driver card */
     .driver-card {
@@ -232,7 +232,7 @@
 
     /* Driver tile – not bookable */
     .seat.driver-seat {
-      background: rgba(0, 0, 0, 0.80);
+      background: rgba(0, 0, 0, 0.30);
       color: #fff;
       border-color: rgba(0, 0, 0, 0.9);
       cursor: default;
@@ -256,7 +256,7 @@
       background: var(--seat-selected);
       color: #fff;
       border-color: var(--seat-selected);
-      box-shadow: 0 10px 30px rgba(248, 113, 113, 0.6);
+      box-shadow: 0 10px 30px rgba(248, 113, 113, 0.4);
       transform: translateY(-1px);
     }
 
@@ -280,7 +280,7 @@
       font-size: 9px;
       padding: 2px 6px;
       border-radius: 999px;
-      background: rgba(239, 68, 68, 0.95);
+      background: rgba(239, 68, 68, 0.65);
       color: #fff;
       font-weight: 600;
       letter-spacing: 0.12em;

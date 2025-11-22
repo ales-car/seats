@@ -10,22 +10,18 @@
       --primary: #ff3600;
       --primary-dark: #d42d00;
       --bg: #f4f4f6;
-      --seat-free: rgba(255, 255, 255, 0.6);
-      --seat-selected: #ff3600;
-      --seat-booked: #555;
+      --seat-free: rgba(255,255,255,0.45);
+      --seat-selected: rgba(255, 54, 0, 0.9);
+      --seat-booked: rgba(31, 41, 55, 0.85);
       --text-dark: #222;
       --text-muted: #666;
-      --card-bg: #ffffff;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--bg);
       color: var(--text-dark);
       display: flex;
@@ -34,23 +30,23 @@
 
     .page {
       width: 100%;
-      max-width: 1200px;
-      padding: 0 16px 40px;
+      max-width: 1100px;
+      padding: 24px 16px 40px;
     }
 
-    /* HERO BANNER */
+    /* Top banner */
     .hero {
       position: relative;
       border-radius: 32px;
       overflow: hidden;
-      margin: 16px 0 24px;
+      margin-bottom: 28px;
     }
 
     .hero img {
       width: 100%;
-      height: 260px;
-      object-fit: cover;
       display: block;
+      height: 220px;
+      object-fit: cover;
     }
 
     .hero-title {
@@ -59,242 +55,221 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(34px, 5vw, 58px);
+      font-size: clamp(32px, 5vw, 56px);
       font-weight: 800;
       color: #fff;
-      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 8px 24px rgba(0,0,0,0.45);
     }
 
-    /* 2-COLUMN LAYOUT */
+    /* Two-column layout: driver + booking */
     .main-card {
-      margin-top: 8px;
-      background: transparent;
       display: grid;
-      grid-template-columns: minmax(0, 0.4fr) minmax(0, 0.6fr);
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
       gap: 24px;
-      align-items: stretch;
+      margin-top: 8px;
     }
 
-    .driver-card,
-    .car-card {
-      background: var(--card-bg);
+    .card {
+      background: #fff;
       border-radius: 28px;
-      box-shadow: 0 22px 45px rgba(15, 23, 42, 0.12);
-      padding: 22px 24px 26px;
+      padding: 22px 24px;
+      box-shadow: 0 22px 40px rgba(15, 23, 42, 0.12);
     }
 
-    /* DRIVER CARD */
-    .driver-label {
+    /* Driver card */
+    .driver-header {
       font-size: 12px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 6px;
-      font-weight: 600;
+      margin-bottom: 10px;
     }
 
-    .driver-header {
+    .driver-info {
       display: flex;
       gap: 14px;
       align-items: center;
-      margin-bottom: 12px;
     }
 
     .driver-photo {
-      width: 54px;
-      height: 54px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       overflow: hidden;
+      border: 2px solid #e5e7eb;
       flex-shrink: 0;
-      background: #eee;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: #f3f4f6;
     }
 
     .driver-photo img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
     }
 
     .driver-name {
-      font-size: 18px;
       font-weight: 700;
+      font-size: 18px;
       margin-bottom: 4px;
     }
 
     .driver-meta {
       font-size: 13px;
       color: var(--text-muted);
+      margin-bottom: 4px;
     }
 
-    .driver-meta span + span::before {
+    .driver-meta span:not(:last-child)::after {
       content: "•";
-      margin: 0 6px;
+      margin: 0 4px;
+      opacity: 0.65;
     }
 
     .driver-bio {
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 14px;
+      color: var(--text-muted);
       line-height: 1.45;
-      color: var(--text-muted);
     }
 
-    /* CAR CARD */
-    .car-card h2 {
+    /* Booking column */
+    .booking-title {
+      font-size: 18px;
+      font-weight: 700;
       margin: 0 0 4px;
-      font-size: 20px;
     }
 
-    .car-card .hint {
-      margin: 0 0 12px;
-      font-size: 13px;
+    .booking-subtitle {
+      margin: 0 0 14px;
+      font-size: 14px;
       color: var(--text-muted);
     }
 
-    .car-wrapper {
+    .car-top-wrapper {
       position: relative;
-      margin: 10px auto 12px;
-      max-width: 320px;
       border-radius: 26px;
       overflow: hidden;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
-      background: #000;
+      background: radial-gradient(circle at top, #e5e7eb, #d1d5db);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px 0;
     }
 
-    .car-image {
-      width: 100%;
+    .car-top-wrapper img {
+      max-height: 360px;
+      width: auto;
       display: block;
-      max-height: 520px;
-      object-fit: cover;
     }
 
-    /* SEAT PILL STYLES */
-    .seat-pill,
-    .driver-pill {
+    /* 2x2 seat grid overlay */
+    .seat-grid {
       position: absolute;
-      transform: translate(-50%, -50%);
-      padding: 6px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(0, 0, 0, 0.18);
+      /* these inset values control where the 2x2 grid sits over the cabin */
+      top: 19%;
+      bottom: 15%;
+      left: 50%;
+      width: 46%;
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 3px;
+    }
+
+    .seat-square {
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.75);
       background: var(--seat-free);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.25);
-      display: inline-flex;
+      backdrop-filter: blur(1px);
+      border-radius: 8px;
+      color: #111827;
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-      font-size: 11px;
+      font-size: 12px;
       cursor: pointer;
-      color: #111;
-      white-space: nowrap;
+      transition: 0.16s ease all;
       user-select: none;
     }
 
-    .seat-pill span {
-      pointer-events: none;
-    }
-
-    .seat-pill .seat-code {
+    .seat-square-label {
       font-weight: 700;
-      font-size: 12px;
+      font-size: 13px;
+      margin-bottom: 2px;
     }
 
-    .seat-pill .seat-caption {
+    .seat-square-small {
+      font-size: 10px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 9px;
     }
 
-    .seat-pill.selected {
+    .seat-square.selected {
       background: var(--seat-selected);
-      border-color: var(--seat-selected);
       color: #fff;
-      box-shadow: 0 10px 30px rgba(244, 63, 94, 0.55);
+      border-color: rgba(0,0,0,0.1);
+      box-shadow: 0 8px 20px rgba(248, 113, 113, 0.65);
+      transform: translateY(-1px);
     }
 
-    .seat-pill.booked {
-      background: rgba(0, 0, 0, 0.78);
-      color: #f5f5f5;
-      border-color: rgba(0, 0, 0, 0.85);
+    .seat-square.booked {
+      background: var(--seat-booked);
+      color: #e5e7eb;
+      border-color: rgba(15,23,42,0.7);
       cursor: not-allowed;
       box-shadow: none;
+      transform: none;
     }
 
-    .seat-pill .booked-overlay {
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      opacity: 0.8;
-    }
-
-    /* DRIVER (non-clickable) */
-    .driver-pill {
-      padding: 5px 10px;
-      background: rgba(0, 0, 0, 0.9);
-      color: #fff;
-      border-color: rgba(0, 0, 0, 0.9);
+    .seat-square.driver-tile {
       cursor: default;
-      gap: 4px;
+      background: rgba(15, 23, 42, 0.82);
+      color: #f9fafb;
+      border-color: rgba(15,23,42,0.95);
     }
 
-    .driver-pill .driver-text {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
+    .seat-square .booked-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      background: rgba(0,0,0,0.55);
+      border-radius: inherit;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
     }
 
-    .driver-pill .driver-icon-mini {
-      width: 18px;
-      height: 18px;
-      filter: invert(1);
+    .seat-square.booked .booked-overlay {
+      opacity: 1;
     }
 
-    /* POSITIONS (tweak visually if needed) */
-    .driver-pill {
-      top: 53%;
-      left: 39%;
-    }
-
-    .seat-pill[data-seat-id="VIP"] {
-      top: 53%;
-      left: 55%;
-    }
-
-    .seat-pill[data-seat-id="BL"] {
-      top: 65%;
-      left: 41%;
-    }
-
-    .seat-pill[data-seat-id="BR"] {
-      top: 65%;
-      left: 55%;
-    }
-
-    /* STATUS + LEGEND + BUTTON */
+    /* Status + legend + button */
     .status {
-      margin-top: 6px;
+      margin-top: 14px;
       font-size: 13px;
       color: var(--text-muted);
     }
-
-    .status strong {
-      color: var(--primary-dark);
-    }
+    .status strong { color: var(--primary-dark); }
 
     .legend {
       display: flex;
-      gap: 16px;
-      justify-content: flex-start;
-      font-size: 12px;
+      gap: 14px;
+      align-items: center;
       margin-top: 10px;
+      font-size: 13px;
       color: var(--text-muted);
     }
 
     .legend-item {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 6px;
     }
@@ -303,26 +278,15 @@
       width: 11px;
       height: 11px;
       border-radius: 50%;
-      border: 2px solid #999;
+      border: 2px solid #9ca3af;
     }
-
-    .legend-dot.free {
-      background: var(--seat-free);
-    }
-
-    .legend-dot.selected {
-      background: var(--seat-selected);
-      border-color: var(--seat-selected);
-    }
-
-    .legend-dot.booked {
-      background: #555;
-      border-color: #555;
-    }
+    .legend-dot.free { background: var(--seat-free); }
+    .legend-dot.selected { background: var(--seat-selected); border-color: var(--seat-selected); }
+    .legend-dot.booked { background: var(--seat-booked); border-color: var(--seat-booked); }
 
     .btn {
-      margin-top: 16px;
-      padding: 13px 30px;
+      margin-top: 18px;
+      padding: 12px 30px;
       border-radius: 999px;
       border: none;
       background: var(--primary);
@@ -330,7 +294,7 @@
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 14px 36px rgba(248, 113, 113, 0.45);
+      box-shadow: 0 14px 32px rgba(248, 113, 113, 0.55);
       transition: 0.16s ease all;
     }
 
@@ -349,51 +313,50 @@
       margin-top: 10px;
       font-size: 13px;
     }
+    .message.ok { color: #059669; }
+    .message.error { color: #dc2626; }
 
-    .message.ok {
-      color: #059669;
-    }
-
-    .message.error {
-      color: #dc2626;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
+    /* Responsive */
+    @media (max-width: 800px) {
       .main-card {
         grid-template-columns: 1fr;
       }
-    }
-
-    @media (max-width: 600px) {
-      .car-wrapper {
-        max-width: 260px;
+      .card {
+        padding: 18px 18px 20px;
+      }
+      .car-top-wrapper img {
+        max-height: 300px;
+      }
+      .seat-grid {
+        top: 21%;
+        bottom: 16%;
+        width: 52%;
       }
     }
   </style>
 </head>
 <body>
   <div class="page">
-    <!-- HERO -->
+    <!-- Banner -->
     <header class="hero">
-      <img src="banner.jpg" alt="Front view of Arteon banner" />
+      <img src="banner.jpg" alt="Arteon banner" />
       <div class="hero-title">Select Your Car Seat</div>
     </header>
 
-    <!-- DRIVER + CAR BOOKING -->
+    <!-- Driver + booking columns -->
     <section class="main-card">
-      <!-- LEFT: DRIVER INFO -->
-      <article class="driver-card">
-        <div class="driver-label">Your driver</div>
-        <div class="driver-header">
+      <!-- LEFT: Driver info -->
+      <article class="card">
+        <div class="driver-header">Your driver</div>
+        <div class="driver-info">
           <div class="driver-photo">
-            <!-- use your real photo if you want -->
-            <img src="driver-wheel.png" alt="Photo of your driver" />
+            <!-- Replace driver-photo.jpg with your actual profile photo file -->
+            <img src="driver-photo.jpg" alt="Photo of your driver" />
           </div>
           <div>
             <div class="driver-name">Aleš Krajina</div>
             <div class="driver-meta">
-              <span>4.9 ★ rating</span>
+              <span>4.9★ rating</span>
               <span>120+ rides</span>
               <span>Non-smoker</span>
             </div>
@@ -401,73 +364,53 @@
         </div>
         <p class="driver-bio">
           Czech guy in Switzerland, driving a graphite-silver Arteon R-Line.
-          I like mountains, good music and making sure your ride is safe, on time
-          and comfortable.
+          I like mountains, good music and making sure your ride is safe, on time and comfortable.
         </p>
       </article>
 
-      <!-- RIGHT: CAR SEAT BOOKING -->
-      <article class="car-card" aria-label="Seat selection in the car">
-        <h2>Choose your place in the Arteon</h2>
-        <p class="hint">Tap on a seat inside the car to reserve your spot.</p>
+      <!-- RIGHT: Seat booking -->
+      <article class="card">
+        <h2 class="booking-title">Choose your place in the Arteon</h2>
+        <p class="booking-subtitle">
+          Tap on a seat inside the car to reserve your spot.
+        </p>
 
-        <div class="car-wrapper">
-          <img
-            src="car-top-vertical.jpg"
-            class="car-image"
-            alt="Top-down view of the car"
-          />
+        <div class="car-top-wrapper" aria-label="Seat selection">
+          <!-- Top-down car image -->
+          <img src="car-top-vertical.jpg" alt="Top-down view of the Arteon" />
 
-          <!-- DRIVER (non-bookable) -->
-          <div class="driver-pill">
-            <img
-              src="driver-wheel.png"
-              alt="Driver"
-              class="driver-icon-mini"
-            />
-            <span class="driver-text">Driver</span>
+          <!-- 2×2 seat grid overlayed on the cabin area -->
+          <div class="seat-grid">
+            <!-- Top-left: DRIVER (static) -->
+            <div class="seat-square driver-tile">
+              <div class="seat-square-label">DRIVER</div>
+              <div class="seat-square-small">Aleš</div>
+            </div>
+
+            <!-- Top-right: VIP / Co-pilot (bookable) -->
+            <button class="seat-square" data-seat-id="VIP" type="button">
+              <div class="seat-square-label">VIP</div>
+              <div class="seat-square-small">Co-pilot</div>
+              <div class="booked-overlay">BOOKED</div>
+            </button>
+
+            <!-- Bottom-left: Back left (Esteemed) -->
+            <button class="seat-square" data-seat-id="BL" type="button">
+              <div class="seat-square-label">BL</div>
+              <div class="seat-square-small">Esteemed</div>
+              <div class="booked-overlay">BOOKED</div>
+            </button>
+
+            <!-- Bottom-right: Back right (Esteemed) -->
+            <button class="seat-square" data-seat-id="BR" type="button">
+              <div class="seat-square-label">BR</div>
+              <div class="seat-square-small">Esteemed</div>
+              <div class="booked-overlay">BOOKED</div>
+            </button>
           </div>
-
-          <!-- VIP FRONT PASSENGER -->
-          <button
-            type="button"
-            class="seat-pill"
-            data-seat-id="VIP"
-            aria-label="VIP front passenger seat"
-          >
-            <span class="seat-code">VIP</span>
-            <span class="seat-caption">Co-pilot</span>
-            <span class="booked-overlay"></span>
-          </button>
-
-          <!-- BACK LEFT -->
-          <button
-            type="button"
-            class="seat-pill"
-            data-seat-id="BL"
-            aria-label="Back left seat"
-          >
-            <span class="seat-code">BL</span>
-            <span class="seat-caption">Esteemed</span>
-            <span class="booked-overlay"></span>
-          </button>
-
-          <!-- BACK RIGHT -->
-          <button
-            type="button"
-            class="seat-pill"
-            data-seat-id="BR"
-            aria-label="Back right seat"
-          >
-            <span class="seat-code">BR</span>
-            <span class="seat-caption">Esteemed</span>
-            <span class="booked-overlay"></span>
-          </button>
         </div>
 
-        <div id="seatStatus" class="status">
-          Loading seat status…
-        </div>
+        <div id="seatStatus" class="status">Loading seat status…</div>
 
         <div class="legend" aria-hidden="true">
           <div class="legend-item">
@@ -481,142 +424,103 @@
           </div>
         </div>
 
-        <button id="confirmBtn" class="btn" disabled>
-          Confirm Booking
-        </button>
+        <button id="confirmBtn" class="btn" disabled>Confirm Booking</button>
         <div id="message" class="message"></div>
       </article>
     </section>
   </div>
 
   <script>
-    // --- CONFIG ----------------------------------------------------
-    const SEATS = ["VIP", "BL", "BR"]; // driver is not bookable
-    const STORAGE_KEY = "arteonSeatBookings_v1";
+    // --- CONFIG ---
+    const TOTAL_SEATS = 3; // VIP, BL, BR
+    const STORAGE_KEY = "carSeatBookings_v2"; // change to reset all bookings
+    const seatLabels = {
+      VIP: "VIP (Co-pilot)",
+      BL: "Back left",
+      BR: "Back right"
+    };
 
-    let seatStates = {}; // { VIP: 'free' | 'booked', ... }
-    let selectedSeat = null;
-
-    function loadSeatStates() {
+    // --- STORAGE HELPERS ---
+    function loadBookings() {
       try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed && typeof parsed === "object") {
-            seatStates = parsed;
-          }
-        }
-      } catch (e) {
-        console.warn("Could not read seat states from localStorage:", e);
-      }
-
-      // default all to free if missing
-      SEATS.forEach((id) => {
-        if (!seatStates[id]) seatStates[id] = "free";
-      });
-    }
-
-    function saveSeatStates() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(seatStates));
-      } catch (e) {
-        console.warn("Could not save seat states:", e);
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return {};
+        return JSON.parse(raw);
+      } catch {
+        return {};
       }
     }
 
-    function updateUI() {
-      const seatStatusEl = document.getElementById("seatStatus");
+    function saveBookings(bookings) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
+    }
+
+    function countBooked(bookings) {
+      return Object.values(bookings).filter(Boolean).length;
+    }
+
+    // --- MAIN LOGIC ---
+    document.addEventListener("DOMContentLoaded", () => {
+      const seatButtons = Array.from(document.querySelectorAll(".seat-square[data-seat-id]"));
+      const statusEl = document.getElementById("seatStatus");
       const confirmBtn = document.getElementById("confirmBtn");
       const messageEl = document.getElementById("message");
 
-      // Update pill classes
-      SEATS.forEach((id) => {
-        const pill = document.querySelector('.seat-pill[data-seat-id="' + id + '"]');
-        if (!pill) return;
+      let bookings = loadBookings();
+      let selectedSeatId = null;
 
-        pill.classList.remove("selected", "booked");
-        pill.querySelector(".booked-overlay").textContent = "";
+      function updateUI() {
+        const bookedCount = countBooked(bookings);
+        const freeCount = Math.max(TOTAL_SEATS - bookedCount, 0);
 
-        if (seatStates[id] === "booked") {
-          pill.classList.add("booked");
-          pill.querySelector(".booked-overlay").textContent = "BOOKED";
-        } else if (id === selectedSeat) {
-          pill.classList.add("selected");
-        }
-      });
+        seatButtons.forEach(btn => {
+          const id = btn.dataset.seatId;
+          const isBooked = bookings[id];
+          btn.classList.toggle("booked", !!isBooked);
+          btn.classList.toggle("selected", selectedSeatId === id && !isBooked);
+        });
 
-      // Status text
-      const bookedCount = SEATS.filter((id) => seatStates[id] === "booked").length;
-      const freeCount = SEATS.length - bookedCount;
+        const selectedLabel = selectedSeatId ? seatLabels[selectedSeatId] : "None";
+        statusEl.innerHTML =
+          `Free seats: <strong>${freeCount}</strong> · ` +
+          `Booked: <strong>${bookedCount}</strong> · ` +
+          `Selected: <strong>${selectedLabel}</strong>`;
 
-      seatStatusEl.innerHTML =
-        "Free seats: <strong>" +
-        freeCount +
-        "</strong> · Booked: <strong>" +
-        bookedCount +
-        "</strong> · Selected: " +
-        (selectedSeat ? "<strong>" + selectedSeat + "</strong>" : "None");
-
-      // Button
-      confirmBtn.disabled = !selectedSeat;
-
-      // Clear transient message on render
-      messageEl.textContent = "";
-      messageEl.className = "message";
-    }
-
-    function handleSeatClick(evt) {
-      const pill = evt.currentTarget;
-      const id = pill.getAttribute("data-seat-id");
-      if (!id) return;
-
-      if (seatStates[id] === "booked") {
-        // Can't select booked seat
-        selectedSeat = null;
-      } else {
-        // Toggle selection
-        selectedSeat = selectedSeat === id ? null : id;
-      }
-      updateUI();
-    }
-
-    function handleConfirm() {
-      const messageEl = document.getElementById("message");
-      if (!selectedSeat) {
-        messageEl.textContent = "Please select a seat first.";
-        messageEl.className = "message error";
-        return;
+        confirmBtn.disabled = !selectedSeatId || bookings[selectedSeatId];
       }
 
-      seatStates[selectedSeat] = "booked";
-      saveSeatStates();
+      seatButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.seatId;
+          if (bookings[id]) return; // already booked -> no action
 
-      messageEl.textContent =
-        "Great, your seat (" + selectedSeat + ") is now booked.";
-      messageEl.className = "message ok";
-
-      selectedSeat = null;
-      updateUI();
-    }
-
-    // INIT
-    document.addEventListener("DOMContentLoaded", () => {
-      loadSeatStates();
-
-      // Attach handlers
-      SEATS.forEach((id) => {
-        const pill = document.querySelector(
-          '.seat-pill[data-seat-id="' + id + '"]'
-        );
-        if (pill) {
-          pill.addEventListener("click", handleSeatClick);
-        }
+          if (selectedSeatId === id) {
+            selectedSeatId = null; // deselect
+          } else {
+            selectedSeatId = id;
+          }
+          messageEl.textContent = "";
+          messageEl.className = "message";
+          updateUI();
+        });
       });
 
-      document
-        .getElementById("confirmBtn")
-        .addEventListener("click", handleConfirm);
+      confirmBtn.addEventListener("click", () => {
+        if (!selectedSeatId) return;
+        if (bookings[selectedSeatId]) return;
 
+        bookings[selectedSeatId] = true;
+        saveBookings(bookings);
+
+        messageEl.textContent =
+          `Seat ${seatLabels[selectedSeatId]} has been booked for this browser.`;
+        messageEl.className = "message ok";
+
+        selectedSeatId = null;
+        updateUI();
+      });
+
+      // Initial paint
       updateUI();
     });
   </script>

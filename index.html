@@ -65,10 +65,10 @@
       text-shadow: 0 8px 24px rgba(0,0,0,0.45);
     }
 
-    /* MAIN LAYOUT (two columns) */
+    /* MAIN LAYOUT (two columns: 40% / 60%) */
     .main-grid {
       display: grid;
-      grid-template-columns: minmax(260px, 1.15fr) minmax(340px, 1.6fr);
+      grid-template-columns: 0.4fr 0.6fr;
       gap: 20px;
       align-items: start;
     }
@@ -155,6 +155,21 @@
       overflow: hidden;
       box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
       background: #000;
+      /* make the car ~50% smaller vs full width */
+      width: 60%;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 860px) {
+      .car-image-wrapper {
+        width: 75%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .car-image-wrapper {
+        width: 90%;
+      }
     }
 
     .car-image-wrapper img.car-top {
@@ -166,7 +181,7 @@
     /* SEAT GRID OVER CAR */
     .seat-grid {
       position: absolute;
-      /* Percentages tuned to sit over cabin of car-top-vertical.jpg */
+      /* These percentages are tuned to sit over the cabin of car-top-vertical.jpg */
       top: 43%;    /* move up/down if needed */
       left: 30%;   /* move left/right if needed */
       right: 35%;
@@ -361,7 +376,7 @@
     </header>
 
     <section class="main-grid">
-      <!-- LEFT: DRIVER INTRO -->
+      <!-- LEFT: DRIVER INTRO (40%) -->
       <article class="driver-card">
         <div class="driver-label">Your driver</div>
         <div class="driver-header">
@@ -382,7 +397,7 @@
         </p>
       </article>
 
-      <!-- RIGHT: CAR + SEATS -->
+      <!-- RIGHT: CAR + SEATS (60%) -->
       <article class="car-card">
         <h2>Choose your place in the Arteon</h2>
         <p class="subtitle">

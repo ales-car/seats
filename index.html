@@ -122,7 +122,7 @@
       line-height: 1.45;
     }
 
-    /* Trip selector */
+    /* Trip selector (admin-configurable list) */
     .trip-section {
       margin-top: 18px;
       padding-top: 14px;
@@ -137,7 +137,7 @@
     .trip-row {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       margin-bottom: 10px;
     }
 
@@ -146,7 +146,6 @@
       color: var(--text-muted);
     }
 
-    .trip-row input[type="date"],
     .trip-row select {
       width: 100%;
       padding: 8px 10px;
@@ -156,7 +155,6 @@
       outline: none;
     }
 
-    .trip-row input[type="date"]:focus,
     .trip-row select:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 1px rgba(255, 54, 0, 0.35);
@@ -165,6 +163,12 @@
     .trip-hint {
       font-size: 12px;
       color: var(--text-muted);
+    }
+
+    .trip-details {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
     }
 
     /* Booking card */
@@ -218,7 +222,7 @@
     .seat {
       position: relative;
       border-radius: 10px;
-      background: rgba(15, 23, 42, 0.20); /* ~80% transparent */
+      background: rgba(15, 23, 42, 0.20); /* ~80% transparent overlay */
       border: 1px solid rgba(255, 255, 255, 0.18);
       display: flex;
       flex-direction: column;
@@ -328,7 +332,7 @@
       color: var(--text-muted);
       text-align: center;
     }
-    .status strong { color: var(--primary-dark); }
+    .status strong { color: --primary-dark; }
 
     .legend {
       display: flex;
@@ -428,28 +432,24 @@
           and comfortable.
         </div>
 
-        <!-- Trip selection -->
+        <!-- Trip selection (from config) -->
         <div class="trip-section">
-          <h3>Choose your trip</h3>
+          <h3>Available rides</h3>
 
           <div class="trip-row">
-            <label for="tripDate">Date</label>
-            <input id="tripDate" type="date">
-          </div>
-
-          <div class="trip-row">
-            <label for="tripRoute">Route</label>
-            <select id="tripRoute">
-              <option value="">Select route…</option>
-              <option value="ZRH-OVA">Zürich → Ostrava</option>
-              <option value="OVA-ZRH">Ostrava → Zürich</option>
+            <label for="tripSelect">Date &amp; route</label>
+            <select id="tripSelect">
+              <option value="">Select a trip…</option>
+              <!-- options are filled from TRIPS config in JS -->
             </select>
           </div>
 
           <p class="trip-hint">
-            Seat availability is stored per <strong>date + route</strong>.  
-            Pick your trip first, then choose your seats.
+            Only trips configured in the admin list are bookable.
+            Edit the <code>TRIPS</code> array in the code to add or remove dates.
           </p>
+
+          <p id="tripDetails" class="trip-details"></p>
         </div>
       </aside>
 
@@ -475,9 +475,9 @@
               <!-- VIP CO-PILOT -->
               <div class="seat" data-seat-id="VIP">
                 <span class="seat-status-label"></span>
-                <img src="/mnt/data/34dec8fd-6199-4649-98d1-2c42e07ecd34.png" alt="VIP icon" class="seat-icon">
+                <img src="vip-icon.png" alt="VIP icon" class="seat-icon">
                 <div class="seat-title">VIP</div>
-                <div class="seat-subtitle">Co-Pilot</div>
+                <div class="seat-subtitle">Co-pilot</div>
               </div>
 
               <!-- Back left – Mood Bringer -->
@@ -496,13 +496,13 @@
             </div>
 
             <div class="car-disabled-overlay" id="carDisabledOverlay">
-              Pick a date and route on the left to select seats.
+              Select a trip on the left to choose seats.
             </div>
           </div>
 
           <!-- Status text -->
           <div id="seatStatus" class="status">
-            Select a date and route to see available seats.
+            Select a trip to see available seats.
           </div>
 
           <!-- Legend -->
@@ -528,11 +528,32 @@
 
   <script>
     /*********************************************************
-     * SIMPLE PER-TRIP SEAT STORAGE
-     * Key = date + '|' + route (e.g. "2025-11-20|ZRH-OVA")
-     * Value = { VIP: true, MB: true, ST: true }  (booked seats)
+     * ADMIN CONFIG
+     * Only trips listed here are bookable.
+     * Edit this array to add/remove trips.
      *********************************************************/
-    const STORAGE_KEY = "arteonSeatBookings_v3";
+    const TRIPS = [
+      {
+        id: "2025-11-20|ZRH-OVA",
+        date: "2025-11-20",
+        route: "Zürich → Ostrava",
+        label: "20.11.2025 – Zürich → Ostrava"
+      },
+      {
+        id: "2025-11-23|OVA-ZRH",
+        date: "2025-11-23",
+        route: "Ostrava → Zürich",
+        label: "23.11.2025 – Ostrava → Zürich"
+      }
+      // Add more objects here as needed
+    ];
+
+    /*********************************************************
+     * SIMPLE PER-TRIP SEAT STORAGE
+     * Key = trip.id (e.g. "2025-11-20|ZRH-OVA")
+     * Value = { VIP: true, MB: true, ST: true }
+     *********************************************************/
+    const STORAGE_KEY = "arteonSeatBookings_v4";
 
     function loadStorage() {
       try {
@@ -551,42 +572,55 @@
 
     const state = {
       storage: loadStorage(),
-      currentTripKey: null,
+      currentTripId: null,
       selectedSeats: []          // array of seat IDs chosen in this session
     };
 
-    const tripDateEl   = document.getElementById("tripDate");
-    const tripRouteEl  = document.getElementById("tripRoute");
-    const carWrapperEl = document.getElementById("carWrapper");
-    const seatStatusEl = document.getElementById("seatStatus");
-    const confirmBtn   = document.getElementById("confirmBtn");
-    const messageEl    = document.getElementById("message");
-    const carOverlayEl = document.getElementById("carDisabledOverlay");
+    const tripSelectEl  = document.getElementById("tripSelect");
+    const tripDetailsEl = document.getElementById("tripDetails");
+    const carWrapperEl  = document.getElementById("carWrapper");
+    const seatStatusEl  = document.getElementById("seatStatus");
+    const confirmBtn    = document.getElementById("confirmBtn");
+    const messageEl     = document.getElementById("message");
+    const carOverlayEl  = document.getElementById("carDisabledOverlay");
 
     const seatEls = Array.from(
       document.querySelectorAll(".seat-grid .seat")
     ).filter(el => !el.classList.contains("driver-seat"));
 
-    function getCurrentTripKey() {
-      const d = tripDateEl.value;
-      const r = tripRouteEl.value;
-      if (!d || !r) return null;
-      return d + "|" + r;
+    /* Populate trip select from TRIPS config */
+    TRIPS.forEach(trip => {
+      const opt = document.createElement("option");
+      opt.value = trip.id;
+      opt.textContent = trip.label;
+      tripSelectEl.appendChild(opt);
+    });
+
+    function getTripById(id) {
+      return TRIPS.find(t => t.id === id) || null;
     }
 
-    function getTripBookings(tripKey) {
-      if (!tripKey) return {};
-      return state.storage[tripKey] || {};
+    function getTripBookings(tripId) {
+      if (!tripId) return {};
+      return state.storage[tripId] || {};
     }
 
-    function setTripBookings(tripKey, bookings) {
-      state.storage[tripKey] = bookings;
+    function setTripBookings(tripId, bookings) {
+      state.storage[tripId] = bookings;
       saveStorage(state.storage);
     }
 
+    function updateTripDetails() {
+      const trip = getTripById(state.currentTripId);
+      if (!trip) {
+        tripDetailsEl.textContent = "";
+        return;
+      }
+      tripDetailsEl.textContent = `Selected trip: ${trip.label}`;
+    }
+
     function updateUI() {
-      const tripKey = state.currentTripKey = getCurrentTripKey();
-      const hasTrip = !!tripKey;
+      const hasTrip = !!state.currentTripId;
 
       // Enable / disable car wrapper
       if (!hasTrip) {
@@ -595,7 +629,9 @@
         carWrapperEl.classList.remove("disabled");
       }
 
-      const bookings = getTripBookings(tripKey);
+      updateTripDetails();
+
+      const bookings = getTripBookings(state.currentTripId);
 
       let freeCount = 0;
       let bookedCount = 0;
@@ -629,7 +665,7 @@
 
       // Update status text
       if (!hasTrip) {
-        seatStatusEl.innerHTML = "Select a date and route to see available seats.";
+        seatStatusEl.innerHTML = "Select a trip to see available seats.";
         carOverlayEl.style.display = "flex";
       } else {
         carOverlayEl.style.display = "none";
@@ -647,10 +683,10 @@
     // Seat click handling (multiple selection)
     seatEls.forEach(el => {
       el.addEventListener("click", () => {
-        const tripKey = getCurrentTripKey();
-        if (!tripKey) return; // guard
+        const tripId = state.currentTripId;
+        if (!tripId) return; // guard
 
-        const bookings = getTripBookings(tripKey);
+        const bookings = getTripBookings(tripId);
         const seatId = el.dataset.seatId;
 
         if (bookings[seatId]) return; // already booked, ignore
@@ -666,39 +702,36 @@
       });
     });
 
-    // Trip selectors
-    tripDateEl.addEventListener("change", () => {
+    // Trip selector change
+    tripSelectEl.addEventListener("change", () => {
+      state.currentTripId = tripSelectEl.value || null;
       state.selectedSeats = [];
       messageEl.textContent = "";
-      updateUI();
-    });
-
-    tripRouteEl.addEventListener("change", () => {
-      state.selectedSeats = [];
-      messageEl.textContent = "";
+      messageEl.className = "message";
       updateUI();
     });
 
     // Confirm booking
     confirmBtn.addEventListener("click", () => {
-      const tripKey = getCurrentTripKey();
-      if (!tripKey || state.selectedSeats.length === 0) return;
+      const tripId = state.currentTripId;
+      if (!tripId || state.selectedSeats.length === 0) return;
 
-      const bookings = getTripBookings(tripKey);
+      const bookings = getTripBookings(tripId);
       state.selectedSeats.forEach(id => {
         bookings[id] = true; // mark as booked
       });
-      setTripBookings(tripKey, bookings);
+      setTripBookings(tripId, bookings);
 
       const bookedNow = state.selectedSeats.slice();
       state.selectedSeats = [];
 
       updateUI();
 
+      const trip = getTripById(tripId);
       messageEl.className = "message ok";
       messageEl.textContent =
         "Nice! You’ve booked: " + bookedNow.join(", ") +
-        " for " + tripKey.replace("|", " – ");
+        (trip ? " for " + trip.label : "");
     });
 
     // Initial paint

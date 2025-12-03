@@ -2,148 +2,170 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Select Your Car Seat</title>
+  <title>Arteon Ride – Seat Booking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Page icon (favicon) -->
+  <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
 
   <style>
     :root {
-      --primary: #ff4b21;
-      --primary-dark: #e03b12;
-      --bg: #f4f4f6;
-      --text-dark: #111827;
-      --text-muted: #6b7280;
+      --primary: #ff3600;
+      --primary-dark: #d42d00;
+      --bg: #0b1120;
+      --card-bg: #020617;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
 
-      --seat-bg: rgba(15, 23, 42, 0.20);
-      --seat-border: rgba(255, 255, 255, 0.35);
-      --seat-selected-bg: rgba(248, 113, 113, 0.85);
-      --seat-selected-border: rgba(255, 255, 255, 0.9);
-      --seat-booked-bg: rgba(31, 41, 55, 0.85);
+      /* Seat colors (your preferred spec) */
+      --seat-bg: rgba(15, 23, 42, 0.38);
+      --seat-border: rgba(148, 163, 184, 0.7);
+      --seat-selected-bg: rgba(248, 113, 113, 0.80);
+      --seat-selected-border: rgba(254, 249, 195, 0.95);
+      --seat-booked-bg: rgba(55, 65, 81, 0.85);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-      margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text-dark);
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 20px 10px 40px;
     }
 
     .page {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 16px 16px 40px;
-    }
-
-    /* HERO */
-    .hero {
-      position: relative;
-      border-radius: 28px;
-      overflow: hidden;
-      margin-bottom: 24px;
-    }
-
-    .hero img {
       width: 100%;
-      display: block;
-      height: 220px;
-      object-fit: cover;
+      max-width: 1100px;
     }
 
-    .hero-title {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(32px, 4.5vw, 54px);
-      font-weight: 800;
-      color: #fff;
-      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    .page-title {
+      text-align: center;
+      margin-bottom: 18px;
     }
 
-    /* LAYOUT */
-    .main-layout {
-      display: flex;
-      gap: 24px;
-      align-items: flex-start;
-      flex-wrap: wrap;
-    }
-
-    .driver-card,
-    .booking-card {
-      background: #ffffff;
-      border-radius: 24px;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
-      padding: 18px 20px;
-    }
-
-    .driver-card {
-      flex: 0 0 40%;
-      min-width: 260px;
-    }
-
-    .booking-card {
-      flex: 1 1 0;
-      min-width: 280px;
-    }
-
-    /* DRIVER CARD */
-    .section-label {
+    .page-title h1 {
+      font-size: clamp(26px, 4vw, 34px);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      font-size: 11px;
-      letter-spacing: 0.18em;
+    }
+
+    .page-title p {
+      margin-top: 6px;
+      font-size: 13px;
       color: var(--text-muted);
-      margin-bottom: 8px;
     }
 
-    .driver-header {
-      display: flex;
+    /* Layout: 2 columns (40% / 60%) */
+    .layout {
+      display: grid;
+      grid-template-columns: 0.4fr 0.6fr;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: linear-gradient(145deg, #020617, #020617f0);
+      border-radius: 24px;
+      padding: 18px 18px 20px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.65);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .pill {
+      display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 6px;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.8);
       margin-bottom: 8px;
     }
 
-    .driver-photo {
-      width: 54px;
-      height: 54px;
+    .pill-dot {
+      width: 8px;
+      height: 8px;
       border-radius: 999px;
-      object-fit: cover;
-      background: #e5e7eb;
+      background: #22c55e;
     }
 
     .driver-name {
-      font-weight: 700;
-      font-size: 18px;
-      margin-bottom: 2px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
     }
 
-    .driver-meta {
+    .driver-subtitle {
       font-size: 12px;
       color: var(--text-muted);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
+      margin-bottom: 10px;
     }
 
-    .star {
-      color: #f59e0b;
-      margin-right: 2px;
-    }
-
-    .driver-bio {
-      margin-top: 8px;
+    .driver-list {
+      list-style: none;
+      margin: 8px 0 12px;
+      padding-left: 0;
       font-size: 13px;
-      line-height: 1.45;
-      color: #4b5563;
+      color: var(--text-main);
     }
 
-    /* ADMIN CONFIG (PIN) */
+    .driver-list li {
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .driver-list li::before {
+      content: "•";
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    .car-specs {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .car-specs strong {
+      color: #e5e7eb;
+    }
+
+    /* Trip + date + stop section */
     .trip-section {
-      margin-top: 14px;
-      border-top: 1px solid #e5e7eb;
-      padding-top: 10px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(148, 163, 184, 0.4);
     }
 
     .trip-current {
@@ -152,6 +174,65 @@
       margin: 0 0 6px;
     }
 
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .form-row label {
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    .form-row select,
+    .form-row input[type="date"] {
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 6px 8px;
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-main);
+      font-size: 12px;
+      outline: none;
+    }
+
+    .form-row select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Radio group for Praha/Brno/Ostrava */
+    .radio-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-main);
+    }
+
+    .radio-item input[type="radio"] {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .radio-item span {
+      cursor: pointer;
+    }
+
+    /* Admin config area */
     .admin-link {
       font-size: 11px;
       border: none;
@@ -160,14 +241,15 @@
       cursor: pointer;
       padding: 0;
       text-decoration: underline;
+      margin-top: 4px;
     }
 
     .admin-config {
       margin-top: 8px;
       padding: 8px 10px;
-      background: #f9fafb;
+      background: #020617;
       border-radius: 12px;
-      border: 1px dashed #e5e7eb;
+      border: 1px dashed #4b5563;
       display: none;
     }
 
@@ -185,11 +267,14 @@
     }
 
     .admin-config-row input[type="date"],
-    .admin-config-row input[type="text"] {
-      padding: 4px 8px;
+    .admin-config-row select {
+      padding: 3px 6px;
       border-radius: 8px;
-      border: 1px solid #d1d5db;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: var(--text-main);
       font-size: 11px;
+      outline: none;
     }
 
     .admin-btn {
@@ -223,70 +308,46 @@
     .admin-trip-remove {
       border: none;
       background: none;
-      color: #dc2626;
+      color: #f97373;
       cursor: pointer;
       font-size: 11px;
       text-decoration: underline;
       padding: 0;
     }
 
-    /* BOOKING CARD - HEADER */
-    .booking-card h2 {
-      margin: 0 0 4px;
-      font-size: 20px;
-    }
-
-    .booking-subtitle {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .trip-select-row {
+    /* Right card: car + seats */
+    .car-card-title {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-      align-items: center;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
     }
 
-    .trip-select-row label {
-      font-size: 12px;
+    .car-card-title h2 {
+      margin-bottom: 0;
+    }
+
+    .car-card-title small {
+      font-size: 11px;
       color: var(--text-muted);
     }
 
-    #tripSelect {
-      padding: 6px 8px;
-      border-radius: 999px;
-      border: 1px solid #d1d5db;
-      font-size: 12px;
-      min-width: 210px;
-    }
-
-    /* CAR + SEATS */
-    .car-seat-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-top: 6px;
-      margin-bottom: 10px;
-    }
-
-    .car-seat-card {
+    .car-visual {
       position: relative;
+      margin-top: 8px;
       border-radius: 26px;
       overflow: hidden;
-      background: #e5e7eb;
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
-      max-width: 360px; /* smaller car */
-      width: 100%;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top, #111827 0, #020617 45%);
     }
 
-    .car-seat-card img.car-top {
+    .car-visual img {
       width: 100%;
       display: block;
+      opacity: 0.9;
     }
 
-    /* Seat grid from your snippet */
+    /* Seat grid – your preferred coordinates */
     .seat-grid {
       position: absolute;
       /* These percentages are tuned to sit over the cabin of car-top-vertical.jpg */
@@ -339,29 +400,15 @@
     .seat-icon {
       width: 32px;
       height: auto;
-      opacity: 0.75;
+      opacity: 0.9;
       margin-bottom: 2px;
       object-fit: contain;
-    }
-
-    .seat-status-label {
-      position: absolute;
-      top: 4px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #fef2f2;
-      opacity: 0;
-      pointer-events: none;
     }
 
     .seat.driver-seat {
       cursor: default;
       pointer-events: none;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.55);
     }
 
     .seat.selected {
@@ -379,67 +426,101 @@
       transform: none;
     }
 
-    .seat.booked .seat-status-label {
-      opacity: 0.95; /* like co-pilot example */
+    /* Booked overlay – slim top bar so it doesn't hide text */
+    .booked-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fff;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent);
+      border-radius: 8px 8px 0 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.16s ease;
     }
 
-    .seat.driver-seat .seat-status-label {
-      display: none;
+    .seat.booked .booked-overlay {
+      opacity: 1;
     }
 
-    /* LEGEND + COUNTS + BUTTON */
-    .counts-row {
+    .seat.disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+
+    /* Status & legend & button */
+    .status-row {
+      margin-top: 10px;
       font-size: 12px;
       color: var(--text-muted);
-      margin-top: 6px;
-      margin-bottom: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 6px;
     }
 
-    .counts-row strong {
-      color: var(--primary-dark);
+    .status-row strong {
+      color: #fbbf24;
     }
 
     .legend {
       display: flex;
-      gap: 14px;
+      gap: 12px;
       font-size: 11px;
+      margin-top: 10px;
       color: var(--text-muted);
-      margin-bottom: 8px;
-      margin-top: 2px;
+      flex-wrap: wrap;
     }
 
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
 
     .legend-dot {
       width: 10px;
       height: 10px;
-      border-radius: 999px;
-      border: 2px solid #9ca3af;
-      background: transparent;
+      border-radius: 3px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      background: rgba(15, 23, 42, 0.7);
     }
 
     .legend-dot.selected {
       background: var(--seat-selected-bg);
-      border-color: var(--seat-selected-bg);
+      border-color: var(--seat-selected-border);
     }
 
     .legend-dot.booked {
       background: var(--seat-booked-bg);
-      border-color: var(--seat-booked-bg);
+      border-color: rgba(0, 0, 0, 0.8);
     }
 
-    .legend-dot.free {
-      background: var(--seat-bg);
-      border-color: var(--seat-border);
+    .legend-dot.driver {
+      background: rgba(0, 0, 0, 0.9);
+      border-color: #000;
     }
 
-    .btn {
-      margin-top: 10px;
-      padding: 11px 26px;
+    .btn-row {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 9px 22px;
       border-radius: 999px;
       border: none;
       background: var(--primary);
@@ -447,464 +528,672 @@
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 14px 32px rgba(248, 113, 113, 0.45);
+      box-shadow: 0 14px 36px rgba(248, 113, 113, 0.55);
       transition: 0.16s ease all;
     }
 
-    .btn:hover:not(:disabled) {
+    .btn-primary:hover:not(:disabled) {
       background: var(--primary-dark);
       transform: translateY(-1px);
     }
 
-    .btn:disabled {
-      background: #cbd5f5;
+    .btn-primary:disabled {
+      background: #4b5563;
       box-shadow: none;
       cursor: not-allowed;
     }
 
-    .message {
-      margin-top: 6px;
+    .price-chip {
       font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.85);
     }
 
-    .message.ok { color: #059669; }
-    .message.error { color: #dc2626; }
+    .message {
+      margin-top: 10px;
+      font-size: 12px;
+      min-height: 16px;
+    }
 
-    @media (max-width: 840px) {
-      .main-layout {
-        flex-direction: column;
-      }
-      .driver-card, .booking-card {
-        width: 100%;
-      }
+    .message.ok {
+      color: #22c55e;
+    }
+
+    .message.error {
+      color: #f97373;
     }
   </style>
 </head>
 <body>
-<div class="page">
+  <div class="page">
+    <header class="page-title">
+      <h1>Arteon Ride Booking</h1>
+      <p>Choose your trip direction, stop & seat – then confirm your spot.</p>
+    </header>
 
-  <!-- HERO -->
-  <header class="hero">
-    <img src="banner.jpg" alt="Arteon banner">
-    <div class="hero-title">Select Your Car Seat</div>
-  </header>
+    <main class="layout">
+      <!-- LEFT: DRIVER + TRIP CONFIG -->
+      <section class="card">
+        <div class="pill">
+          <span class="pill-dot"></span>
+          Verified ride · Real driver · 3 passenger seats only
+        </div>
 
-  <main class="main-layout">
-    <!-- LEFT: DRIVER INFO + ADMIN -->
-    <section class="driver-card">
-      <div class="section-label">Your driver</div>
-      <div class="driver-header">
-        <img src="driver-photo.jpg" alt="Photo of your driver" class="driver-photo">
-        <div>
-          <div class="driver-name">Aleš Krajina</div>
-          <div class="driver-meta">
-            <span><span class="star">★</span>4.9 rating</span>
-            <span>• 120+ rides</span>
-            <span>• Non-smoker</span>
+        <h2>Your Pilot</h2>
+        <div class="driver-name">Aleš – Arteon Captain</div>
+        <div class="driver-subtitle">
+          VW Arteon Shooting Brake R-Line · 2.0 TDI · 147 kW
+        </div>
+
+        <ul class="driver-list">
+          <li>Comfort cruise, no rushing and no chaos.</li>
+          <li>Clean, quiet interior with wide back seats.</li>
+          <li>Only 3 passengers – cozy, not a bus.</li>
+        </ul>
+
+        <div class="car-specs">
+          <strong>About the car:</strong><br />
+          VW Arteon Shooting Brake R-Line (147 kW) – premium long-distance
+          cruiser with a big luggage area, wide rear seats and a calm, quiet cabin.
+        </div>
+
+        <!-- TRIP / DATE / STOP -->
+        <div class="trip-section">
+          <div class="section-title">Trip & Date</div>
+          <p id="tripCurrent" class="trip-current">
+            No trip selected yet – choose one below.
+          </p>
+
+          <div class="form-row">
+            <label for="tripSelect">Available trips (set by admin)</label>
+            <select id="tripSelect">
+              <option value="">– Select a trip –</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label id="stopLabel">Exit / pickup stop</label>
+            <div class="radio-group" id="stopRadios">
+              <label class="radio-item">
+                <input type="radio" name="stop" value="praha" data-price="50" disabled />
+                <span>Praha (50 CHF)</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="stop" value="brno" data-price="70" disabled />
+                <span>Brno (70 CHF)</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="stop" value="ostrava" data-price="80" disabled />
+                <span>Ostrava (80 CHF)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- ADMIN CONFIG (PIN-PROTECTED) -->
+          <button type="button" class="admin-link" id="adminToggle">
+            Admin (PIN) – configure trips & dates
+          </button>
+
+          <div class="admin-config" id="adminConfig">
+            <div class="admin-config-row">
+              <label for="adminDate">Date:</label>
+              <input type="date" id="adminDate" />
+            </div>
+            <div class="admin-config-row">
+              <label for="adminFrom">From:</label>
+              <select id="adminFrom">
+                <option value="Zurich">Zurich</option>
+                <option value="Ostrava">Ostrava</option>
+                <option value="Praha">Praha</option>
+                <option value="Brno">Brno</option>
+              </select>
+              <label for="adminTo">To:</label>
+              <select id="adminTo">
+                <option value="Ostrava">Ostrava</option>
+                <option value="Zurich">Zurich</option>
+                <option value="Praha">Praha</option>
+                <option value="Brno">Brno</option>
+              </select>
+            </div>
+            <div class="admin-config-row">
+              <button type="button" class="admin-btn" id="adminAddTrip">
+                Add Trip
+              </button>
+            </div>
+            <ul class="admin-trip-list" id="adminTripList"></ul>
           </div>
         </div>
-      </div>
-      <p class="driver-bio">
-        Czech guy in Switzerland, driving a graphite-silver Arteon R-Line. I like mountains, good music
-        and making sure your ride is safe, on time and comfortable.
-      </p>
+      </section>
 
-      <div class="trip-section">
-        <p class="trip-current">
-          Current available trips:<br>
-          <span id="tripSummary">None yet – ask the driver 🙂</span>
-        </p>
-        <button id="adminToggle" class="admin-link">I’m the driver (admin)</button>
-
-        <div id="adminConfig" class="admin-config">
-          <div class="admin-config-row">
-            <label for="tripDate">Date:</label>
-            <input type="date" id="tripDate">
-          </div>
-          <div class="admin-config-row">
-            <label for="fromCity">From:</label>
-            <input type="text" id="fromCity" placeholder="Zurich">
-            <label for="toCity">To:</label>
-            <input type="text" id="toCity" placeholder="Ostrava">
-          </div>
-          <div class="admin-config-row">
-            <button id="addTripBtn" class="admin-btn">Add trip</button>
-          </div>
-
-          <ul id="tripList" class="admin-trip-list"></ul>
+      <!-- RIGHT: CAR + SEAT BOOKING -->
+      <section class="card">
+        <div class="car-card-title">
+          <h2>Select Your Seat</h2>
+          <small>1 co-pilot + 2 back seats</small>
         </div>
-      </div>
-    </section>
 
-    <!-- RIGHT: BOOKING -->
-    <section class="booking-card">
-      <h2>Choose your place in the Arteon</h2>
-      <p class="booking-subtitle">
-        Select a date & route, then tap on a seat inside the car to reserve your spot.
-      </p>
+        <div class="car-visual">
+          <!-- Your Arteon top-down image -->
+          <img src="car-top-vertical.jpg" alt="Top-down view of VW Arteon" />
 
-      <div class="trip-select-row">
-        <label for="tripSelect">Trip:</label>
-        <select id="tripSelect">
-          <option value="">Select date & route</option>
-        </select>
-      </div>
-
-      <div class="car-seat-wrapper">
-        <div class="car-seat-card">
-          <img src="car-top-vertical.jpg" alt="Top-down view of the car" class="car-top">
-
+          <!-- Seat overlay -->
           <div class="seat-grid">
-            <!-- DRIVER (not bookable) -->
-            <div class="seat driver-seat" data-seat-id="DRIVER">
-              <span class="seat-status-label"></span>
-              <img src="driver-wheel-icon.png" alt="Driver" class="seat-icon">
-              <div class="seat-label">Driver</div>
-              <div class="seat-small">Non bookable</div>
+            <!-- Driver (not bookable) -->
+            <div class="seat driver-seat" data-seat-id="DRV">
+              <img
+                src="driver-wheel-icon.png"
+                alt="Driver steering wheel"
+                class="seat-icon"
+              />
+              <div class="seat-label">DRIVER</div>
+              <div class="seat-small">Not bookable</div>
             </div>
 
-            <!-- VIP CO-PILOT -->
+            <!-- Co-Pilot / VIP seat (front passenger) -->
             <div class="seat" data-seat-id="VIP">
-              <span class="seat-status-label"></span>
-              <img src="vip-icon.png" alt="VIP icon" class="seat-icon">
-              <div class="seat-label">Co-pilot</div>
+              <img
+                src="vip-icon.png"
+                alt="VIP co-pilot icon"
+                class="seat-icon"
+              />
+              <div class="seat-label">CO-PILOT</div>
               <div class="seat-small">Front passenger</div>
+              <div class="booked-overlay">BOOKED</div>
             </div>
 
-            <!-- BACK LEFT -->
-            <div class="seat" data-seat-id="BL">
-              <span class="seat-status-label"></span>
-              <div class="seat-label">Mood bringer</div>
-              <div class="seat-small">Back left</div>
+            <!-- Mood Bringer (rear left) -->
+            <div class="seat" data-seat-id="MB">
+              <div class="seat-label">MOOD BRINGER</div>
+              <div class="seat-small">Rear left</div>
+              <div class="booked-overlay">BOOKED</div>
             </div>
 
-            <!-- BACK RIGHT -->
-            <div class="seat" data-seat-id="BR">
-              <span class="seat-status-label"></span>
-              <div class="seat-label">Vibe curator</div>
-              <div class="seat-small">Back right</div>
+            <!-- Chief DJ (rear right) -->
+            <div class="seat" data-seat-id="DJ">
+              <div class="seat-label">CHIEF DJ</div>
+              <div class="seat-small">Rear right</div>
+              <div class="booked-overlay">BOOKED</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div id="seatCounts" class="counts-row">
-        Free seats: <strong>3</strong> · Booked: <strong>0</strong> · Selected: <strong>None</strong>
-      </div>
-
-      <div class="legend" aria-hidden="true">
-        <div class="legend-item">
-          <span class="legend-dot free"></span> Free
+        <div class="status-row" id="seatStatus">
+          Select a trip and stop to see seat availability.
         </div>
-        <div class="legend-item">
-          <span class="legend-dot selected"></span> Selected
+
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-dot driver"></span> Driver
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot"></span> Free
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot selected"></span> Selected
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot booked"></span> Booked
+          </div>
         </div>
-        <div class="legend-item">
-          <span class="legend-dot booked"></span> Booked
+
+        <div class="btn-row">
+          <div class="price-chip" id="priceDisplay">
+            Choose stop & seat(s) to see price
+          </div>
+          <button type="button" class="btn-primary" id="confirmBtn" disabled>
+            Confirm Booking
+          </button>
         </div>
-      </div>
 
-      <button id="confirmBtn" class="btn" disabled>Confirm Booking</button>
-      <div id="message" class="message"></div>
-    </section>
-  </main>
-</div>
+        <div id="message" class="message"></div>
+      </section>
+    </main>
+  </div>
 
-<script>
-  // --- STORAGE KEYS -------------------------------------------------
-  const STORAGE_KEY_TRIPS = "carTrips_v1";
-  const STORAGE_KEY_BOOKINGS = "carSeatBookings_v1";
+  <script>
+    // === CONFIG ======================================================
+    const ADMIN_PIN = "1470"; // Change this to whatever you want
+    const STORAGE_TRIPS_KEY = "arteonTrips_v1";
+    const STORAGE_BOOKINGS_KEY = "arteonBookings_v1";
 
-  // --- ELEMENTS -----------------------------------------------------
-  const tripSummaryEl = document.getElementById("tripSummary");
-  const adminToggleBtn = document.getElementById("adminToggle");
-  const adminConfigEl = document.getElementById("adminConfig");
-  const tripListEl = document.getElementById("tripList");
-  const tripSelectEl = document.getElementById("tripSelect");
-  const confirmBtn = document.getElementById("confirmBtn");
-  const messageEl = document.getElementById("message");
-  const seatCountEl = document.getElementById("seatCounts");
-  const seatEls = Array.from(document.querySelectorAll(".seat"));
+    const SEAT_IDS = ["VIP", "MB", "DJ"]; // driver (DRV) is not bookable
 
-  const tripDateInput = document.getElementById("tripDate");
-  const fromCityInput = document.getElementById("fromCity");
-  const toCityInput = document.getElementById("toCity");
-  const addTripBtn = document.getElementById("addTripBtn");
+    // Base prices by stop (CHF)
+    const STOP_PRICES = {
+      praha: 50,
+      brno: 70,
+      ostrava: 80,
+    };
 
-  const ADMIN_PIN = "1379"; // change to whatever you want
+    // === STATE =======================================================
+    let trips = [];
+    let bookings = {};
+    let currentTripId = "";
+    let currentStop = "";        // praha / brno / ostrava
+    let selectedSeats = new Set();
 
-  let trips = [];
-  let bookingsByTrip = {};
-  let currentTripId = "";
-  let selectedSeatIds = new Set();
-
-  // --- UTIL: LOAD/SAVE TRIPS & BOOKINGS -----------------------------
-  function loadTrips() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY_TRIPS);
-      trips = raw ? JSON.parse(raw) : [];
-    } catch {
-      trips = [];
-    }
-  }
-
-  function saveTrips() {
-    localStorage.setItem(STORAGE_KEY_TRIPS, JSON.stringify(trips));
-  }
-
-  function loadBookings() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY_BOOKINGS);
-      bookingsByTrip = raw ? JSON.parse(raw) : {};
-    } catch {
-      bookingsByTrip = {};
-    }
-  }
-
-  function saveBookings() {
-    localStorage.setItem(STORAGE_KEY_BOOKINGS, JSON.stringify(bookingsByTrip));
-  }
-
-  function formatTrip(trip) {
-    return `${trip.date} – ${trip.from} → ${trip.to}`;
-  }
-
-  // --- RENDER TRIPS (ADMIN + SELECT) -------------------------------
-  function renderTrips() {
-    // summary
-    if (!trips.length) {
-      tripSummaryEl.textContent = "None yet – ask the driver 🙂";
-    } else {
-      tripSummaryEl.textContent = trips
-        .slice()
-        .sort((a, b) => a.date.localeCompare(b.date))
-        .map(t => formatTrip(t))
-        .join(" | ");
+    // === UTILS =======================================================
+    function loadTrips() {
+      try {
+        const raw = localStorage.getItem(STORAGE_TRIPS_KEY);
+        trips = raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        trips = [];
+      }
     }
 
-    // admin list
-    tripListEl.innerHTML = "";
-    trips.forEach(trip => {
-      const li = document.createElement("li");
-      li.textContent = formatTrip(trip);
-      const btn = document.createElement("button");
-      btn.textContent = "remove";
-      btn.className = "admin-trip-remove";
-      btn.addEventListener("click", () => removeTrip(trip.id));
-      li.appendChild(btn);
-      tripListEl.appendChild(li);
-    });
+    function saveTrips() {
+      localStorage.setItem(STORAGE_TRIPS_KEY, JSON.stringify(trips));
+    }
 
-    // user select
-    const prev = tripSelectEl.value;
-    tripSelectEl.innerHTML = '<option value="">Select date & route</option>';
-    trips
-      .slice()
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .forEach(trip => {
+    function loadBookings() {
+      try {
+        const raw = localStorage.getItem(STORAGE_BOOKINGS_KEY);
+        bookings = raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        bookings = {};
+      }
+    }
+
+    function saveBookings() {
+      localStorage.setItem(STORAGE_BOOKINGS_KEY, JSON.stringify(bookings));
+    }
+
+    function formatTripLabel(t) {
+      // display: YYYY-MM-DD – From → To
+      return `${t.date} – ${t.from} → ${t.to}`;
+    }
+
+    function getTripById(id) {
+      return trips.find((t) => t.id === id) || null;
+    }
+
+    function getCurrentBookingMap() {
+      if (!currentTripId) return {};
+      if (!bookings[currentTripId]) bookings[currentTripId] = {};
+      return bookings[currentTripId];
+    }
+
+    // === UI: POPULATE SELECTS =======================================
+    function refreshTripSelect() {
+      const tripSelect = document.getElementById("tripSelect");
+      tripSelect.innerHTML = `<option value="">– Select a trip –</option>`;
+
+      if (!trips.length) {
         const opt = document.createElement("option");
-        opt.value = trip.id;
-        opt.textContent = formatTrip(trip);
-        tripSelectEl.appendChild(opt);
+        opt.value = "";
+        opt.disabled = true;
+        opt.textContent = "No trips configured (admin only)";
+        tripSelect.appendChild(opt);
+        return;
+      }
+
+      trips
+        .slice()
+        .sort((a, b) => (a.date > b.date ? 1 : -1))
+        .forEach((trip) => {
+          const opt = document.createElement("option");
+          opt.value = trip.id;
+          opt.textContent = formatTripLabel(trip);
+          tripSelect.appendChild(opt);
+        });
+    }
+
+    function refreshAdminTripList() {
+      const list = document.getElementById("adminTripList");
+      list.innerHTML = "";
+
+      if (!trips.length) {
+        const li = document.createElement("li");
+        li.textContent = "No trips yet.";
+        list.appendChild(li);
+        return;
+      }
+
+      trips
+        .slice()
+        .sort((a, b) => (a.date > b.date ? 1 : -1))
+        .forEach((t) => {
+          const li = document.createElement("li");
+          const span = document.createElement("span");
+          span.textContent = formatTripLabel(t);
+          const btn = document.createElement("button");
+          btn.className = "admin-trip-remove";
+          btn.textContent = "remove";
+          btn.addEventListener("click", () => {
+            trips = trips.filter((x) => x.id !== t.id);
+            saveTrips();
+            refreshTripSelect();
+            refreshAdminTripList();
+            if (currentTripId === t.id) {
+              currentTripId = "";
+              selectedSeats.clear();
+              currentStop = "";
+              clearStopRadios();
+              updateSeatVisuals();
+              updateSeatStatus();
+            }
+          });
+          li.appendChild(span);
+          li.appendChild(btn);
+          list.appendChild(li);
+        });
+    }
+
+    // === UI: STOPS (RADIOS) =========================================
+    function setStopRadiosEnabled(enabled) {
+      document
+        .querySelectorAll('input[name="stop"]')
+        .forEach((radio) => {
+          radio.disabled = !enabled;
+          if (!enabled) radio.checked = false;
+        });
+    }
+
+    function clearStopRadios() {
+      document
+        .querySelectorAll('input[name="stop"]')
+        .forEach((radio) => (radio.checked = false));
+    }
+
+    // === UI: SEATS ===================================================
+    function updateSeatVisuals() {
+      const seatElems = document.querySelectorAll(".seat");
+      const bookingMap = getCurrentBookingMap();
+
+      seatElems.forEach((seat) => {
+        const seatId = seat.dataset.seatId;
+        seat.classList.remove("selected", "booked", "disabled", "driver-seat");
+
+        if (seatId === "DRV") {
+          // driver seat is always non-bookable
+          seat.classList.add("driver-seat");
+          return;
+        }
+
+        // If no trip or no stop selected => disable seats
+        if (!currentTripId || !currentStop) {
+          seat.classList.add("disabled");
+          return;
+        }
+
+        // Already booked for this trip?
+        if (bookingMap[seatId]) {
+          seat.classList.add("booked");
+          return;
+        }
+
+        // Locally selected in this session
+        if (selectedSeats.has(seatId)) {
+          seat.classList.add("selected");
+        }
+      });
+    }
+
+    function updateSeatStatus() {
+      const statusEl = document.getElementById("seatStatus");
+      const priceEl = document.getElementById("priceDisplay");
+      const confirmBtn = document.getElementById("confirmBtn");
+
+      if (!currentTripId) {
+        statusEl.textContent =
+          "Select a trip on the left to see seat availability.";
+        priceEl.textContent = "Choose stop & seat(s) to see price";
+        confirmBtn.disabled = true;
+        return;
+      }
+
+      if (!currentStop) {
+        const trip = getTripById(currentTripId);
+        if (trip && trip.from === "Ostrava" && trip.to === "Zurich") {
+          statusEl.textContent =
+            "Trip selected. Now choose where you start from (Praha / Brno / Ostrava).";
+        } else if (trip && trip.from === "Zurich" && trip.to === "Ostrava") {
+          statusEl.textContent =
+            "Trip selected. Now choose where you get off (Praha / Brno / Ostrava).";
+        } else {
+          statusEl.textContent =
+            "Trip selected. Now choose your stop (Praha / Brno / Ostrava).";
+        }
+        priceEl.textContent = "Select stop & seat(s) to see price";
+        confirmBtn.disabled = true;
+        return;
+      }
+
+      const bookingMap = getCurrentBookingMap();
+      const bookedCount = SEAT_IDS.filter((s) => bookingMap[s]).length;
+      const freeCount = SEAT_IDS.length - bookedCount;
+
+      statusEl.textContent = `For this trip: ${bookedCount} seat(s) booked, ${freeCount} free.`;
+
+      const radio = document.querySelector(
+        'input[name="stop"]:checked'
+      );
+      const basePrice = radio
+        ? Number(radio.dataset.price || 0)
+        : 0;
+
+      const seatCount = selectedSeats.size;
+      if (seatCount > 0 && basePrice > 0) {
+        const total = seatCount * basePrice;
+        priceEl.textContent = `${seatCount} seat(s) × ${basePrice} CHF = ${total} CHF`;
+        confirmBtn.disabled = false;
+      } else {
+        priceEl.textContent = "Select at least one seat to see total price.";
+        confirmBtn.disabled = true;
+      }
+    }
+
+    function setMessage(text, type = "") {
+      const msgEl = document.getElementById("message");
+      msgEl.className = "message " + (type || "");
+      msgEl.textContent = text;
+    }
+
+    // === EVENT HANDLERS ==============================================
+    function handleSeatClick(e) {
+      const seatElem = e.currentTarget;
+      const seatId = seatElem.dataset.seatId;
+
+      if (seatId === "DRV") return;
+      if (!currentTripId || !currentStop) return;
+
+      const bookingMap = getCurrentBookingMap();
+      if (bookingMap[seatId]) return; // already booked
+
+      if (selectedSeats.has(seatId)) {
+        selectedSeats.delete(seatId);
+      } else {
+        selectedSeats.add(seatId);
+      }
+
+      updateSeatVisuals();
+      updateSeatStatus();
+      setMessage("");
+    }
+
+    function handleTripChange() {
+      const tripSelect = document.getElementById("tripSelect");
+      const tripCurrent = document.getElementById("tripCurrent");
+      const stopLabel = document.getElementById("stopLabel");
+
+      currentTripId = tripSelect.value || "";
+      selectedSeats.clear();
+      currentStop = "";
+      clearStopRadios();
+      setStopRadiosEnabled(!!currentTripId);
+
+      const trip = getTripById(currentTripId);
+      if (trip) {
+        tripCurrent.textContent = `Selected trip: ${trip.date} – ${trip.from} → ${trip.to}`;
+
+        // Direction logic for label text
+        if (trip.from === "Zurich" && trip.to === "Ostrava") {
+          stopLabel.textContent = "I get off in:";
+        } else if (trip.from === "Ostrava" && trip.to === "Zurich") {
+          stopLabel.textContent = "I start from:";
+        } else {
+          stopLabel.textContent = "Exit / pickup stop:";
+        }
+      } else {
+        tripCurrent.textContent = "No trip selected yet – choose one below.";
+        stopLabel.textContent = "Exit / pickup stop:";
+      }
+
+      updateSeatVisuals();
+      updateSeatStatus();
+      setMessage("");
+    }
+
+    function handleStopChange(e) {
+      const radio = e.target;
+      if (!radio.checked) return;
+      currentStop = radio.value || "";
+      selectedSeats.clear();
+      updateSeatVisuals();
+      updateSeatStatus();
+      setMessage("");
+    }
+
+    function handleConfirmBooking() {
+      if (!currentTripId || !currentStop) {
+        setMessage(
+          "Please select a trip and stop before confirming.",
+          "error"
+        );
+        return;
+      }
+      if (!selectedSeats.size) {
+        setMessage("Select at least one seat to book.", "error");
+        return;
+      }
+
+      const bookingMap = getCurrentBookingMap();
+      const now = new Date().toISOString();
+      const basePrice = STOP_PRICES[currentStop] || 0;
+      const trip = getTripById(currentTripId);
+
+      selectedSeats.forEach((seatId) => {
+        bookingMap[seatId] = {
+          stop: currentStop,
+          price: basePrice,
+          createdAt: now,
+          direction: trip ? `${trip.from}→${trip.to}` : "",
+        };
       });
 
-    // try to keep previous selection
-    if (trips.some(t => t.id === prev)) {
-      tripSelectEl.value = prev;
-    } else {
-      tripSelectEl.value = "";
-      currentTripId = "";
+      bookings[currentTripId] = bookingMap;
+      saveBookings();
+
+      const count = selectedSeats.size;
+      selectedSeats.clear();
+      updateSeatVisuals();
+      updateSeatStatus();
+
+      // TODO: replace this with real backend call if needed
+      // fetch('/api/book', { method: 'POST', body: JSON.stringify({ tripId: currentTripId, stop: currentStop, seats: [...selectedSeats] }) })
+
+      setMessage(
+        `Booking confirmed for ${count} seat(s). Stored locally and ready for backend integration.`,
+        "ok"
+      );
     }
 
-    handleTripChange();
-  }
-
-  function removeTrip(id) {
-    trips = trips.filter(t => t.id !== id);
-    delete bookingsByTrip[id];
-    saveTrips();
-    saveBookings();
-    renderTrips();
-  }
-
-  // --- ADMIN TOGGLE -------------------------------------------------
-  adminToggleBtn.addEventListener("click", () => {
-    if (adminConfigEl.style.display === "block") {
-      adminConfigEl.style.display = "none";
-      return;
-    }
-    const pin = prompt("Enter driver admin PIN:");
-    if (pin === ADMIN_PIN) {
-      adminConfigEl.style.display = "block";
-    } else if (pin !== null) {
-      alert("Wrong PIN.");
-    }
-  });
-
-  // --- ADD TRIP (ADMIN) ---------------------------------------------
-  addTripBtn.addEventListener("click", () => {
-    const date = tripDateInput.value;
-    const from = (fromCityInput.value || "").trim();
-    const to = (toCityInput.value || "").trim();
-
-    if (!date || !from || !to) {
-      alert("Please fill date, from and to.");
-      return;
+    // === ADMIN FUNCTIONS =============================================
+    function handleAdminToggle() {
+      const ok = window.prompt("Enter admin PIN:");
+      if (ok === ADMIN_PIN) {
+        const panel = document.getElementById("adminConfig");
+        panel.style.display = panel.style.display === "block" ? "none" : "block";
+      } else if (ok !== null) {
+        alert("Wrong PIN.");
+      }
     }
 
-    const id = `${date}_${from}_${to}_${Date.now()}`;
-    trips.push({ id, date, from, to });
-    saveTrips();
+    function handleAdminAddTrip() {
+      const d = document.getElementById("adminDate").value;
+      const from = document.getElementById("adminFrom").value;
+      const to = document.getElementById("adminTo").value;
 
-    // clear inputs a bit (keep from/to if you like)
-    tripDateInput.value = "";
-    renderTrips();
-  });
-
-  // --- HANDLE TRIP SELECTION ----------------------------------------
-  tripSelectEl.addEventListener("change", handleTripChange);
-
-  function handleTripChange() {
-    currentTripId = tripSelectEl.value;
-    selectedSeatIds.clear();
-    resetSeatClasses();
-
-    if (!currentTripId) {
-      confirmBtn.disabled = true;
-      messageEl.textContent = "Select a date & route first to see seat availability.";
-      messageEl.className = "message";
-      updateCounts();
-      return;
-    }
-
-    messageEl.textContent = "";
-    loadSeatStateForTrip(currentTripId);
-    confirmBtn.disabled = true; // until user selects at least one
-  }
-
-  // --- SEAT STATE ---------------------------------------------------
-  function getSeatStateForTrip(tripId) {
-    if (!bookingsByTrip[tripId]) bookingsByTrip[tripId] = {};
-    return bookingsByTrip[tripId];
-  }
-
-  function loadSeatStateForTrip(tripId) {
-    resetSeatClasses();
-    const state = getSeatStateForTrip(tripId);
-
-    seatEls.forEach(seat => {
-      const id = seat.dataset.seatId;
-      const labelEl = seat.querySelector(".seat-status-label");
-      if (id === "DRIVER") {
-        seat.classList.add("driver-seat");
-        if (labelEl) labelEl.textContent = "";
+      if (!d || !from || !to) {
+        alert("Please fill date, from and to.");
+        return;
+      }
+      if (from === to) {
+        alert("From and To can't be the same.");
         return;
       }
 
-      if (state[id] === "booked") {
-        seat.classList.add("booked");
-        if (labelEl) labelEl.textContent = "BOOKED";
-      }
-    });
+      const id = `${d}_${from}_${to}_${Date.now()}`;
+      trips.push({ id, date: d, from, to });
+      saveTrips();
+      refreshTripSelect();
+      refreshAdminTripList();
+      alert("Trip added.");
+    }
 
-    selectedSeatIds.clear();
-    updateCounts();
-  }
+    // === INIT ========================================================
+    document.addEventListener("DOMContentLoaded", () => {
+      // Load stored data
+      loadTrips();
+      loadBookings();
 
-  function resetSeatClasses() {
-    seatEls.forEach(seat => {
-      const labelEl = seat.querySelector(".seat-status-label");
-      seat.classList.remove("selected", "booked");
-      if (seat.dataset.seatId === "DRIVER") {
-        seat.classList.add("driver-seat");
-      }
-      if (labelEl) labelEl.textContent = "";
-    });
-  }
-
-  // --- CLICK ON SEATS -----------------------------------------------
-  seatEls.forEach(seat => {
-    const seatId = seat.dataset.seatId;
-
-    if (seatId === "DRIVER") return; // never clickable
-
-    seat.addEventListener("click", () => {
-      if (!currentTripId) {
-        messageEl.textContent = "Please select a date & route first.";
-        messageEl.className = "message error";
-        return;
+      // If no trips yet, create a dummy example so page isn't empty
+      if (!trips.length) {
+        const today = new Date();
+        const y = today.getFullYear();
+        const m = String(today.getMonth() + 1).padStart(2, "0");
+        const day = String(today.getDate()).padStart(2, "0");
+        const d = `${y}-${m}-${day}`;
+        trips.push({
+          id: `${d}_Zurich_Ostrava_demo`,
+          date: d,
+          from: "Zurich",
+          to: "Ostrava",
+        });
+        saveTrips();
       }
 
-      const state = getSeatStateForTrip(currentTripId);
-      if (state[seatId] === "booked") return; // locked
+      refreshTripSelect();
+      refreshAdminTripList();
 
-      if (selectedSeatIds.has(seatId)) {
-        selectedSeatIds.delete(seatId);
-        seat.classList.remove("selected");
-      } else {
-        selectedSeatIds.add(seatId);
-        seat.classList.add("selected");
-      }
+      // Seat click handlers
+      document.querySelectorAll(".seat").forEach((seat) => {
+        seat.addEventListener("click", handleSeatClick);
+      });
 
-      confirmBtn.disabled = selectedSeatIds.size === 0;
-      messageEl.textContent = "";
-      messageEl.className = "message";
-      updateCounts();
+      // Trip handler
+      document
+        .getElementById("tripSelect")
+        .addEventListener("change", handleTripChange);
+
+      // Stop radio handlers
+      document
+        .querySelectorAll('input[name="stop"]')
+        .forEach((radio) => {
+          radio.addEventListener("change", handleStopChange);
+        });
+
+      // Confirm button
+      document
+        .getElementById("confirmBtn")
+        .addEventListener("click", handleConfirmBooking);
+
+      // Admin
+      document
+        .getElementById("adminToggle")
+        .addEventListener("click", handleAdminToggle);
+      document
+        .getElementById("adminAddTrip")
+        .addEventListener("click", handleAdminAddTrip);
+
+      // Initially stops are disabled
+      setStopRadiosEnabled(false);
+      updateSeatVisuals();
+      updateSeatStatus();
     });
-  });
-
-  // --- CONFIRM BOOKING ----------------------------------------------
-  confirmBtn.addEventListener("click", () => {
-    if (!currentTripId || selectedSeatIds.size === 0) return;
-
-    const state = getSeatStateForTrip(currentTripId);
-    selectedSeatIds.forEach(id => {
-      state[id] = "booked";
-    });
-    saveBookings();
-
-    // reflect in UI
-    selectedSeatIds.forEach(id => {
-      const seat = seatEls.find(s => s.dataset.seatId === id);
-      if (!seat) return;
-      seat.classList.remove("selected");
-      seat.classList.add("booked");
-      const label = seat.querySelector(".seat-status-label");
-      if (label) label.textContent = "BOOKED";
-    });
-
-    const bookedList = Array.from(selectedSeatIds).join(", ");
-    selectedSeatIds.clear();
-    confirmBtn.disabled = true;
-    updateCounts();
-
-    messageEl.textContent = `Seats booked: ${bookedList}. See you on the ride!`;
-    messageEl.className = "message ok";
-  });
-
-  // --- COUNTS -------------------------------------------------------
-  function updateCounts() {
-    const allBookable = seatEls.filter(s => s.dataset.seatId !== "DRIVER");
-    let booked = 0;
-    let selected = 0;
-
-    allBookable.forEach(seat => {
-      if (seat.classList.contains("booked")) booked++;
-      else if (seat.classList.contains("selected")) selected++;
-    });
-
-    const total = allBookable.length;
-    const free = total - booked - selected;
-
-    const selectedLabel = selected === 0 ? "None" : selected.toString();
-
-    seatCountEl.innerHTML = `Free seats: <strong>${free}</strong> · Booked: <strong>${booked}</strong> · Selected: <strong>${selectedLabel}</strong>`;
-  }
-
-  // --- INIT ---------------------------------------------------------
-  loadTrips();
-  loadBookings();
-  renderTrips();
-</script>
+  </script>
 </body>
 </html>

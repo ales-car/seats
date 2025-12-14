@@ -41,17 +41,20 @@ function toggleView(isAdmin) {
 
 // NAHRADIT CELOU FUNKCI apiVerifyPin TÍMTO:
 
+// ==========================================
+// BYPASS: Ověření proběhne pouze v prohlížeči
+// ==========================================
 async function apiVerifyPin(pin) {
-    console.log("Bypass server check...");
+    console.log("⚠️ BYPASS: Ověřuji PIN lokálně (bez serveru)...");
     
-    // ZDE SI NASTAVTE SVŮJ PIN (pro teď natvrdo v JS)
+    // Zde si nastavte PIN, kterým se chcete přihlásit
     const HARDCODED_PIN = "1234"; 
 
-    // Simulace čekání (aby to vypadalo jako request)
-    await new Promise(r => setTimeout(r, 500));
+    // Malá pauza, aby to vypadalo, že systém "přemýšlí"
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     if (pin === HARDCODED_PIN) {
-        console.log("PIN OK (Local)");
+        console.log("✅ PIN je správný (Lokální ověření)");
         return true;
     } else {
         throw new Error("Wrong PIN (Local check)");

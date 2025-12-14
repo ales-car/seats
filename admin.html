@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
   <style>
-    /* ... Váš existující CSS kód (ponechán beze změny) ... */
     :root{
       --primary:#ff3600; --primary-dark:#d42d00;
       --text:#e5e7eb; --muted:#9ca3af;
@@ -125,7 +124,7 @@
         <div class="row">
           <label>Direction</label>
           <select id="tripDirection">
-                        <option value="ZO">Zurich → Ostrava</option>
+            <option value="ZO">Zurich → Ostrava</option>
             <option value="OZ">Ostrava → Zurich</option>
           </select>
         </div>
@@ -155,30 +154,28 @@
 /*
  * ====================================================================
  * ARTEON RIDE ADMIN SCRIPT
- * Handles Admin Login, Adding/Deleting Trips via Supabase Edge Functions
  * ====================================================================
  */
 
-/* ====== SUPABASE CONFIG (FILL THESE) ====== */
-const SUPABASE_URL = "https://rtqnbryjqiwnewmtdeqb.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0cW5icnlqcWl3bmV3bXRkZXFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3MDE2NjgsImV4cCI6MjA4MTI3NzY2OH0.3HACsytbNMgBZ9wpspl7SI76OpAsoUMZGyK57mQhCro";
-const SESSION_ADMIN_PIN = "arteon_admin_pin"; // Key pro uložení PINu v Session Storage
+/* ====== ⚠️ SUPABASE CONFIG (NUTNÉ VYPLNIT) ⚠️ ====== */
+const SUPABASE_URL = "https://rtqnbryjqiwnewmtdeqb.supabase.co"; // Vaše URL
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0cW5icnlqcWl3bmV3bXRkZXFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3MDE2NjgsImV4cCI6MjA4MTI3NzY2OH0.3HACsytbNMgBZ9wpspl7SI76OpAsoUMZGyK57mQhCro"; // Váš Anon Key
+const SESSION_ADMIN_PIN = "arteon_admin_pin";
 
-// ROUTE MAPPING: MAPUJE VÝBĚR NA FRONTENDU NA ID TRAS V DATABÁZI (routes tabulka)
+// ROUTE MAPPING: Mapuje zkratku na frontendu na ID v tabulce 'routes'
 const ROUTE_MAPPING = {
-    // Předpoklad: ID 1 je Zurich -> Ostrava
-    "ZO": { route_id: 1, from_city: "Zurich", to_city: "Ostrava", stop_mode: "dropoff" },
-    // Předpoklad: ID 2 je Ostrava -> Zurich
-    "OZ": { route_id: 2, from_city: "Ostrava", to_city: "Zurich", stop_mode: "pickup" }
+    "ZO": { route_id: 1, from_city: "Zurich", to_city: "Ostrava" }, // Předpoklad ID 1
+    "OZ": { route_id: 2, from_city: "Ostrava", to_city: "Zurich" } // Předpoklad ID 2
     // POZOR: Tato ID musí odpovídat skutečným ID v tabulce routes!
 };
 
 
 /* ====== Edge function endpoints ====== */
-const FN_LIST = `${SUPABASE_URL}/functions/v1/list-trips`;
-const FN_ADD  = `${SUPABASE_URL}/functions/v1/add-trip`;
-const FN_DEL  = `${SUPABASE_URL}/functions/v1/delete-trip`;
-const FN_VERIFY = `${SUPABASE_URL}/functions/v1/verify-admin-pin`; // Přidáno
+const FN_BASE = `${SUPABASE_URL}/functions/v1`;
+const FN_VERIFY = `${FN_BASE}/verify-admin-pin`;
+const FN_LIST = `${FN_BASE}/list-trips`;
+const FN_ADD  = `${FN_BASE}/add-trip`;
+const FN_DEL  = `${FN_BASE}/delete-trip`;
 
 
 /* ====== UI helpers ====== */
@@ -190,7 +187,6 @@ function setMsg(id, txt, type=""){
 function getPin(){ return sessionStorage.getItem(SESSION_ADMIN_PIN) || ""; }
 function setPin(pin){ sessionStorage.setItem(SESSION_ADMIN_PIN, pin); }
 function clearPin(){ sessionStorage.removeItem(SESSION_ADMIN_PIN); }
-
 function showLogin(){
   document.getElementById("loginWrap").style.display = "block";
   document.getElementById("adminUI").style.display = "none";
@@ -201,25 +197,16 @@ function showAdmin(){
 }
 
 /* ====== API calls (Edge Functions) ====== */
-// Nová funkce pro ověření PINu
 async function apiVerifyPin(pin) {
     const res = await fetch(FN_VERIFY, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "x-admin-pin": pin,
-        },
+        headers: { "Content-Type": "application/json", "x-admin-pin": pin }
     });
-    // Zde není potřeba JSON, funkce vrací jen 200/401/500
-    if (res.status === 401) {
-        throw new Error("Wrong PIN");
-    }
-    if (!res.ok) {
-        throw new Error(`Verification failed with status: ${res.status}`);
-    }
+    // Funkce by měla vrátit 200 pro OK, 401/403 pro chybu PINu
+    if (res.status === 401 || res.status === 403) throw new Error("Wrong PIN");
+    if (!res.ok) throw new Error(`Verification failed with status: ${res.status}`);
     return true;
 }
-
 
 async function apiListTrips() {
   const pin = getPin();
@@ -227,7 +214,6 @@ async function apiListTrips() {
   const res = await fetch(FN_LIST, {
     method: "GET",
     headers: {
-      // Zde stačí Anon Key a PIN, Anon Key se teď posílá správně:
       "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
       "apikey": SUPABASE_ANON_KEY,
       "x-admin-pin": pin,
@@ -243,7 +229,7 @@ async function apiListTrips() {
   }
 
   if (!res.ok || data.ok === false) {
-    throw new Error(data.error || `List failed (${res.status})`);
+    throw new Error(data.error || `List failed (HTTP ${res.status})`);
   }
 
   return data.trips || [];
@@ -251,7 +237,7 @@ async function apiListTrips() {
 
 
 async function apiAddTrip(payload) {
-    // Payload by měl obsahovat jen: { trip_date: "YYYY-MM-DD", route_id: Number }
+    // Payload: { trip_date: "YYYY-MM-DD", route_id: Number }
   const pin = getPin();
 
   const res = await fetch(FN_ADD, {
@@ -297,7 +283,7 @@ async function apiDeleteTrip(id) {
       "Content-Type": "application/json",
       "x-admin-pin": pin
     },
-    body: JSON.stringify({ id })
+    body: JSON.stringify({ id: Number(id) }) // Zajišťuje odeslání ID jako čísla
   });
 
   let data;
@@ -322,41 +308,35 @@ async function apiDeleteTrip(id) {
 
 
 /* ====== Render and Logic ====== */
-
-/**
- * Odvozuje stop_mode z route_id pro zobrazení v adminu.
- * Toto je jen pro UI, hlavní logika je v routes DB.
- */
 function getStopMode(from, to) {
-    if (from === "Zurich" && to === "Ostrava") return "dropoff";
-    if (from === "Ostrava" && to === "Zurich") return "pickup";
-    return "?";
+    if (from === "Zurich" && to === "Ostrava") return "dropoff (Exit)";
+    if (from === "Ostrava" && to === "Zurich") return "pickup (Start)";
+    return "Neznámý směr";
 }
-
 
 async function renderTrips(){
   const list = document.getElementById("tripList");
   list.innerHTML = `<div class="muted">Loading…</div>`;
   try{
-    const trips = await apiListTrips(); // Očekává strukturu z list-trips funkce
+    const trips = await apiListTrips();
     list.innerHTML = "";
 
     if (!trips.length){
-      list.innerHTML = `<div class="muted">No trips yet.</div>`;
+      list.innerHTML = `<div class="muted">No scheduled trips yet.</div>`;
       return;
     }
 
     trips.forEach(t=>{
       const div = document.createElement("div");
       div.className = "item";
-      // stop_mode se odvozuje, protože ho už nenačítáme ze sloupce trips.stop_mode
-      const mode = getStopMode(t.from_city, t.to_city); 
+      const mode = getStopMode(t.from_city, t.to_city);
+      const bookedCount = Object.keys(t.seat_bookings || {}).length; // Předpoklad, že bookings přijdou z DB
       
       const label = `${t.trip_date} – ${t.from_city} → ${t.to_city}`;
       div.innerHTML = `
         <div>
           <strong>${label}</strong>
-          <small>Mode: ${mode}</small>
+          <small>Mode: ${mode} | Seats Booked: ${bookedCount}/3</small>
         </div>
         <button class="btn danger" data-id="${t.id}">Delete</button>
       `;
@@ -364,7 +344,7 @@ async function renderTrips(){
       div.querySelector("button").onclick = async (e)=>{
         const tripId = e.currentTarget.dataset.id;
         try{
-          await apiDeleteTrip(tripId); // Používáme t.id, což je trip ID
+          await apiDeleteTrip(tripId);
           setMsg("adminMsg","Trip deleted ✅","ok");
           await renderTrips();
         } catch(e){
@@ -380,66 +360,12 @@ async function renderTrips(){
 }
 
 
-/* ====== Login Handler ====== */
-async function handleLogin(){
-  const pin = document.getElementById("pinInput").value.trim();
-  if(!pin){ setMsg("loginMsg", "PIN cannot be empty", "err"); return; }
-  
-  try{
-    setMsg("loginMsg", "Verifying PIN...");
-    await apiVerifyPin(pin); // Ověří PIN přes Edge Function
-    
-    // PIN je platný, ulož a načti UI
-    setPin(pin);
-    setMsg("loginMsg","Logged in successfully.","ok");
-    showAdmin();
-    await renderTrips();
-  } catch(e){
-    clearPin();
-    setMsg("loginMsg", e.message || "Login failed (check PIN/Functions)", "err");
-  }
-}
-
-
-/* ====== Add Trip Handler (upraveno) ====== */
-document.getElementById("addTripBtn").onclick = async ()=>{
-    const d = document.getElementById("tripDate").value;
-    const dirKey = document.getElementById("tripDirection").value;
-    
-    if(!d){ setMsg("adminMsg","Select date","err"); return; }
-
-    const routeInfo = ROUTE_MAPPING[dirKey];
-    if (!routeInfo || !routeInfo.route_id) {
-        setMsg("adminMsg","Invalid direction mapping","err"); 
-        return;
-    }
-
-    // Payload posíláme pouze trip_date a route_id
-    const payload = { 
-        trip_date: d, 
-        route_id: routeInfo.route_id 
-    };
-    const payload = { 
-        trip_date: d, 
-        route_id: Number(routeInfo.route_id) 
-    };
-    try{
-        await apiAddTrip(payload);
-        setMsg("adminMsg","Trip added to DB ✅","ok");
-        await renderTrips();
-    } catch(e){
-        setMsg("adminMsg", e.message, "err");
-    }
-};
-
-
 /* ====== Initialization ====== */
 document.addEventListener("DOMContentLoaded", async ()=>{
-  // if pin already stored in session, try to load
+  // Check if PIN is stored and try to verify/load admin UI
   if (getPin()){
     try{
-      // Rychlé ověření (List se ověří sám)
-      await apiListTrips(); 
+      await apiListTrips();
       showAdmin();
       await renderTrips();
     } catch {
@@ -450,20 +376,56 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     showLogin();
   }
 
-  // Login button handler
-  document.getElementById("loginBtn").onclick = handleLogin;
-  
-  // Logout button handler
+  document.getElementById("loginBtn").onclick = async ()=>{
+    const pin = document.getElementById("pinInput").value.trim();
+    if(!pin) return;
+    try{
+      await apiVerifyPin(pin);
+      setPin(pin);
+      setMsg("loginMsg","Logged in successfully.","ok");
+      showAdmin();
+      await renderTrips();
+    } catch(e){
+      clearPin();
+      setMsg("loginMsg", e.message || "Wrong PIN", "err");
+    }
+  };
+
   document.getElementById("logoutBtn").onclick = ()=>{
     clearPin();
     showLogin();
   };
 
-  // Refresh button handler
   document.getElementById("refreshBtn").onclick = async ()=>{
     setMsg("adminMsg","Refreshing…");
     await renderTrips();
     setMsg("adminMsg","Up to date","ok");
+  };
+
+  document.getElementById("addTripBtn").onclick = async ()=>{
+    const d = document.getElementById("tripDate").value;
+    const dirKey = document.getElementById("tripDirection").value;
+
+    if(!d){ setMsg("adminMsg","Select date","err"); return; }
+
+    const routeInfo = ROUTE_MAPPING[dirKey];
+    if (!routeInfo || !routeInfo.route_id) {
+      setMsg("adminMsg","Invalid direction mapping (Check ROUTE_MAPPING)","err");
+      return;
+    }
+
+    const payload = {
+      trip_date: d,
+      route_id: Number(routeInfo.route_id) // Zajistí, že je to číslo
+    };
+
+    try{
+      await apiAddTrip(payload);
+      setMsg("adminMsg","Trip added to DB ✅","ok");
+      await renderTrips();
+    } catch(e){
+      setMsg("adminMsg", e.message, "err");
+    }
   };
 });
 </script>

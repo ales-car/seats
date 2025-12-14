@@ -4,14 +4,19 @@
   <meta charset="UTF-8" />
   <title>Arteon Ride – Seat Booking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <!-- Page icon (favicon) -->
   <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
       --primary: #ff3600;
       --primary-dark: #d42d00;
-
+      --bg: #0b1120;
+      --card-bg: #020617;
       --text-main: #e5e7eb;
       --text-muted: #9ca3af;
 
@@ -46,6 +51,7 @@
       box-shadow: 0 32px 80px rgba(15, 23, 42, 0.75);
       border: 1px solid rgba(148, 163, 184, 0.35);
     }
+
     .hero img {
       width: 100%;
       display: block;
@@ -53,6 +59,7 @@
       object-fit: cover;
       filter: saturate(1.1);
     }
+
     .hero-title {
       position: absolute;
       inset: 0;
@@ -74,6 +81,7 @@
       gap: 20px;
       align-items: flex-start;
     }
+
     @media (max-width: 900px) {
       .layout { grid-template-columns: 1fr; }
     }
@@ -112,6 +120,7 @@
       background: rgba(15, 23, 42, 0.8);
       margin-bottom: 10px;
     }
+
     .pill-dot {
       width: 8px;
       height: 8px;
@@ -126,6 +135,7 @@
       gap: 12px;
       margin-bottom: 10px;
     }
+
     .driver-avatar {
       width: 58px;
       height: 58px;
@@ -134,11 +144,9 @@
       border: 2px solid rgba(248, 250, 252, 0.9);
       box-shadow: 0 8px 20px rgba(15, 23, 42, 0.8);
     }
-    .driver-name {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
+
+    .driver-name { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+
     .driver-meta {
       font-size: 12px;
       color: var(--text-muted);
@@ -146,6 +154,7 @@
       flex-wrap: wrap;
       gap: 10px;
     }
+
     .driver-meta span::before { content: "• "; color: var(--primary); }
     .driver-meta span:first-child::before { content: ""; }
 
@@ -156,23 +165,21 @@
       font-size: 13px;
       color: var(--text-main);
     }
+
     .driver-list li {
       margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
+
     .driver-list li::before {
       content: "•";
       color: var(--primary);
       font-size: 16px;
     }
 
-    .car-specs {
-      margin-top: 8px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
+    .car-specs { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
     .car-specs strong { color: #e5e7eb; }
 
     /* Trip + date + stop section */
@@ -181,11 +188,8 @@
       padding-top: 12px;
       border-top: 1px dashed rgba(148, 163, 184, 0.4);
     }
-    .trip-current {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin: 0 0 6px;
-    }
+
+    .trip-current { font-size: 12px; color: var(--text-muted); margin: 0 0 6px; }
 
     .form-row {
       display: flex;
@@ -194,14 +198,17 @@
       margin-bottom: 8px;
       font-size: 12px;
     }
+
     .form-row label {
       color: var(--text-muted);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       font-size: 11px;
     }
+
     .form-row select,
-    .form-row input[type="date"] {
+    .form-row input[type="text"],
+    .form-row input[type="tel"] {
       border-radius: 10px;
       border: 1px solid rgba(148, 163, 184, 0.5);
       padding: 6px 8px;
@@ -210,6 +217,7 @@
       font-size: 12px;
       outline: none;
     }
+
     .form-row select:disabled { opacity: 0.5; cursor: not-allowed; }
 
     /* Radio group for Praha/Brno/Ostrava */
@@ -219,99 +227,10 @@
       flex-wrap: wrap;
       margin-top: 2px;
     }
-    .radio-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--text-main);
-      background: rgba(0,0,0,0.22);
-      border: 1px solid rgba(148,163,184,0.18);
-      padding: 8px 10px;
-      border-radius: 12px;
-    }
-    .radio-item input[type="radio"] {
-      width: 14px;
-      height: 14px;
-      accent-color: var(--primary);
-      cursor: pointer;
-    }
-    .radio-item span { cursor: pointer; }
 
-    /* Admin config area */
-    .admin-link {
-      font-size: 11px;
-      border: none;
-      background: none;
-      color: var(--primary);
-      cursor: pointer;
-      padding: 0;
-      text-decoration: underline;
-      margin-top: 4px;
-    }
-    .admin-config {
-      margin-top: 8px;
-      padding: 8px 10px;
-      background: #020617;
-      border-radius: 12px;
-      border: 1px dashed #4b5563;
-      display: none;
-    }
-    .admin-config-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 6px;
-      align-items: center;
-    }
-    .admin-config-row label {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-    .admin-config-row input[type="date"],
-    .admin-config-row select {
-      padding: 3px 6px;
-      border-radius: 8px;
-      border: 1px solid #4b5563;
-      background: #020617;
-      color: var(--text-main);
-      font-size: 11px;
-      outline: none;
-    }
-    .admin-btn {
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: none;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      background: var(--primary);
-      color: #fff;
-    }
-    .admin-trip-list {
-      list-style: none;
-      padding: 0;
-      margin: 4px 0 0;
-      max-height: 140px;
-      overflow-y: auto;
-      font-size: 11px;
-    }
-    .admin-trip-list li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-    .admin-trip-remove {
-      border: none;
-      background: none;
-      color: #f97373;
-      cursor: pointer;
-      font-size: 11px;
-      text-decoration: underline;
-      padding: 0;
-    }
+    .radio-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-main); }
+    .radio-item input[type="radio"] { width: 14px; height: 14px; accent-color: var(--primary); cursor: pointer; }
+    .radio-item span { cursor: pointer; }
 
     /* Right card: car + seats */
     .car-card-title {
@@ -319,12 +238,13 @@
       justify-content: space-between;
       align-items: baseline;
       margin-bottom: 8px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
+
     .car-card-title h2 { margin-bottom: 0; }
-    .car-card-title small {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
+
+    .car-card-title small { font-size: 11px; color: var(--text-muted); }
 
     .car-visual {
       position: relative;
@@ -333,17 +253,14 @@
       overflow: hidden;
       border: 1px solid rgba(148, 163, 184, 0.4);
       background: radial-gradient(circle at top, #111827 0, #020617 45%);
-      max-width: 320px;  /* slightly smaller than before */
+      max-width: 320px; /* smaller car */
       margin-left: auto;
       margin-right: auto;
     }
-    .car-visual img {
-      width: 100%;
-      display: block;
-      opacity: 0.92;
-    }
 
-    /* === SEAT GRID & STYLE (your snippet) ========================== */
+    .car-visual img { width: 100%; display: block; opacity: 0.92; }
+
+    /* === SEAT GRID & STYLE (YOUR FINAL SNIPPET) ==================== */
     .seat-grid {
       position: absolute;
       /* These percentages are tuned to sit over the cabin of car-top-vertical.jpg */
@@ -438,12 +355,10 @@
       pointer-events: none;
       transition: opacity 0.16s ease;
     }
+
     .seat.booked .booked-tag { opacity: 1; }
 
-    .seat.disabled {
-      cursor: not-allowed;
-      opacity: 0.4;
-    }
+    .seat.disabled { cursor: not-allowed; opacity: 0.4; }
 
     /* Status & legend & button */
     .status-row {
@@ -456,6 +371,8 @@
       gap: 6px;
     }
 
+    .status-row strong { color: #fbbf24; }
+
     .legend {
       display: flex;
       gap: 12px;
@@ -464,7 +381,9 @@
       color: var(--text-muted);
       flex-wrap: wrap;
     }
+
     .legend-item { display: flex; align-items: center; gap: 6px; }
+
     .legend-dot {
       width: 10px;
       height: 10px;
@@ -472,6 +391,7 @@
       border: 1px solid rgba(148, 163, 184, 0.9);
       background: rgba(15, 23, 42, 0.7);
     }
+
     .legend-dot.selected { background: var(--seat-selected-bg); border-color: var(--seat-selected-border); }
     .legend-dot.booked { background: var(--seat-booked-bg); border-color: rgba(0, 0, 0, 0.8); }
     .legend-dot.driver { background: rgba(0, 0, 0, 0.9); border-color: #000; }
@@ -484,6 +404,7 @@
       gap: 10px;
       flex-wrap: wrap;
     }
+
     .btn-primary {
       padding: 9px 22px;
       border-radius: 999px;
@@ -496,6 +417,7 @@
       box-shadow: 0 14px 36px rgba(248, 113, 113, 0.55);
       transition: 0.16s ease all;
     }
+
     .btn-primary:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
     .btn-primary:disabled { background: #4b5563; box-shadow: none; cursor: not-allowed; }
 
@@ -507,13 +429,40 @@
       background: rgba(15, 23, 42, 0.85);
     }
 
-    .message {
-      margin-top: 10px;
-      font-size: 12px;
-      min-height: 16px;
-    }
+    .message { margin-top: 10px; font-size: 12px; min-height: 16px; }
     .message.ok { color: #22c55e; }
     .message.error { color: #f97373; }
+
+    .contact-actions {
+      margin-top: 10px;
+      display: none;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-ghost {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.55);
+      color: #e5e7eb;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.6); }
+
+    footer {
+      margin-top: 18px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 12px;
+    }
+    footer a { color: #9ca3af; text-decoration: underline; margin: 0 10px; }
   </style>
 </head>
 
@@ -526,7 +475,7 @@
     </header>
 
     <main class="layout">
-      <!-- LEFT: DRIVER + TRIP CONFIG -->
+      <!-- LEFT: DRIVER + TRIP -->
       <section class="card">
         <div class="pill">
           <span class="pill-dot"></span>
@@ -538,38 +487,41 @@
           <div>
             <div class="driver-name">Aleš Krajina</div>
             <div class="driver-meta">
-              <span>⭐ 4.9 rating</span>
-              <span>120+ rides</span>
               <span>Non-smoker</span>
+              <span>Safe ride</span>
+              <span>Comfort first</span>
             </div>
           </div>
         </div>
 
         <ul class="driver-list">
-          <li>Czech guy in Switzerland, driving a graphite-silver Arteon R-Line.</li>
-          <li>I like mountains, good music and making sure your ride is safe, on time and comfortable.</li>
+          <li>Czech guy in Switzerland – long-distance rides Zürich ↔ Czechia.</li>
+          <li>Calm driving, good music, clean car.</li>
+          <li>You can book 1–3 seats (VIP / Mood Bringer / Chief DJ).</li>
         </ul>
 
         <div class="car-specs">
           <strong>About the car:</strong><br />
-          VW Arteon 2.0 TDI Shooting Brake R-Line (147 kW) – premium long-distance
-          cruiser with a big luggage area, wide rear seats and a calm, quiet cabin.
+          VW Arteon 2.0 TDI Shooting Brake <strong>R-Line</strong> (147 kW) – premium long-distance cruiser,
+          big luggage area and comfy rear seats.
         </div>
 
-        <!-- TRIP / DATE / STOP -->
+        <!-- TRIP / STOP -->
         <div class="trip-section">
           <div class="section-title">Trip & Date</div>
-          <p id="tripCurrent" class="trip-current">No trip selected yet – choose one below.</p>
+          <p id="tripCurrent" class="trip-current">
+            No trip selected yet – choose one below.
+          </p>
 
           <div class="form-row">
-            <label for="tripSelect">Available trips (set by admin)</label>
+            <label for="tripSelect">Available trips</label>
             <select id="tripSelect">
-              <option value="">– Select a trip –</option>
+              <option value="">– Loading trips… –</option>
             </select>
           </div>
 
           <div class="form-row">
-            <label id="stopLabel">Exit / pickup stop</label>
+            <label id="stopLabel">Stop</label>
             <div class="radio-group" id="stopRadios">
               <label class="radio-item">
                 <input type="radio" name="stop" value="praha" data-price="50" disabled />
@@ -586,28 +538,15 @@
             </div>
           </div>
 
-          <!-- ADMIN CONFIG (PIN-PROTECTED) -->
-          <button type="button" class="admin-link" id="adminToggle">I’m the driver (admin)</button>
+          <!-- Optional contact fields (saved to DB) -->
+          <div class="form-row">
+            <label for="custName">Your name (optional)</label>
+            <input id="custName" type="text" placeholder="e.g. Jakub" />
+          </div>
 
-          <div class="admin-config" id="adminConfig">
-            <div class="admin-config-row">
-              <label for="adminDate">Date:</label>
-              <input type="date" id="adminDate" />
-            </div>
-
-            <div class="admin-config-row">
-              <label for="adminRoute">Route:</label>
-              <select id="adminRoute">
-                <option value="ZRH_OSR">Zurich → Ostrava</option>
-                <option value="OSR_ZRH">Ostrava → Zurich</option>
-              </select>
-            </div>
-
-            <div class="admin-config-row">
-              <button type="button" class="admin-btn" id="adminAddTrip">Add Trip</button>
-            </div>
-
-            <ul class="admin-trip-list" id="adminTripList"></ul>
+          <div class="form-row">
+            <label for="custPhone">Phone (optional)</label>
+            <input id="custPhone" type="tel" placeholder="+420..." />
           </div>
         </div>
       </section>
@@ -616,7 +555,7 @@
       <section class="card">
         <div class="car-card-title">
           <h2>Choose your place in the Arteon</h2>
-          <small>1 co-pilot + 2 back seats</small>
+          <small>VIP + Mood Bringer + Chief DJ</small>
         </div>
 
         <div class="car-visual">
@@ -625,14 +564,14 @@
           <div class="seat-grid">
             <!-- Driver (not bookable) -->
             <div class="seat driver-seat" data-seat-id="DRV">
-              <img src="driver-wheel-icon.png" alt="Driver steering wheel" class="seat-icon" />
+              <img src="driver-wheel-icon.png" alt="Driver" class="seat-icon" />
               <div class="seat-label">DRIVER</div>
               <div class="seat-small">Not bookable</div>
             </div>
 
-            <!-- Co-Pilot / VIP -->
+            <!-- VIP -->
             <div class="seat" data-seat-id="VIP">
-              <img src="vip-icon.png" alt="VIP co-pilot icon" class="seat-icon" />
+              <img src="vip-icon.png" alt="VIP" class="seat-icon" />
               <div class="seat-label">CO-PILOT</div>
               <div class="seat-small">Front passenger</div>
               <div class="booked-tag">BOOKED</div>
@@ -667,171 +606,103 @@
 
         <div class="btn-row">
           <div class="price-chip" id="priceDisplay">Choose stop & seat(s) to see price</div>
-          <button type="button" class="btn-primary" id="confirmBtn" disabled>Confirm Booking</button>
+          <button type="button" class="btn-primary" id="confirmBtn" disabled>
+            Confirm Booking
+          </button>
         </div>
 
         <div id="message" class="message"></div>
+
+        <div class="contact-actions" id="contactActions">
+          <a class="btn-ghost" id="waBtn" href="#" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn-ghost" id="msBtn" href="#" target="_blank" rel="noopener">Messenger</a>
+          <a class="btn-ghost" id="emBtn" href="#" target="_blank" rel="noopener">Email</a>
+        </div>
       </section>
     </main>
+
+    <footer>
+      <a href="./privacy-policy.html">Zásady ochrany soukromí</a>
+      <a href="./terms.html">Podmínky použití</a>
+    </footer>
   </div>
 
   <script>
-    const ADMIN_PIN = "1470"; // change as you like
-    const STORAGE_TRIPS_KEY = "arteonTrips_v2";
-    const STORAGE_BOOKINGS_KEY = "arteonBookings_v1";
+    // ==========================
+    // 1) SUPABASE CONFIG
+    // ==========================
+    const SUPABASE_URL = "https://rtqnbryjqiwnewmtdeqb.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0cW5icnlqcWl3bmV3bXRkZXFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3MDE2NjgsImV4cCI6MjA4MTI3NzY2OH0.3HACsytbNMgBZ9wpspl7SI76OpAsoUMZGyK57mQhCro";
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const SEAT_IDS = ["VIP", "MB", "DJ"]; // driver DRV is not bookable
-    const STOP_PRICES = { praha: 50, brno: 70, ostrava: 80 };
+    // ==========================
+    // 2) APP CONFIG
+    // ==========================
+    const OWNER_WHATSAPP = "+41767775898";
+    const OWNER_FB_PROFILE = "https://www.facebook.com/ales.krajina/";
+    const OWNER_EMAIL = "ales.krajina@yourmail.com"; // change or keep dummy
+
+    const SEAT_IDS = ["VIP", "MB", "DJ"]; // DRV not bookable
+
+    const STOP_PRICES = {
+      praha: 50,
+      brno: 70,
+      ostrava: 80
+    };
 
     let trips = [];
-    let bookings = {};
     let currentTripId = "";
+    let currentTripObj = null;
     let currentStop = "";
     let selectedSeats = new Set();
+    let bookedSeats = new Set(); // from DB
 
-    function loadTrips() {
-      try {
-        const raw = localStorage.getItem(STORAGE_TRIPS_KEY);
-        trips = raw ? JSON.parse(raw) : [];
-      } catch { trips = []; }
-
-      // Backward-compat migration (if you had old objects with from/to)
-      // Convert them into { id, date, route }
-      trips = trips.map(t => {
-        if (t.route) return t;
-        const from = (t.from || "").toLowerCase();
-        const to = (t.to || "").toLowerCase();
-        let route = "";
-        if (from.includes("zur") && to.includes("ostr")) route = "ZRH_OSR";
-        if (from.includes("ostr") && to.includes("zur")) route = "OSR_ZRH";
-        return { id: t.id || `${t.date}_${Date.now()}`, date: t.date, route: route || "ZRH_OSR" };
-      }).filter(t => t.date && t.route);
-    }
-
-    function saveTrips() {
-      localStorage.setItem(STORAGE_TRIPS_KEY, JSON.stringify(trips));
-    }
-
-    function loadBookings() {
-      try {
-        const raw = localStorage.getItem(STORAGE_BOOKINGS_KEY);
-        bookings = raw ? JSON.parse(raw) : {};
-      } catch { bookings = {}; }
-    }
-
-    function saveBookings() {
-      localStorage.setItem(STORAGE_BOOKINGS_KEY, JSON.stringify(bookings));
-    }
-
-    function routeToText(route) {
-      if (route === "ZRH_OSR") return "Zurich → Ostrava";
-      if (route === "OSR_ZRH") return "Ostrava → Zurich";
-      return route;
-    }
-
-    function getTripById(id) {
-      return trips.find(t => t.id === id) || null;
-    }
-
-    function formatTripLabel(t) {
-      // ✅ requested: only date (with year) + route
-      return `${t.date} · ${routeToText(t.route)}`;
-    }
-
-    function getCurrentBookingMap() {
-      if (!currentTripId) return {};
-      if (!bookings[currentTripId]) bookings[currentTripId] = {};
-      return bookings[currentTripId];
-    }
-
-    function refreshTripSelect() {
-      const tripSelect = document.getElementById("tripSelect");
-      tripSelect.innerHTML = `<option value="">– Select a trip –</option>`;
-
-      if (!trips.length) {
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.disabled = true;
-        opt.textContent = "No trips configured (admin only)";
-        tripSelect.appendChild(opt);
-        return;
-      }
-
-      trips.slice()
-        .sort((a,b) => (a.date > b.date ? 1 : -1))
-        .forEach(trip => {
-          const opt = document.createElement("option");
-          opt.value = trip.id;
-          opt.textContent = formatTripLabel(trip);
-          tripSelect.appendChild(opt);
-        });
-    }
-
-    function refreshAdminTripList() {
-      const list = document.getElementById("adminTripList");
-      list.innerHTML = "";
-
-      if (!trips.length) {
-        const li = document.createElement("li");
-        li.textContent = "No trips yet.";
-        list.appendChild(li);
-        return;
-      }
-
-      trips.slice()
-        .sort((a,b) => (a.date > b.date ? 1 : -1))
-        .forEach(t => {
-          const li = document.createElement("li");
-          const span = document.createElement("span");
-          span.textContent = formatTripLabel(t);
-
-          const btn = document.createElement("button");
-          btn.className = "admin-trip-remove";
-          btn.textContent = "remove";
-          btn.addEventListener("click", () => {
-            trips = trips.filter(x => x.id !== t.id);
-            saveTrips();
-            refreshTripSelect();
-            refreshAdminTripList();
-            if (currentTripId === t.id) {
-              currentTripId = "";
-              selectedSeats.clear();
-              currentStop = "";
-              clearStopRadios();
-              setStopRadiosEnabled(false);
-              updateSeatVisuals();
-              updateSeatStatus();
-              setMessage("");
-              document.getElementById("tripCurrent").textContent = "No trip selected yet – choose one below.";
-            }
-          });
-
-          li.appendChild(span);
-          li.appendChild(btn);
-          list.appendChild(li);
-        });
+    // ==========================
+    // 3) UI HELPERS
+    // ==========================
+    function setMessage(text, type = "") {
+      const msgEl = document.getElementById("message");
+      msgEl.className = "message " + (type || "");
+      msgEl.textContent = text;
     }
 
     function setStopRadiosEnabled(enabled) {
-      document.querySelectorAll('input[name="stop"]').forEach(radio => {
-        radio.disabled = !enabled;
-        if (!enabled) radio.checked = false;
+      document.querySelectorAll('input[name="stop"]').forEach(r => {
+        r.disabled = !enabled;
+        if (!enabled) r.checked = false;
       });
     }
 
-    function clearStopRadios() {
-      document.querySelectorAll('input[name="stop"]').forEach(radio => (radio.checked = false));
+    function clearStopSelection() {
+      document.querySelectorAll('input[name="stop"]').forEach(r => r.checked = false);
+    }
+
+    function formatTripLabel(t) {
+      return `${t.date} – ${t.from} → ${t.to}`;
+    }
+
+    function updateStopLabel() {
+      const stopLabel = document.getElementById("stopLabel");
+      if (!currentTripObj) {
+        stopLabel.textContent = "Stop";
+        return;
+      }
+      if (currentTripObj.from === "Zurich" && currentTripObj.to === "Ostrava") {
+        stopLabel.textContent = "I get off in:";
+      } else if (currentTripObj.from === "Ostrava" && currentTripObj.to === "Zurich") {
+        stopLabel.textContent = "I start from:";
+      } else {
+        stopLabel.textContent = "Stop:";
+      }
     }
 
     function updateSeatVisuals() {
-      const seatElems = document.querySelectorAll(".seat");
-      const bookingMap = getCurrentBookingMap();
-
-      seatElems.forEach(seat => {
-        const seatId = seat.dataset.seatId;
+      const seats = document.querySelectorAll(".seat");
+      seats.forEach(seat => {
+        const id = seat.dataset.seatId;
         seat.classList.remove("selected", "booked", "disabled", "driver-seat");
 
-        if (seatId === "DRV") {
+        if (id === "DRV") {
           seat.classList.add("driver-seat");
           return;
         }
@@ -841,52 +712,47 @@
           return;
         }
 
-        if (bookingMap[seatId]) {
+        if (bookedSeats.has(id)) {
           seat.classList.add("booked");
           return;
         }
 
-        if (selectedSeats.has(seatId)) seat.classList.add("selected");
+        if (selectedSeats.has(id)) {
+          seat.classList.add("selected");
+        }
       });
     }
 
-    function updateSeatStatus() {
+    function updateStatusAndPrice() {
       const statusEl = document.getElementById("seatStatus");
       const priceEl = document.getElementById("priceDisplay");
       const confirmBtn = document.getElementById("confirmBtn");
+      const contactActions = document.getElementById("contactActions");
+
+      contactActions.style.display = "none";
 
       if (!currentTripId) {
-        statusEl.textContent = "Select a trip on the left to see seat availability.";
+        statusEl.textContent = "Select a trip to see seat availability.";
         priceEl.textContent = "Choose stop & seat(s) to see price";
         confirmBtn.disabled = true;
         return;
       }
 
-      const trip = getTripById(currentTripId);
-
       if (!currentStop) {
-        if (trip?.route === "ZRH_OSR") {
-          statusEl.textContent = "Trip selected. Now choose where you get off (Praha / Brno / Ostrava).";
-        } else if (trip?.route === "OSR_ZRH") {
-          statusEl.textContent = "Trip selected. Now choose where you start from (Praha / Brno / Ostrava).";
-        } else {
-          statusEl.textContent = "Trip selected. Now choose your stop (Praha / Brno / Ostrava).";
-        }
-        priceEl.textContent = "Select stop & seat(s) to see price";
+        statusEl.textContent = "Trip selected. Now choose your stop (Praha / Brno / Ostrava).";
+        priceEl.textContent = "Select stop & seat(s) to see total price";
         confirmBtn.disabled = true;
         return;
       }
 
-      const bookingMap = getCurrentBookingMap();
-      const bookedCount = SEAT_IDS.filter(s => bookingMap[s]).length;
+      const bookedCount = [...bookedSeats].filter(s => SEAT_IDS.includes(s)).length;
       const freeCount = SEAT_IDS.length - bookedCount;
 
-      statusEl.textContent = `For this trip: ${bookedCount} seat(s) booked, ${freeCount} free.`;
-
-      const radio = document.querySelector('input[name="stop"]:checked');
-      const basePrice = radio ? Number(radio.dataset.price || 0) : 0;
-
+      const basePrice = STOP_PRICES[currentStop] || 0;
       const seatCount = selectedSeats.size;
+
+      statusEl.innerHTML = `For this trip: <strong>${bookedCount}</strong> booked, <strong>${freeCount}</strong> free.`;
+
       if (seatCount > 0 && basePrice > 0) {
         const total = seatCount * basePrice;
         priceEl.textContent = `${seatCount} seat(s) × ${basePrice} CHF = ${total} CHF`;
@@ -897,10 +763,134 @@
       }
     }
 
-    function setMessage(text, type = "") {
-      const msgEl = document.getElementById("message");
-      msgEl.className = "message " + (type || "");
-      msgEl.textContent = text;
+    // ==========================
+    // 4) SUPABASE DATA
+    // ==========================
+    async function fetchTrips() {
+      // trips join routes
+      const { data, error } = await sb
+        .from("trips")
+        .select("id, trip_date, routes(from_city,to_city)")
+        .eq("is_active", true)
+        .order("trip_date", { ascending: true });
+
+      if (error) throw error;
+
+      return (data || []).map(t => ({
+        id: t.id,
+        date: t.trip_date,
+        from: t.routes?.from_city || "?",
+        to: t.routes?.to_city || "?"
+      }));
+    }
+
+    async function fetchBookedSeats(tripId) {
+      const { data, error } = await sb
+        .from("bookings")
+        .select("seat_code")
+        .eq("trip_id", tripId);
+
+      if (error) throw error;
+
+      return new Set((data || []).map(x => x.seat_code));
+    }
+
+    async function createBookings({ tripId, stopCity, price, seats, name, phone, channel }) {
+      const rows = seats.map(seat => ({
+        trip_id: tripId,
+        seat_code: seat,
+        stop_city: stopCity,
+        price_chf: price,
+        customer_name: name || null,
+        customer_phone: phone || null,
+        contact_channel: channel
+      }));
+
+      const { data, error } = await sb
+        .from("bookings")
+        .insert(rows)
+        .select();
+
+      if (error) throw error;
+      return data;
+    }
+
+    // ==========================
+    // 5) UI EVENT HANDLERS
+    // ==========================
+    async function refreshTripSelect() {
+      const sel = document.getElementById("tripSelect");
+      sel.innerHTML = "";
+
+      const opt0 = document.createElement("option");
+      opt0.value = "";
+      opt0.textContent = "– Select a trip –";
+      sel.appendChild(opt0);
+
+      if (!trips.length) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.disabled = true;
+        opt.textContent = "No trips available (admin needs to add them)";
+        sel.appendChild(opt);
+        return;
+      }
+
+      trips.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t.id;
+        opt.textContent = formatTripLabel(t);
+        sel.appendChild(opt);
+      });
+    }
+
+    async function handleTripChange() {
+      const sel = document.getElementById("tripSelect");
+      const tripCurrent = document.getElementById("tripCurrent");
+
+      currentTripId = sel.value || "";
+      currentTripObj = trips.find(t => t.id === currentTripId) || null;
+
+      selectedSeats.clear();
+      bookedSeats = new Set();
+      currentStop = "";
+      clearStopSelection();
+      setStopRadiosEnabled(!!currentTripId);
+      updateStopLabel();
+
+      if (!currentTripId) {
+        tripCurrent.textContent = "No trip selected yet – choose one below.";
+        updateSeatVisuals();
+        updateStatusAndPrice();
+        setMessage("");
+        return;
+      }
+
+      tripCurrent.textContent = `Selected trip: ${formatTripLabel(currentTripObj)}`;
+
+      try {
+        setMessage("Loading seat availability…");
+        bookedSeats = await fetchBookedSeats(currentTripId);
+        setMessage("");
+      } catch (e) {
+        console.error(e);
+        setMessage("Failed to load bookings from DB. Check Supabase policies/keys.", "error");
+      }
+
+      updateSeatVisuals();
+      updateStatusAndPrice();
+    }
+
+    function handleStopChange(e) {
+      const radio = e.target;
+      if (!radio.checked) return;
+
+      currentStop = radio.value || "";
+      selectedSeats.clear();
+
+      updateSeatVisuals();
+      updateStatusAndPrice();
+      setMessage("");
     }
 
     function handleSeatClick(e) {
@@ -909,145 +899,133 @@
 
       if (seatId === "DRV") return;
       if (!currentTripId || !currentStop) return;
-
-      const bookingMap = getCurrentBookingMap();
-      if (bookingMap[seatId]) return;
+      if (bookedSeats.has(seatId)) return;
 
       if (selectedSeats.has(seatId)) selectedSeats.delete(seatId);
       else selectedSeats.add(seatId);
 
       updateSeatVisuals();
-      updateSeatStatus();
+      updateStatusAndPrice();
       setMessage("");
     }
 
-    function handleTripChange() {
-      const tripSelect = document.getElementById("tripSelect");
-      const tripCurrent = document.getElementById("tripCurrent");
-      const stopLabel = document.getElementById("stopLabel");
+    function buildSummaryText({ trip, stop, seats, basePrice }) {
+      const seatsArr = [...seats];
+      const total = seatsArr.length * basePrice;
 
-      currentTripId = tripSelect.value || "";
-      selectedSeats.clear();
-      currentStop = "";
-      clearStopRadios();
-      setStopRadiosEnabled(!!currentTripId);
+      return [
+        "🚗 Arteon Ride booking",
+        `Trip: ${trip.date} – ${trip.from} → ${trip.to}`,
+        (trip.from === "Zurich" && trip.to === "Ostrava") ? `Drop-off: ${stop}` :
+        (trip.from === "Ostrava" && trip.to === "Zurich") ? `Pickup: ${stop}` :
+        `Stop: ${stop}`,
+        `Seats: ${seatsArr.join(", ")}`,
+        `Price: ${seatsArr.length} × ${basePrice} CHF = ${total} CHF`
+      ].join("\n");
+    }
 
-      const trip = getTripById(currentTripId);
-      if (trip) {
-        tripCurrent.textContent = `Selected trip: ${formatTripLabel(trip)}`;
-        if (trip.route === "ZRH_OSR") stopLabel.textContent = "I get off in:";
-        else if (trip.route === "OSR_ZRH") stopLabel.textContent = "I start from:";
-        else stopLabel.textContent = "Exit / pickup stop:";
-      } else {
-        tripCurrent.textContent = "No trip selected yet – choose one below.";
-        stopLabel.textContent = "Exit / pickup stop:";
+    function showContactButtons(summaryText) {
+      const contactActions = document.getElementById("contactActions");
+      const waBtn = document.getElementById("waBtn");
+      const msBtn = document.getElementById("msBtn");
+      const emBtn = document.getElementById("emBtn");
+
+      const waText = encodeURIComponent(summaryText);
+      const waPhone = OWNER_WHATSAPP.replace(/\D/g, ""); // digits only
+      waBtn.href = `https://wa.me/${waPhone}?text=${waText}`;
+
+      // Messenger: auto-send without FB app/API is not possible.
+      // We open messenger and user pastes text (still fastest + no verification hell).
+      msBtn.href = "https://www.messenger.com/t/" + encodeURIComponent(OWNER_FB_PROFILE);
+
+      const mailSubj = encodeURIComponent("Arteon Ride booking");
+      const mailBody = encodeURIComponent(summaryText);
+      emBtn.href = `mailto:${encodeURIComponent(OWNER_EMAIL)}?subject=${mailSubj}&body=${mailBody}`;
+
+      contactActions.style.display = "flex";
+    }
+
+    async function handleConfirmBooking() {
+      if (!currentTripId || !currentTripObj) {
+        setMessage("Please select a trip first.", "error");
+        return;
       }
-
-      updateSeatVisuals();
-      updateSeatStatus();
-      setMessage("");
-    }
-
-    function handleStopChange(e) {
-      const radio = e.target;
-      if (!radio.checked) return;
-      currentStop = radio.value || "";
-      selectedSeats.clear(); // new stop => choose seats again
-      updateSeatVisuals();
-      updateSeatStatus();
-      setMessage("");
-    }
-
-    function handleConfirmBooking() {
-      if (!currentTripId || !currentStop) {
-        setMessage("Please select a trip and stop before confirming.", "error");
+      if (!currentStop) {
+        setMessage("Please select a stop (Praha/Brno/Ostrava).", "error");
         return;
       }
       if (!selectedSeats.size) {
-        setMessage("Select at least one seat to book.", "error");
+        setMessage("Select at least one seat.", "error");
         return;
       }
 
-      const bookingMap = getCurrentBookingMap();
-      const now = new Date().toISOString();
       const basePrice = STOP_PRICES[currentStop] || 0;
-      const trip = getTripById(currentTripId);
+      const seatsToBook = [...selectedSeats];
 
-      // write bookings
-      selectedSeats.forEach(seatId => {
-        bookingMap[seatId] = {
-          stop: currentStop,
+      const name = document.getElementById("custName").value.trim();
+      const phone = document.getElementById("custPhone").value.trim();
+
+      try {
+        setMessage("Saving booking to DB…");
+
+        await createBookings({
+          tripId: currentTripId,
+          stopCity: currentStop,
           price: basePrice,
-          createdAt: now,
-          route: trip?.route || ""
-        };
-      });
+          seats: seatsToBook,
+          name,
+          phone,
+          channel: "web"
+        });
 
-      bookings[currentTripId] = bookingMap;
-      saveBookings();
+        // refresh booked seats from DB (source of truth)
+        bookedSeats = await fetchBookedSeats(currentTripId);
 
-      const count = selectedSeats.size;
-      selectedSeats.clear();
-      updateSeatVisuals();
-      updateSeatStatus();
+        const summary = buildSummaryText({
+          trip: currentTripObj,
+          stop: currentStop,
+          seats: new Set(seatsToBook),
+          basePrice
+        });
 
-      setMessage(
-        `Booking confirmed for ${count} seat(s) on ${formatTripLabel(trip)}. Stored locally (ready for backend integration).`,
-        "ok"
-      );
-    }
+        selectedSeats.clear();
+        updateSeatVisuals();
+        updateStatusAndPrice();
 
-    function handleAdminToggle() {
-      const ok = window.prompt("Enter admin PIN:");
-      if (ok === ADMIN_PIN) {
-        const panel = document.getElementById("adminConfig");
-        panel.style.display = (panel.style.display === "block") ? "none" : "block";
-      } else if (ok !== null) {
-        alert("Wrong PIN.");
+        setMessage("✅ Booking stored in DB. Now send me the message to confirm.", "ok");
+        showContactButtons(summary);
+
+      } catch (e) {
+        console.error(e);
+
+        // Most common: UNIQUE constraint violation => someone booked same seat
+        setMessage("⚠️ Booking failed (seat may have been taken). Refreshing availability…", "error");
+
+        try {
+          bookedSeats = await fetchBookedSeats(currentTripId);
+          selectedSeats.clear();
+          updateSeatVisuals();
+          updateStatusAndPrice();
+        } catch {}
       }
     }
 
-    function handleAdminAddTrip() {
-      const d = document.getElementById("adminDate").value;
-      const route = document.getElementById("adminRoute").value;
+    // ==========================
+    // 6) INIT
+    // ==========================
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        setMessage("Loading trips…");
+        trips = await fetchTrips();
+        await refreshTripSelect();
+        setMessage("");
 
-      if (!d || !route) {
-        alert("Please select date and route.");
-        return;
+      } catch (e) {
+        console.error(e);
+        const sel = document.getElementById("tripSelect");
+        sel.innerHTML = `<option value="">DB error – check Supabase URL/Key & RLS policies</option>`;
+        setMessage("DB error – check Supabase URL/Key & RLS policies.", "error");
       }
-
-      // prevent duplicates (same date + same route)
-      const exists = trips.some(t => t.date === d && t.route === route);
-      if (exists) {
-        alert("This trip already exists (same date + same route).");
-        return;
-      }
-
-      const id = `${d}_${route}_${Date.now()}`;
-      trips.push({ id, date: d, route });
-      saveTrips();
-      refreshTripSelect();
-      refreshAdminTripList();
-      alert("Trip added.");
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      loadTrips();
-      loadBookings();
-
-      // create one demo trip if empty
-      if (!trips.length) {
-        const today = new Date();
-        const y = today.getFullYear();
-        const m = String(today.getMonth() + 1).padStart(2, "0");
-        const day = String(today.getDate()).padStart(2, "0");
-        const d = `${y}-${m}-${day}`;
-        trips.push({ id: `${d}_ZRH_OSR_demo`, date: d, route: "ZRH_OSR" });
-        saveTrips();
-      }
-
-      refreshTripSelect();
-      refreshAdminTripList();
 
       document.querySelectorAll(".seat").forEach(seat => {
         seat.addEventListener("click", handleSeatClick);
@@ -1060,12 +1038,10 @@
       });
 
       document.getElementById("confirmBtn").addEventListener("click", handleConfirmBooking);
-      document.getElementById("adminToggle").addEventListener("click", handleAdminToggle);
-      document.getElementById("adminAddTrip").addEventListener("click", handleAdminAddTrip);
 
       setStopRadiosEnabled(false);
       updateSeatVisuals();
-      updateSeatStatus();
+      updateStatusAndPrice();
     });
   </script>
 </body>

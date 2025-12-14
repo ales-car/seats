@@ -11,8 +11,7 @@
     :root {
       --primary: #ff3600;
       --primary-dark: #d42d00;
-      --bg: #0b1120;
-      --card-bg: #020617;
+
       --text-main: #e5e7eb;
       --text-muted: #9ca3af;
 
@@ -24,11 +23,7 @@
       --seat-booked-bg: rgba(55, 65, 81, 0.85);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -40,10 +35,7 @@
       padding: 20px 10px 40px;
     }
 
-    .page {
-      width: 100%;
-      max-width: 1100px;
-    }
+    .page { width: 100%; max-width: 1100px; }
 
     /* HERO BANNER */
     .hero {
@@ -54,7 +46,6 @@
       box-shadow: 0 32px 80px rgba(15, 23, 42, 0.75);
       border: 1px solid rgba(148, 163, 184, 0.35);
     }
-
     .hero img {
       width: 100%;
       display: block;
@@ -62,7 +53,6 @@
       object-fit: cover;
       filter: saturate(1.1);
     }
-
     .hero-title {
       position: absolute;
       inset: 0;
@@ -84,11 +74,8 @@
       gap: 20px;
       align-items: flex-start;
     }
-
     @media (max-width: 900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+      .layout { grid-template-columns: 1fr; }
     }
 
     .card {
@@ -125,7 +112,6 @@
       background: rgba(15, 23, 42, 0.8);
       margin-bottom: 10px;
     }
-
     .pill-dot {
       width: 8px;
       height: 8px;
@@ -140,7 +126,6 @@
       gap: 12px;
       margin-bottom: 10px;
     }
-
     .driver-avatar {
       width: 58px;
       height: 58px;
@@ -149,13 +134,11 @@
       border: 2px solid rgba(248, 250, 252, 0.9);
       box-shadow: 0 8px 20px rgba(15, 23, 42, 0.8);
     }
-
     .driver-name {
       font-size: 17px;
       font-weight: 600;
       margin-bottom: 4px;
     }
-
     .driver-meta {
       font-size: 12px;
       color: var(--text-muted);
@@ -163,15 +146,8 @@
       flex-wrap: wrap;
       gap: 10px;
     }
-
-    .driver-meta span::before {
-      content: "• ";
-      color: var(--primary);
-    }
-
-    .driver-meta span:first-child::before {
-      content: "";
-    }
+    .driver-meta span::before { content: "• "; color: var(--primary); }
+    .driver-meta span:first-child::before { content: ""; }
 
     .driver-list {
       list-style: none;
@@ -180,14 +156,12 @@
       font-size: 13px;
       color: var(--text-main);
     }
-
     .driver-list li {
       margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-
     .driver-list li::before {
       content: "•";
       color: var(--primary);
@@ -199,10 +173,7 @@
       font-size: 12px;
       color: var(--text-muted);
     }
-
-    .car-specs strong {
-      color: #e5e7eb;
-    }
+    .car-specs strong { color: #e5e7eb; }
 
     /* Trip + date + stop section */
     .trip-section {
@@ -210,7 +181,6 @@
       padding-top: 12px;
       border-top: 1px dashed rgba(148, 163, 184, 0.4);
     }
-
     .trip-current {
       font-size: 12px;
       color: var(--text-muted);
@@ -224,14 +194,12 @@
       margin-bottom: 8px;
       font-size: 12px;
     }
-
     .form-row label {
       color: var(--text-muted);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       font-size: 11px;
     }
-
     .form-row select,
     .form-row input[type="date"] {
       border-radius: 10px;
@@ -242,11 +210,7 @@
       font-size: 12px;
       outline: none;
     }
-
-    .form-row select:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    .form-row select:disabled { opacity: 0.5; cursor: not-allowed; }
 
     /* Radio group for Praha/Brno/Ostrava */
     .radio-group {
@@ -255,25 +219,24 @@
       flex-wrap: wrap;
       margin-top: 2px;
     }
-
     .radio-item {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       font-size: 12px;
       color: var(--text-main);
+      background: rgba(0,0,0,0.22);
+      border: 1px solid rgba(148,163,184,0.18);
+      padding: 8px 10px;
+      border-radius: 12px;
     }
-
     .radio-item input[type="radio"] {
       width: 14px;
       height: 14px;
       accent-color: var(--primary);
       cursor: pointer;
     }
-
-    .radio-item span {
-      cursor: pointer;
-    }
+    .radio-item span { cursor: pointer; }
 
     /* Admin config area */
     .admin-link {
@@ -286,7 +249,6 @@
       text-decoration: underline;
       margin-top: 4px;
     }
-
     .admin-config {
       margin-top: 8px;
       padding: 8px 10px;
@@ -295,7 +257,6 @@
       border: 1px dashed #4b5563;
       display: none;
     }
-
     .admin-config-row {
       display: flex;
       flex-wrap: wrap;
@@ -303,12 +264,10 @@
       margin-bottom: 6px;
       align-items: center;
     }
-
     .admin-config-row label {
       font-size: 11px;
       color: var(--text-muted);
     }
-
     .admin-config-row input[type="date"],
     .admin-config-row select {
       padding: 3px 6px;
@@ -319,7 +278,6 @@
       font-size: 11px;
       outline: none;
     }
-
     .admin-btn {
       padding: 5px 10px;
       border-radius: 999px;
@@ -330,7 +288,6 @@
       background: var(--primary);
       color: #fff;
     }
-
     .admin-trip-list {
       list-style: none;
       padding: 0;
@@ -339,7 +296,6 @@
       overflow-y: auto;
       font-size: 11px;
     }
-
     .admin-trip-list li {
       display: flex;
       justify-content: space-between;
@@ -347,7 +303,6 @@
       gap: 6px;
       margin-bottom: 4px;
     }
-
     .admin-trip-remove {
       border: none;
       background: none;
@@ -365,11 +320,7 @@
       align-items: baseline;
       margin-bottom: 8px;
     }
-
-    .car-card-title h2 {
-      margin-bottom: 0;
-    }
-
+    .car-card-title h2 { margin-bottom: 0; }
     .car-card-title small {
       font-size: 11px;
       color: var(--text-muted);
@@ -382,15 +333,14 @@
       overflow: hidden;
       border: 1px solid rgba(148, 163, 184, 0.4);
       background: radial-gradient(circle at top, #111827 0, #020617 45%);
-      max-width: 360px;  /* smaller car */
+      max-width: 320px;  /* slightly smaller than before */
       margin-left: auto;
       margin-right: auto;
     }
-
     .car-visual img {
       width: 100%;
       display: block;
-      opacity: 0.9;
+      opacity: 0.92;
     }
 
     /* === SEAT GRID & STYLE (your snippet) ========================== */
@@ -488,10 +438,7 @@
       pointer-events: none;
       transition: opacity 0.16s ease;
     }
-
-    .seat.booked .booked-tag {
-      opacity: 1;
-    }
+    .seat.booked .booked-tag { opacity: 1; }
 
     .seat.disabled {
       cursor: not-allowed;
@@ -509,10 +456,6 @@
       gap: 6px;
     }
 
-    .status-row strong {
-      color: #fbbf24;
-    }
-
     .legend {
       display: flex;
       gap: 12px;
@@ -521,13 +464,7 @@
       color: var(--text-muted);
       flex-wrap: wrap;
     }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
+    .legend-item { display: flex; align-items: center; gap: 6px; }
     .legend-dot {
       width: 10px;
       height: 10px;
@@ -535,21 +472,9 @@
       border: 1px solid rgba(148, 163, 184, 0.9);
       background: rgba(15, 23, 42, 0.7);
     }
-
-    .legend-dot.selected {
-      background: var(--seat-selected-bg);
-      border-color: var(--seat-selected-border);
-    }
-
-    .legend-dot.booked {
-      background: var(--seat-booked-bg);
-      border-color: rgba(0, 0, 0, 0.8);
-    }
-
-    .legend-dot.driver {
-      background: rgba(0, 0, 0, 0.9);
-      border-color: #000;
-    }
+    .legend-dot.selected { background: var(--seat-selected-bg); border-color: var(--seat-selected-border); }
+    .legend-dot.booked { background: var(--seat-booked-bg); border-color: rgba(0, 0, 0, 0.8); }
+    .legend-dot.driver { background: rgba(0, 0, 0, 0.9); border-color: #000; }
 
     .btn-row {
       margin-top: 14px;
@@ -559,7 +484,6 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-
     .btn-primary {
       padding: 9px 22px;
       border-radius: 999px;
@@ -572,17 +496,8 @@
       box-shadow: 0 14px 36px rgba(248, 113, 113, 0.55);
       transition: 0.16s ease all;
     }
-
-    .btn-primary:hover:not(:disabled) {
-      background: var(--primary-dark);
-      transform: translateY(-1px);
-    }
-
-    .btn-primary:disabled {
-      background: #4b5563;
-      box-shadow: none;
-      cursor: not-allowed;
-    }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn-primary:disabled { background: #4b5563; box-shadow: none; cursor: not-allowed; }
 
     .price-chip {
       font-size: 12px;
@@ -597,21 +512,15 @@
       font-size: 12px;
       min-height: 16px;
     }
-
-    .message.ok {
-      color: #22c55e;
-    }
-
-    .message.error {
-      color: #f97373;
-    }
+    .message.ok { color: #22c55e; }
+    .message.error { color: #f97373; }
   </style>
 </head>
+
 <body>
   <div class="page">
     <!-- HERO BANNER -->
     <header class="hero">
-      <!-- Use your arteon banner image here -->
       <img src="banner.jpg" alt="Arteon banner" />
       <div class="hero-title">Select Your Car Seat</div>
     </header>
@@ -650,9 +559,7 @@
         <!-- TRIP / DATE / STOP -->
         <div class="trip-section">
           <div class="section-title">Trip & Date</div>
-          <p id="tripCurrent" class="trip-current">
-            No trip selected yet – choose one below.
-          </p>
+          <p id="tripCurrent" class="trip-current">No trip selected yet – choose one below.</p>
 
           <div class="form-row">
             <label for="tripSelect">Available trips (set by admin)</label>
@@ -680,36 +587,26 @@
           </div>
 
           <!-- ADMIN CONFIG (PIN-PROTECTED) -->
-          <button type="button" class="admin-link" id="adminToggle">
-            I’m the driver (admin)
-          </button>
+          <button type="button" class="admin-link" id="adminToggle">I’m the driver (admin)</button>
 
           <div class="admin-config" id="adminConfig">
             <div class="admin-config-row">
               <label for="adminDate">Date:</label>
               <input type="date" id="adminDate" />
             </div>
+
             <div class="admin-config-row">
-              <label for="adminFrom">From:</label>
-              <select id="adminFrom">
-                <option value="Zurich">Zurich</option>
-                <option value="Ostrava">Ostrava</option>
-                <option value="Praha">Praha</option>
-                <option value="Brno">Brno</option>
-              </select>
-              <label for="adminTo">To:</label>
-              <select id="adminTo">
-                <option value="Ostrava">Ostrava</option>
-                <option value="Zurich">Zurich</option>
-                <option value="Praha">Praha</option>
-                <option value="Brno">Brno</option>
+              <label for="adminRoute">Route:</label>
+              <select id="adminRoute">
+                <option value="ZRH_OSR">Zurich → Ostrava</option>
+                <option value="OSR_ZRH">Ostrava → Zurich</option>
               </select>
             </div>
+
             <div class="admin-config-row">
-              <button type="button" class="admin-btn" id="adminAddTrip">
-                Add Trip
-              </button>
+              <button type="button" class="admin-btn" id="adminAddTrip">Add Trip</button>
             </div>
+
             <ul class="admin-trip-list" id="adminTripList"></ul>
           </div>
         </div>
@@ -723,42 +620,32 @@
         </div>
 
         <div class="car-visual">
-          <!-- Your Arteon top-down image -->
           <img src="car-top-vertical.jpg" alt="Top-down view of VW Arteon" />
 
-          <!-- Seat overlay -->
           <div class="seat-grid">
             <!-- Driver (not bookable) -->
             <div class="seat driver-seat" data-seat-id="DRV">
-              <img
-                src="driver-wheel.png"
-                alt="Driver steering wheel"
-                class="seat-icon"
-              />
+              <img src="driver-wheel-icon.png" alt="Driver steering wheel" class="seat-icon" />
               <div class="seat-label">DRIVER</div>
               <div class="seat-small">Not bookable</div>
             </div>
 
-            <!-- Co-Pilot / VIP seat (front passenger) -->
+            <!-- Co-Pilot / VIP -->
             <div class="seat" data-seat-id="VIP">
-              <img
-                src="vip-icon.png"
-                alt="VIP co-pilot icon"
-                class="seat-icon"
-              />
+              <img src="vip-icon.png" alt="VIP co-pilot icon" class="seat-icon" />
               <div class="seat-label">CO-PILOT</div>
               <div class="seat-small">Front passenger</div>
               <div class="booked-tag">BOOKED</div>
             </div>
 
-            <!-- Mood Bringer (rear left) -->
+            <!-- Mood Bringer -->
             <div class="seat" data-seat-id="MB">
               <div class="seat-label">MOOD BRINGER</div>
               <div class="seat-small">Rear left</div>
               <div class="booked-tag">BOOKED</div>
             </div>
 
-            <!-- Chief DJ (rear right) -->
+            <!-- Chief DJ -->
             <div class="seat" data-seat-id="DJ">
               <div class="seat-label">CHIEF DJ</div>
               <div class="seat-small">Rear right</div>
@@ -772,27 +659,15 @@
         </div>
 
         <div class="legend">
-          <div class="legend-item">
-            <span class="legend-dot driver"></span> Driver
-          </div>
-          <div class="legend-item">
-            <span class="legend-dot"></span> Free
-          </div>
-          <div class="legend-item">
-            <span class="legend-dot selected"></span> Selected
-          </div>
-          <div class="legend-item">
-            <span class="legend-dot booked"></span> Booked
-          </div>
+          <div class="legend-item"><span class="legend-dot driver"></span> Driver</div>
+          <div class="legend-item"><span class="legend-dot"></span> Free</div>
+          <div class="legend-item"><span class="legend-dot selected"></span> Selected</div>
+          <div class="legend-item"><span class="legend-dot booked"></span> Booked</div>
         </div>
 
         <div class="btn-row">
-          <div class="price-chip" id="priceDisplay">
-            Choose stop & seat(s) to see price
-          </div>
-          <button type="button" class="btn-primary" id="confirmBtn" disabled>
-            Confirm Booking
-          </button>
+          <div class="price-chip" id="priceDisplay">Choose stop & seat(s) to see price</div>
+          <button type="button" class="btn-primary" id="confirmBtn" disabled>Confirm Booking</button>
         </div>
 
         <div id="message" class="message"></div>
@@ -802,16 +677,11 @@
 
   <script>
     const ADMIN_PIN = "1470"; // change as you like
-    const STORAGE_TRIPS_KEY = "arteonTrips_v1";
+    const STORAGE_TRIPS_KEY = "arteonTrips_v2";
     const STORAGE_BOOKINGS_KEY = "arteonBookings_v1";
 
     const SEAT_IDS = ["VIP", "MB", "DJ"]; // driver DRV is not bookable
-
-    const STOP_PRICES = {
-      praha: 50,
-      brno: 70,
-      ostrava: 80,
-    };
+    const STOP_PRICES = { praha: 50, brno: 70, ostrava: 80 };
 
     let trips = [];
     let bookings = {};
@@ -823,9 +693,19 @@
       try {
         const raw = localStorage.getItem(STORAGE_TRIPS_KEY);
         trips = raw ? JSON.parse(raw) : [];
-      } catch {
-        trips = [];
-      }
+      } catch { trips = []; }
+
+      // Backward-compat migration (if you had old objects with from/to)
+      // Convert them into { id, date, route }
+      trips = trips.map(t => {
+        if (t.route) return t;
+        const from = (t.from || "").toLowerCase();
+        const to = (t.to || "").toLowerCase();
+        let route = "";
+        if (from.includes("zur") && to.includes("ostr")) route = "ZRH_OSR";
+        if (from.includes("ostr") && to.includes("zur")) route = "OSR_ZRH";
+        return { id: t.id || `${t.date}_${Date.now()}`, date: t.date, route: route || "ZRH_OSR" };
+      }).filter(t => t.date && t.route);
     }
 
     function saveTrips() {
@@ -836,21 +716,26 @@
       try {
         const raw = localStorage.getItem(STORAGE_BOOKINGS_KEY);
         bookings = raw ? JSON.parse(raw) : {};
-      } catch {
-        bookings = {};
-      }
+      } catch { bookings = {}; }
     }
 
     function saveBookings() {
       localStorage.setItem(STORAGE_BOOKINGS_KEY, JSON.stringify(bookings));
     }
 
-    function formatTripLabel(t) {
-      return `${t.date} – ${t.from} → ${t.to}`;
+    function routeToText(route) {
+      if (route === "ZRH_OSR") return "Zurich → Ostrava";
+      if (route === "OSR_ZRH") return "Ostrava → Zurich";
+      return route;
     }
 
     function getTripById(id) {
-      return trips.find((t) => t.id === id) || null;
+      return trips.find(t => t.id === id) || null;
+    }
+
+    function formatTripLabel(t) {
+      // ✅ requested: only date (with year) + route
+      return `${t.date} · ${routeToText(t.route)}`;
     }
 
     function getCurrentBookingMap() {
@@ -872,10 +757,9 @@
         return;
       }
 
-      trips
-        .slice()
-        .sort((a, b) => (a.date > b.date ? 1 : -1))
-        .forEach((trip) => {
+      trips.slice()
+        .sort((a,b) => (a.date > b.date ? 1 : -1))
+        .forEach(trip => {
           const opt = document.createElement("option");
           opt.value = trip.id;
           opt.textContent = formatTripLabel(trip);
@@ -894,18 +778,18 @@
         return;
       }
 
-      trips
-        .slice()
-        .sort((a, b) => (a.date > b.date ? 1 : -1))
-        .forEach((t) => {
+      trips.slice()
+        .sort((a,b) => (a.date > b.date ? 1 : -1))
+        .forEach(t => {
           const li = document.createElement("li");
           const span = document.createElement("span");
           span.textContent = formatTripLabel(t);
+
           const btn = document.createElement("button");
           btn.className = "admin-trip-remove";
           btn.textContent = "remove";
           btn.addEventListener("click", () => {
-            trips = trips.filter((x) => x.id !== t.id);
+            trips = trips.filter(x => x.id !== t.id);
             saveTrips();
             refreshTripSelect();
             refreshAdminTripList();
@@ -914,10 +798,14 @@
               selectedSeats.clear();
               currentStop = "";
               clearStopRadios();
+              setStopRadiosEnabled(false);
               updateSeatVisuals();
               updateSeatStatus();
+              setMessage("");
+              document.getElementById("tripCurrent").textContent = "No trip selected yet – choose one below.";
             }
           });
+
           li.appendChild(span);
           li.appendChild(btn);
           list.appendChild(li);
@@ -925,25 +813,21 @@
     }
 
     function setStopRadiosEnabled(enabled) {
-      document
-        .querySelectorAll('input[name="stop"]')
-        .forEach((radio) => {
-          radio.disabled = !enabled;
-          if (!enabled) radio.checked = false;
-        });
+      document.querySelectorAll('input[name="stop"]').forEach(radio => {
+        radio.disabled = !enabled;
+        if (!enabled) radio.checked = false;
+      });
     }
 
     function clearStopRadios() {
-      document
-        .querySelectorAll('input[name="stop"]')
-        .forEach((radio) => (radio.checked = false));
+      document.querySelectorAll('input[name="stop"]').forEach(radio => (radio.checked = false));
     }
 
     function updateSeatVisuals() {
       const seatElems = document.querySelectorAll(".seat");
       const bookingMap = getCurrentBookingMap();
 
-      seatElems.forEach((seat) => {
+      seatElems.forEach(seat => {
         const seatId = seat.dataset.seatId;
         seat.classList.remove("selected", "booked", "disabled", "driver-seat");
 
@@ -962,9 +846,7 @@
           return;
         }
 
-        if (selectedSeats.has(seatId)) {
-          seat.classList.add("selected");
-        }
+        if (selectedSeats.has(seatId)) seat.classList.add("selected");
       });
     }
 
@@ -974,24 +856,21 @@
       const confirmBtn = document.getElementById("confirmBtn");
 
       if (!currentTripId) {
-        statusEl.textContent =
-          "Select a trip on the left to see seat availability.";
+        statusEl.textContent = "Select a trip on the left to see seat availability.";
         priceEl.textContent = "Choose stop & seat(s) to see price";
         confirmBtn.disabled = true;
         return;
       }
 
+      const trip = getTripById(currentTripId);
+
       if (!currentStop) {
-        const trip = getTripById(currentTripId);
-        if (trip && trip.from === "Ostrava" && trip.to === "Zurich") {
-          statusEl.textContent =
-            "Trip selected. Now choose where you start from (Praha / Brno / Ostrava).";
-        } else if (trip && trip.from === "Zurich" && trip.to === "Ostrava") {
-          statusEl.textContent =
-            "Trip selected. Now choose where you get off (Praha / Brno / Ostrava).";
+        if (trip?.route === "ZRH_OSR") {
+          statusEl.textContent = "Trip selected. Now choose where you get off (Praha / Brno / Ostrava).";
+        } else if (trip?.route === "OSR_ZRH") {
+          statusEl.textContent = "Trip selected. Now choose where you start from (Praha / Brno / Ostrava).";
         } else {
-          statusEl.textContent =
-            "Trip selected. Now choose your stop (Praha / Brno / Ostrava).";
+          statusEl.textContent = "Trip selected. Now choose your stop (Praha / Brno / Ostrava).";
         }
         priceEl.textContent = "Select stop & seat(s) to see price";
         confirmBtn.disabled = true;
@@ -999,7 +878,7 @@
       }
 
       const bookingMap = getCurrentBookingMap();
-      const bookedCount = SEAT_IDS.filter((s) => bookingMap[s]).length;
+      const bookedCount = SEAT_IDS.filter(s => bookingMap[s]).length;
       const freeCount = SEAT_IDS.length - bookedCount;
 
       statusEl.textContent = `For this trip: ${bookedCount} seat(s) booked, ${freeCount} free.`;
@@ -1034,11 +913,8 @@
       const bookingMap = getCurrentBookingMap();
       if (bookingMap[seatId]) return;
 
-      if (selectedSeats.has(seatId)) {
-        selectedSeats.delete(seatId);
-      } else {
-        selectedSeats.add(seatId);
-      }
+      if (selectedSeats.has(seatId)) selectedSeats.delete(seatId);
+      else selectedSeats.add(seatId);
 
       updateSeatVisuals();
       updateSeatStatus();
@@ -1058,15 +934,10 @@
 
       const trip = getTripById(currentTripId);
       if (trip) {
-        tripCurrent.textContent = `Selected trip: ${trip.date} – ${trip.from} → ${trip.to}`;
-
-        if (trip.from === "Zurich" && trip.to === "Ostrava") {
-          stopLabel.textContent = "I get off in:";
-        } else if (trip.from === "Ostrava" && trip.to === "Zurich") {
-          stopLabel.textContent = "I start from:";
-        } else {
-          stopLabel.textContent = "Exit / pickup stop:";
-        }
+        tripCurrent.textContent = `Selected trip: ${formatTripLabel(trip)}`;
+        if (trip.route === "ZRH_OSR") stopLabel.textContent = "I get off in:";
+        else if (trip.route === "OSR_ZRH") stopLabel.textContent = "I start from:";
+        else stopLabel.textContent = "Exit / pickup stop:";
       } else {
         tripCurrent.textContent = "No trip selected yet – choose one below.";
         stopLabel.textContent = "Exit / pickup stop:";
@@ -1081,7 +952,7 @@
       const radio = e.target;
       if (!radio.checked) return;
       currentStop = radio.value || "";
-      selectedSeats.clear();
+      selectedSeats.clear(); // new stop => choose seats again
       updateSeatVisuals();
       updateSeatStatus();
       setMessage("");
@@ -1089,10 +960,7 @@
 
     function handleConfirmBooking() {
       if (!currentTripId || !currentStop) {
-        setMessage(
-          "Please select a trip and stop before confirming.",
-          "error"
-        );
+        setMessage("Please select a trip and stop before confirming.", "error");
         return;
       }
       if (!selectedSeats.size) {
@@ -1105,12 +973,13 @@
       const basePrice = STOP_PRICES[currentStop] || 0;
       const trip = getTripById(currentTripId);
 
-      selectedSeats.forEach((seatId) => {
+      // write bookings
+      selectedSeats.forEach(seatId => {
         bookingMap[seatId] = {
           stop: currentStop,
           price: basePrice,
           createdAt: now,
-          direction: trip ? `${trip.from}→${trip.to}` : "",
+          route: trip?.route || ""
         };
       });
 
@@ -1123,7 +992,7 @@
       updateSeatStatus();
 
       setMessage(
-        `Booking confirmed for ${count} seat(s) on ${trip.date} (${trip.from}→${trip.to}). Stored locally and ready for backend integration.`,
+        `Booking confirmed for ${count} seat(s) on ${formatTripLabel(trip)}. Stored locally (ready for backend integration).`,
         "ok"
       );
     }
@@ -1132,7 +1001,7 @@
       const ok = window.prompt("Enter admin PIN:");
       if (ok === ADMIN_PIN) {
         const panel = document.getElementById("adminConfig");
-        panel.style.display = panel.style.display === "block" ? "none" : "block";
+        panel.style.display = (panel.style.display === "block") ? "none" : "block";
       } else if (ok !== null) {
         alert("Wrong PIN.");
       }
@@ -1140,20 +1009,22 @@
 
     function handleAdminAddTrip() {
       const d = document.getElementById("adminDate").value;
-      const from = document.getElementById("adminFrom").value;
-      const to = document.getElementById("adminTo").value;
+      const route = document.getElementById("adminRoute").value;
 
-      if (!d || !from || !to) {
-        alert("Please fill date, from and to.");
-        return;
-      }
-      if (from === to) {
-        alert("From and To can't be the same.");
+      if (!d || !route) {
+        alert("Please select date and route.");
         return;
       }
 
-      const id = `${d}_${from}_${to}_${Date.now()}`;
-      trips.push({ id, date: d, from, to });
+      // prevent duplicates (same date + same route)
+      const exists = trips.some(t => t.date === d && t.route === route);
+      if (exists) {
+        alert("This trip already exists (same date + same route).");
+        return;
+      }
+
+      const id = `${d}_${route}_${Date.now()}`;
+      trips.push({ id, date: d, route });
       saveTrips();
       refreshTripSelect();
       refreshAdminTripList();
@@ -1164,48 +1035,33 @@
       loadTrips();
       loadBookings();
 
+      // create one demo trip if empty
       if (!trips.length) {
         const today = new Date();
         const y = today.getFullYear();
         const m = String(today.getMonth() + 1).padStart(2, "0");
         const day = String(today.getDate()).padStart(2, "0");
         const d = `${y}-${m}-${day}`;
-        trips.push({
-          id: `${d}_Zurich_Ostrava_demo`,
-          date: d,
-          from: "Zurich",
-          to: "Ostrava",
-        });
+        trips.push({ id: `${d}_ZRH_OSR_demo`, date: d, route: "ZRH_OSR" });
         saveTrips();
       }
 
       refreshTripSelect();
       refreshAdminTripList();
 
-      document.querySelectorAll(".seat").forEach((seat) => {
+      document.querySelectorAll(".seat").forEach(seat => {
         seat.addEventListener("click", handleSeatClick);
       });
 
-      document
-        .getElementById("tripSelect")
-        .addEventListener("change", handleTripChange);
+      document.getElementById("tripSelect").addEventListener("change", handleTripChange);
 
-      document
-        .querySelectorAll('input[name="stop"]')
-        .forEach((radio) => {
-          radio.addEventListener("change", handleStopChange);
-        });
+      document.querySelectorAll('input[name="stop"]').forEach(radio => {
+        radio.addEventListener("change", handleStopChange);
+      });
 
-      document
-        .getElementById("confirmBtn")
-        .addEventListener("click", handleConfirmBooking);
-
-      document
-        .getElementById("adminToggle")
-        .addEventListener("click", handleAdminToggle);
-      document
-        .getElementById("adminAddTrip")
-        .addEventListener("click", handleAdminAddTrip);
+      document.getElementById("confirmBtn").addEventListener("click", handleConfirmBooking);
+      document.getElementById("adminToggle").addEventListener("click", handleAdminToggle);
+      document.getElementById("adminAddTrip").addEventListener("click", handleAdminAddTrip);
 
       setStopRadiosEnabled(false);
       updateSeatVisuals();

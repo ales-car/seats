@@ -14,7 +14,6 @@ const ROUTE_MAPPING = {
 };
 
 const FN_BASE = `${SUPABASE_URL}/functions/v1`;
-// ✅ DŮLEŽITÉ: Definice URL pro login
 const FN_VERIFY = `${FN_BASE}/verify-admin-pin`; 
 
 // --- Helpers ---
@@ -40,9 +39,9 @@ function toggleView(isAdmin) {
 
 // --- API Calls ---
 
-// 1. LOGIN FUNKCE (Opraveno: PIN v body)
 async function apiVerifyPin(pin){
     console.log("Odesílám PIN na:", FN_VERIFY);
+    
     const res = await fetch(FN_VERIFY, {
       method: "POST",
       headers: {
@@ -50,7 +49,7 @@ async function apiVerifyPin(pin){
         "apikey": SUPABASE_ANON_KEY,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ pin }) // PIN bezpečně v JSONu
+      body: JSON.stringify({ pin }) 
     });
 
     const data = await res.json().catch(()=> ({}));
@@ -58,7 +57,6 @@ async function apiVerifyPin(pin){
     return true;
 }
 
-// 2. OSTATNÍ FUNKCE (Seznam jízd, Přidání, Mazání)
 async function makeApiCall(endpoint, method, body = null) {
     const pin = getPin();
     const res = await fetch(`${FN_BASE}/${endpoint}`, {
@@ -68,8 +66,6 @@ async function makeApiCall(endpoint, method, body = null) {
             "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
             "apikey": SUPABASE_ANON_KEY,
             "x-admin-pin": pin 
-            // Poznámka: Pokud by i funkce list-trips/add-trip padaly na CORS, 
-            // budeš muset na backendu upravit i je (stejně jako jsme opravili verify-admin-pin).
         },
         body: body ? JSON.stringify(body) : null
     });
@@ -170,19 +166,43 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleView(false);
     }
 
-    // Login Button Event
+    // 1. LOGIKA PRO OKO (Zobrazit/Skrýt heslo)
+    const toggleBtn = document.getElementById("togglePasswordBtn");
+    const pinInput = document.getElementById("pinInput");
+    
+    if(toggleBtn && pinInput) {
+        toggleBtn.addEventListener("click", () => {
+            const type = pinInput.getAttribute("type") === "password" ? "text" : "password";
+            pinInput.setAttribute("type", type);
+            
+            // Změna ikony
+            const svg = toggleBtn.querySelector("svg");
+            if(type === "text") {
+                // Otevřené oko
+                svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />';
+            } else {
+                // Přeškrtnuté oko
+                svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />';
+            }
+        });
+    }
+
+    // 2. LOGIN FORMULÁŘ (Enter i Click)
+    const loginForm = document.getElementById("loginForm");
     const loginBtn = document.getElementById("loginBtn");
-    if(loginBtn) {
-        loginBtn.addEventListener("click", async () => {
-            const pinInput = document.getElementById("pinInput");
+
+    if(loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault(); // Zabrání obnovení stránky
+
             const pin = pinInput.value.trim();
             if (!pin) return setMsg("loginMsg", "Enter PIN", "error");
             
             try {
                 setMsg("loginMsg", "Verifying...", "");
                 loginBtn.disabled = true;
+                loginBtn.textContent = "Checking...";
                 
-                // Voláme novou API funkci
                 await apiVerifyPin(pin);
                 
                 // Úspěch
@@ -200,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Ostatní tlačítka
     const logoutBtn = document.getElementById("logoutBtn");
     if(logoutBtn) logoutBtn.addEventListener("click", () => {
         clearPin();

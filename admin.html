@@ -4,12 +4,11 @@
   <meta charset="UTF-8" />
   <title>Arteon Ride – Admin Panel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
 
   <style>
     /* =========================================
-       CSS Z INDEX.HTML (DARK THEME)
+       CSS (DARK THEME)
        ========================================= */
     :root {
       --primary: #ff3600;
@@ -18,11 +17,6 @@
       --card-bg: #020617;
       --text-main: #e5e7eb;
       --text-muted: #9ca3af;
-
-      /* Barvy pro vzhled */
-      --seat-bg: rgba(15, 23, 42, 0.38);
-      --seat-border: rgba(148, 163, 184, 0.7);
-      
       --bg-gradient: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
       --card-bg-gradient: linear-gradient(145deg, #020617, #020617f0);
     }
@@ -41,7 +35,7 @@
 
     .page { width: 100%; max-width: 1100px; }
 
-    /* HERO BANNER */
+    /* HERO */
     .hero {
       position: relative;
       border-radius: 32px;
@@ -50,172 +44,65 @@
       box-shadow: 0 32px 80px rgba(15, 23, 42, 0.75);
       border: 1px solid rgba(148, 163, 184, 0.35);
     }
-
-    .hero img {
-      width: 100%;
-      display: block;
-      height: 230px;
-      object-fit: cover;
-      filter: saturate(1.1);
-    }
-
+    .hero img { width: 100%; display: block; height: 230px; object-fit: cover; filter: saturate(1.1); }
     .hero-title {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(32px, 5vw, 52px);
-      font-weight: 800;
-      color: #fff;
-      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-size: clamp(32px, 5vw, 52px); font-weight: 800; color: #fff;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); letter-spacing: 0.06em; text-transform: uppercase;
     }
 
-    /* Layout: 2 columns */
-    .layout {
-      display: grid;
-      grid-template-columns: 0.4fr 0.6fr;
-      gap: 20px;
-      align-items: flex-start;
-    }
+    /* LAYOUT & CARDS */
+    .layout { display: grid; grid-template-columns: 0.4fr 0.6fr; gap: 20px; align-items: flex-start; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
 
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-    }
-
-    /* CARDS */
     .card {
-      background: var(--card-bg-gradient);
-      border-radius: 24px;
-      padding: 18px 18px 20px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.8);
+      background: var(--card-bg-gradient); border-radius: 24px; padding: 18px 18px 20px;
+      border: 1px solid rgba(148, 163, 184, 0.4); box-shadow: 0 20px 60px rgba(15, 23, 42, 0.8);
     }
+    .card h2 { font-size: 18px; margin-bottom: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+    .muted { color: var(--text-muted); font-size: 13px; margin-bottom: 15px; line-height: 1.4; }
 
-    .card h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #fff;
+    /* FORMS */
+    .form-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; font-size: 12px; }
+    .form-row label { color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; }
+    .form-row select, .form-row input {
+      border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.5); padding: 10px 12px;
+      background: rgba(15, 23, 42, 0.7); color: var(--text-main); font-size: 13px; outline: none; width: 100%;
     }
-
-    .muted {
-      color: var(--text-muted);
-      font-size: 13px;
-      margin-bottom: 15px;
-      line-height: 1.4;
-    }
-
-    /* FORM ELEMENTS (Using styles from index) */
-    .form-row {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 12px;
-      font-size: 12px;
-    }
-
-    .form-row label {
-      color: var(--text-muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 11px;
-    }
-
-    .form-row select,
-    .form-row input[type="text"],
-    .form-row input[type="password"],
-    .form-row input[type="date"] {
-      border-radius: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      padding: 10px 12px;
-      background: rgba(15, 23, 42, 0.7);
-      color: var(--text-main);
-      font-size: 13px;
-      outline: none;
-      width: 100%;
-    }
-
-    .form-row input:focus, .form-row select:focus {
-      border-color: var(--primary);
-    }
+    .form-row input:focus, .form-row select:focus { border-color: var(--primary); }
 
     /* BUTTONS */
-    .btn-row {
-      margin-top: 14px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
+    .btn-row { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
     .btn-primary {
-      padding: 10px 24px;
-      border-radius: 999px;
-      border: none;
-      background: var(--primary);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 14px 36px rgba(248, 113, 113, 0.55);
-      transition: 0.16s ease all;
-      text-decoration: none;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
+      padding: 10px 24px; border-radius: 999px; border: none; background: var(--primary); color: #fff;
+      font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 14px 36px rgba(248, 113, 113, 0.55);
+      transition: 0.16s ease all; text-decoration: none; display: inline-flex; justify-content: center; align-items: center;
     }
-
     .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
-    
     .btn-secondary {
-      padding: 10px 20px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
+      padding: 10px 20px; border-radius: 999px; border: 1px solid rgba(148, 163, 184, 0.5);
+      background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;
     }
     .btn-secondary:hover { border-color: #fff; color: #fff; }
-
     .btn-danger {
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(249, 115, 115, 0.3);
-      background: rgba(249, 115, 115, 0.1);
-      color: #fca5a5;
-      font-size: 11px;
-      cursor: pointer;
-      font-weight: 600;
+      padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(249, 115, 115, 0.3);
+      background: rgba(249, 115, 115, 0.1); color: #fca5a5; font-size: 11px; cursor: pointer; font-weight: 600;
     }
     .btn-danger:hover { background: rgba(249, 115, 115, 0.2); color: #fff; }
 
-    /* LIST ITEMS */
+    /* UI ITEMS */
     .list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
     .item {
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center;
-      background: rgba(15, 23, 42, 0.4);
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      border-radius: 12px;
-      padding: 12px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 12px; padding: 12px;
     }
     .item-info { display: flex; flex-direction: column; gap: 2px; }
     .item-info strong { font-size: 14px; color: #fff; }
     .item-info small { font-size: 11px; color: var(--text-muted); }
-
-    /* MESSAGES */
     .message { margin-top: 12px; font-size: 13px; min-height: 18px; }
     .message.ok { color: #22c55e; }
     .message.error { color: #f97373; }
-
-    /* Login Specific */
     .login-wrap { max-width: 400px; margin: 40px auto; }
   </style>
 </head>
@@ -238,7 +125,7 @@
         </div>
 
         <div class="btn-row">
-          <button class="btn-primary" id="loginBtn">Login</button>
+          <button class="btn-primary" id="loginBtn" type="button">Login</button>
           <a href="index.html" class="btn-secondary">Back to Home</a>
         </div>
 
@@ -251,15 +138,11 @@
         
         <section class="card">
           <h2>Create New Trip</h2>
-          <div class="muted">
-            Add a date and direction. This will appear on the main page.
-          </div>
-
+          <div class="muted">Add a date and direction.</div>
           <div class="form-row">
             <label>Date</label>
             <input type="date" id="tripDate" />
           </div>
-
           <div class="form-row">
             <label>Direction</label>
             <select id="tripDirection">
@@ -267,14 +150,11 @@
               <option value="OZ">Ostrava → Zurich</option>
             </select>
           </div>
-
           <div class="btn-row">
             <button class="btn-primary" id="addTripBtn">Add Trip</button>
             <button class="btn-secondary" id="refreshBtn">Refresh</button>
           </div>
-
           <div id="adminMsg" class="message"></div>
-          
           <div style="margin-top: 20px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1);">
              <button class="btn-secondary" id="logoutBtn" style="font-size: 11px;">Logout</button>
           </div>
@@ -283,197 +163,14 @@
         <section class="card">
           <h2>Scheduled Trips</h2>
           <div class="muted">List of active trips in database.</div>
-          
           <div class="list" id="tripList">
             <div class="muted" style="text-align: center;">Loading...</div>
           </div>
         </section>
-
       </main>
     </section>
   </div>
 
-  <script>
-    /* =========================================================
-       ARTEON RIDE - ADMIN LOGIC
-       ========================================================= */
-
-    // ⚠️ CONFIGURATION (FILL ME)
-    const SUPABASE_URL = "https://rtqnbryjqiwnewmtdeqb.supabase.co"; // Vaše URL
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0cW5icnlqcWl3bmV3bXRkZXFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3MDE2NjgsImV4cCI6MjA4MTI3NzY2OH0.3HACsytbNMgBZ9wpspl7SI76OpAsoUMZGyK57mQhCro"; // Váš Klíč
-    const SESSION_ADMIN_PIN = "arteon_admin_pin";
-
-    // ROUTE MAPPING (Must match DB IDs)
-    const ROUTE_MAPPING = {
-        "ZO": { route_id: 1, from: "Zurich", to: "Ostrava" },
-        "OZ": { route_id: 2, from: "Ostrava", to: "Zurich" }
-    };
-
-    const FN_BASE = `${SUPABASE_URL}/functions/v1`;
-
-    // --- Helpers ---
-    function setMsg(id, txt, type="") {
-        const el = document.getElementById(id);
-        el.className = "message " + type;
-        el.textContent = txt;
-    }
-    function getPin(){ return sessionStorage.getItem(SESSION_ADMIN_PIN) || ""; }
-    function setPin(pin){ sessionStorage.setItem(SESSION_ADMIN_PIN, pin); }
-    function clearPin(){ sessionStorage.removeItem(SESSION_ADMIN_PIN); }
-
-    function toggleView(isAdmin) {
-        document.getElementById("loginWrap").style.display = isAdmin ? "none" : "block";
-        document.getElementById("adminUI").style.display = isAdmin ? "block" : "none";
-    }
-
-    // --- API Calls ---
-    async function makeApiCall(endpoint, method, body = null) {
-        const pin = getPin();
-        const res = await fetch(`${FN_BASE}/${endpoint}`, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-                "x-admin-pin": pin
-            },
-            body: body ? JSON.stringify(body) : null
-        });
-
-        if (res.status === 401 || res.status === 403) {
-            clearPin();
-            toggleView(false);
-            throw new Error("Invalid or expired PIN.");
-        }
-
-        let data;
-        try { data = await res.json(); } catch { throw new Error(`API Error: ${res.status}`); }
-        
-        if (!res.ok || data.ok === false) throw new Error(data.error || "Unknown error");
-        return data;
-    }
-
-    // --- Actions ---
-   async function apiVerifyPin(pin){
-  const res = await fetch(FN_VERIFY, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-      "apikey": SUPABASE_ANON_KEY,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ pin })
-  });
-
-  const data = await res.json().catch(()=> ({}));
-  if (!res.ok || !data.ok) throw new Error(data.error || `Verify failed (${res.status})`);
-  return true;
-}
-
-
-    async function loadTrips() {
-        const listEl = document.getElementById("tripList");
-        listEl.innerHTML = '<div class="muted" style="text-align: center;">Loading...</div>';
-        
-        try {
-            const data = await makeApiCall("list-trips", "GET");
-            const trips = data.trips || [];
-            
-            listEl.innerHTML = "";
-            if (trips.length === 0) {
-                listEl.innerHTML = '<div class="muted" style="text-align: center;">No scheduled trips.</div>';
-                return;
-            }
-
-            trips.forEach(t => {
-                // UI Item
-                const div = document.createElement("div");
-                div.className = "item";
-                
-                // Determine direction label
-                let dirLabel = `${t.from_city || "?"} → ${t.to_city || "?"}`;
-                
-                div.innerHTML = `
-                    <div class="item-info">
-                        <strong>${t.trip_date}</strong>
-                        <small>${dirLabel}</small>
-                    </div>
-                    <button class="btn-danger" onclick="deleteTrip(${t.id})">Delete</button>
-                `;
-                listEl.appendChild(div);
-            });
-
-        } catch (e) {
-            listEl.innerHTML = `<div class="message error">Failed to load: ${e.message}</div>`;
-        }
-    }
-
-    async function addTrip() {
-        const date = document.getElementById("tripDate").value;
-        const dir = document.getElementById("tripDirection").value;
-        
-        if (!date) return setMsg("adminMsg", "Please select a date", "error");
-
-        const mapping = ROUTE_MAPPING[dir];
-        if (!mapping) return setMsg("adminMsg", "Invalid route selected", "error");
-
-        try {
-            setMsg("adminMsg", "Adding trip...", "");
-            await makeApiCall("add-trip", "POST", {
-                trip_date: date,
-                route_id: mapping.route_id
-            });
-            setMsg("adminMsg", "Trip added successfully!", "ok");
-            loadTrips();
-        } catch (e) {
-            setMsg("adminMsg", e.message, "error");
-        }
-    }
-
-    // Global scope for onclick attribute
-    window.deleteTrip = async function(id) {
-        if (!confirm("Are you sure you want to delete this trip?")) return;
-        try {
-            await makeApiCall("delete-trip", "POST", { id: Number(id) });
-            loadTrips();
-        } catch (e) {
-            alert(e.message);
-        }
-    };
-
-    // --- Init ---
-    document.addEventListener("DOMContentLoaded", () => {
-        if (getPin()) {
-            toggleView(true);
-            loadTrips();
-        } else {
-            toggleView(false);
-        }
-
-        document.getElementById("loginBtn").addEventListener("click", async () => {
-            const pin = document.getElementById("pinInput").value.trim();
-            if (!pin) return setMsg("loginMsg", "Enter PIN", "error");
-            
-            try {
-                setMsg("loginMsg", "Verifying...", "");
-                await verifyPin(pin);
-                setPin(pin);
-                toggleView(true);
-                loadTrips();
-                setMsg("loginMsg", "", "");
-            } catch (e) {
-                setMsg("loginMsg", "Wrong PIN", "error");
-            }
-        });
-
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-            clearPin();
-            toggleView(false);
-        });
-
-        document.getElementById("refreshBtn").addEventListener("click", loadTrips);
-        document.getElementById("addTripBtn").addEventListener("click", addTrip);
-    });
-
-  </script>
+  <script src="admin-logic.js"></script>
 </body>
 </html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Arteon Ride – Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
+
+  <style>
+    :root{
+      --primary:#ff3600; --primary-dark:#d42d00;
+      --bg:#0b1120; --card:#020617;
+      --text:#e5e7eb; --muted:#9ca3af;
+      --border: rgba(148, 163, 184, 0.35);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      padding:20px 10px 40px;
+    }
+    .page{width:100%; max-width:1000px;}
+    .hero{
+      position:relative; border-radius:32px; overflow:hidden; margin-bottom:18px;
+      box-shadow: 0 32px 80px rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border);
+    }
+    .hero img{width:100%; height:210px; object-fit:cover; display:block; opacity:.92}
+    .hero-title{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size: clamp(28px, 4.2vw, 46px);
+      font-weight:900; letter-spacing:.10em; text-transform:uppercase;
+      color:#fff; text-shadow:0 10px 30px rgba(0,0,0,.85);
+    }
+    .layout{
+      display:grid;
+      grid-template-columns: 0.45fr 0.55fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media(max-width:900px){ .layout{grid-template-columns:1fr;} }
+
+    .card{
+      background: linear-gradient(145deg, #020617, #020617f0);
+      border-radius:24px;
+      border:1px solid rgba(148,163,184,0.4);
+      box-shadow:0 20px 60px rgba(15, 23, 42, 0.8);
+      padding:16px 16px 18px;
+    }
+    .card h2{
+      font-size:16px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .muted{color:var(--muted); font-size:12px; line-height:1.4}
+    .row{display:flex; flex-direction:column; gap:6px; margin:10px 0;}
+    label{
+      font-size:11px; text-transform:uppercase; letter-spacing:.14em; color:var(--muted);
+    }
+    input[type="date"], select, input[type="password"], input[type="text"], input[type="number"]{
+      width:100%;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.65);
+      color:var(--text);
+      outline:none;
+      font-size:13px;
+    }
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:10px 16px;
+      font-weight:700;
+      cursor:pointer;
+      background:var(--primary);
+      color:#fff;
+      transition:.16s ease all;
+      box-shadow: 0 14px 36px rgba(248, 113, 113, 0.35);
+      font-size:13px;
+    }
+    .btn:hover{background:var(--primary-dark); transform:translateY(-1px)}
+    .btn.secondary{
+      background: rgba(148,163,184,0.18);
+      box-shadow:none;
+      border:1px solid rgba(148,163,184,0.35);
+    }
+    .btn.danger{
+      background: rgba(244,63,94,0.12);
+      border:1px solid rgba(244,63,94,0.35);
+      box-shadow:none;
+    }
+    .btn.danger:hover{background: rgba(244,63,94,0.18); transform:none}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    .chip{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.35);
+      background: rgba(15,23,42,0.75);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:#22c55e}
+
+    .list{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      max-height:420px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .item{
+      border:1px solid rgba(148,163,184,0.25);
+      background: rgba(15,23,42,0.45);
+      border-radius:16px;
+      padding:10px 10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .item strong{display:block; font-size:13px; letter-spacing:.02em}
+    .item small{display:block; font-size:11px; color:var(--muted); margin-top:2px}
+    .item .right{display:flex; gap:8px; align-items:center}
+    .msg{margin-top:10px; font-size:12px; min-height:16px}
+    .ok{color:#22c55e}
+    .err{color:#fb7185}
+
+    /* Login overlay */
+    .login-wrap{
+      display:none;
+    }
+    .login-card{
+      max-width:520px;
+      margin:0 auto;
+      text-align:left;
+    }
+    .login-title{
+      font-size:18px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    .logout{
+      text-decoration:underline;
+      color:var(--primary);
+      background:none;
+      border:none;
+      cursor:pointer;
+      padding:0;
+      font-size:12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header class="hero">
+      <img src="banner.jpg" alt="Arteon banner">
+      <div class="hero-title">Admin Panel</div>
+    </header>
+
+    <!-- LOGIN -->
+    <section class="login-wrap" id="loginWrap">
+      <div class="card login-card">
+        <div class="chip"><span class="dot"></span> Admin access</div>
+        <div style="height:10px"></div>
+        <div class="login-title">Login</div>
+        <div class="muted">
+          Enter your admin PIN. This is stored only in your browser session (not in the cloud).
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <label for="pin">Admin PIN</label>
+          <input id="pin" type="password" placeholder="••••" autocomplete="current-password" />
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="loginBtn" type="button">Login</button>
+          <a class="btn secondary" href="index.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Back to booking</a>
+        </div>
+
+        <div class="msg" id="loginMsg"></div>
+      </div>
+    </section>
+
+    <!-- MAIN ADMIN UI -->
+    <section id="adminUI" style="display:none;">
+      <main class="layout">
+        <!-- LEFT: CREATE TRIP -->
+        <section class="card">
+          <div class="chip">
+            <span class="dot"></span>
+            Trips configuration (UI-first)
+          </div>
+          <div style="height:10px"></div>
+
+          <h2>Create trip</h2>
+          <div class="muted">
+            Create only <b>date + direction</b>. The booking page will then show it as selectable.
+            <br/>Direction automatically sets <b>stop_mode</b>:
+            Zurich→Ostrava = <b>dropoff</b>, Ostrava→Zurich = <b>pickup</b>.
+          </div>
+
+          <div class="row">
+            <label for="tripDate">Trip date</label>
+            <input type="date" id="tripDate" />
+          </div>
+
+          <div class="row">
+            <label for="direction">Direction</label>
+            <select id="direction">
+              <option value="ZO">Zurich → Ostrava (dropoff)</option>
+              <option value="OZ">Ostrava → Zurich (pickup)</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label>Stops (fixed)</label>
+            <div class="muted">Praha (50 CHF), Brno (70 CHF), Ostrava (80 CHF)</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="addTripBtn" type="button">Add trip</button>
+            <button class="btn secondary" id="seedDemoBtn" type="button">Add demo trip</button>
+          </div>
+
+          <div class="msg" id="leftMsg"></div>
+
+          <div style="height:14px"></div>
+          <div class="muted">
+            <b>Security note:</b> This PIN login is “good enough” for now.
+            When we move to Supabase, the admin page will require real auth / admin role.
+          </div>
+
+          <div style="height:10px"></div>
+          <button class="logout" id="logoutBtn" type="button">Logout</button>
+        </section>
+
+        <!-- RIGHT: LIST TRIPS -->
+        <section class="card">
+          <h2>Trips</h2>
+          <div class="muted">
+            Stored in <b>localStorage</b> key: <code>arteonTrips_v1</code>.
+            Later we’ll replace this with Supabase reads/writes.
+          </div>
+
+          <div class="list" id="tripList"></div>
+
+          <div class="actions" style="margin-top:12px">
+            <button class="btn danger" id="clearAllBtn" type="button">Delete ALL trips</button>
+            <a class="btn secondary" href="index.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Open booking page</a>
+          </div>
+
+          <div class="msg" id="rightMsg"></div>
+        </section>
+      </main>
+    </section>
+  </div>
+
+  <script>
+    // ====== CONFIG ======
+    const ADMIN_PIN = "1470";              // change
+    const SESSION_KEY = "arteonAdmin_ok";  // sessionStorage flag
+    const TRIPS_KEY = "arteonTrips_v1";    // MUST match index.html
+
+    // ====== STORAGE (UI-first) ======
+    function loadTrips() {
+      try {
+        const raw = localStorage.getItem(TRIPS_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch { return []; }
+    }
+    function saveTrips(trips) {
+      localStorage.setItem(TRIPS_KEY, JSON.stringify(trips));
+    }
+
+    // ====== HELPERS ======
+    function uuid() {
+      return (crypto?.randomUUID?.() || (Date.now() + "_" + Math.random().toString(16).slice(2)));
+    }
+    function fmtLabel(t) {
+      return `${t.trip_date} – ${t.from_city} → ${t.to_city}`;
+    }
+    function setMsg(id, text, type="") {
+      const el = document.getElementById(id);
+      el.className = "msg " + (type || "");
+      el.textContent = text;
+    }
+
+    function directionToTrip(direction) {
+      if (direction === "ZO") {
+        return { from_city: "Zurich", to_city: "Ostrava", stop_mode: "dropoff" };
+      }
+      return { from_city: "Ostrava", to_city: "Zurich", stop_mode: "pickup" };
+    }
+
+    function renderTrips() {
+      const list = document.getElementById("tripList");
+      const trips = loadTrips().sort((a,b) => (a.trip_date > b.trip_date ? 1 : -1));
+      list.innerHTML = "";
+
+      if (!trips.length) {
+        const empty = document.createElement("div");
+        empty.className = "muted";
+        empty.style.padding = "10px 0";
+        empty.textContent = "No trips yet. Add one on the left.";
+        list.appendChild(empty);
+        return;
+      }
+
+      trips.forEach(t => {
+        const item = document.createElement("div");
+        item.className = "item";
+
+        const left = document.createElement("div");
+        const strong = document.createElement("strong");
+        strong.textContent = fmtLabel(t);
+
+        const small = document.createElement("small");
+        small.textContent = `stop_mode: ${t.stop_mode} · id: ${t.id}`;
+
+        left.appendChild(strong);
+        left.appendChild(small);
+
+        const right = document.createElement("div");
+        right.className = "right";
+
+        const del = document.createElement("button");
+        del.className = "btn danger";
+        del.type = "button";
+        del.textContent = "Delete";
+        del.addEventListener("click", () => {
+          const updated = loadTrips().filter(x => x.id !== t.id);
+          saveTrips(updated);
+          renderTrips();
+          setMsg("rightMsg", "Trip deleted.", "ok");
+        });
+
+        right.appendChild(del);
+
+        item.appendChild(left);
+        item.appendChild(right);
+        list.appendChild(item);
+      });
+    }
+
+    // ====== LOGIN FLOW ======
+    function showLogin() {
+      document.getElementById("loginWrap").style.display = "block";
+      document.getElementById("adminUI").style.display = "none";
+    }
+    function showAdmin() {
+      document.getElementById("loginWrap").style.display = "none";
+      document.getElementById("adminUI").style.display = "block";
+      renderTrips();
+    }
+    function isAuthed() {
+      return sessionStorage.getItem(SESSION_KEY) === "1";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // initial view
+      if (isAuthed()) showAdmin();
+      else showLogin();
+
+      // login
+      document.getElementById("loginBtn").addEventListener("click", () => {
+        const pin = document.getElementById("pin").value.trim();
+        if (pin === ADMIN_PIN) {
+          sessionStorage.setItem(SESSION_KEY, "1");
+          setMsg("loginMsg", "", "");
+          showAdmin();
+        } else {
+          setMsg("loginMsg", "Wrong PIN.", "err");
+        }
+      });
+
+      // enter key to login
+      document.getElementById("pin").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") document.getElementById("loginBtn").click();
+      });
+
+      // logout
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        sessionStorage.removeItem(SESSION_KEY);
+        showLogin();
+      });
+
+      // add trip
+      document.getElementById("addTripBtn").addEventListener("click", () => {
+        const trip_date = document.getElementById("tripDate").value;
+        const direction = document.getElementById("direction").value;
+
+        if (!trip_date) {
+          setMsg("leftMsg", "Pick a date first.", "err");
+          return;
+        }
+
+        const base = directionToTrip(direction);
+        const trips = loadTrips();
+
+        // prevent duplicates: (from,to,date)
+        const exists = trips.some(t =>
+          t.trip_date === trip_date &&
+          t.from_city === base.from_city &&
+          t.to_city === base.to_city
+        );
+        if (exists) {
+          setMsg("leftMsg", "This trip already exists for that date & direction.", "err");
+          return;
+        }
+
+        const trip = {
+          id: uuid(),
+          trip_date,
+          from_city: base.from_city,
+          to_city: base.to_city,
+          stop_mode: base.stop_mode,
+          created_at: new Date().toISOString()
+        };
+
+        trips.push(trip);
+        saveTrips(trips);
+
+        setMsg("leftMsg", "Trip added.", "ok");
+        setMsg("rightMsg", "", "");
+        renderTrips();
+      });
+
+      // seed demo
+      document.getElementById("seedDemoBtn").addEventListener("click", () => {
+        const today = new Date();
+        const y = today.getFullYear();
+        const m = String(today.getMonth()+1).padStart(2,"0");
+        const d = String(today.getDate()).padStart(2,"0");
+        const date = `${y}-${m}-${d}`;
+
+        const trips = loadTrips();
+        const demo = {
+          id: uuid(),
+          trip_date: date,
+          from_city: "Zurich",
+          to_city: "Ostrava",
+          stop_mode: "dropoff",
+          created_at: new Date().toISOString()
+        };
+
+        // avoid duplicates
+        const exists = trips.some(t => t.trip_date===demo.trip_date && t.from_city===demo.from_city && t.to_city===demo.to_city);
+        if (!exists) trips.push(demo);
+
+        saveTrips(trips);
+        setMsg("leftMsg", "Demo trip added.", "ok");
+        renderTrips();
+      });
+
+      // clear all
+      document.getElementById("clearAllBtn").addEventListener("click", () => {
+        const ok = confirm("Delete ALL trips? This cannot be undone.");
+        if (!ok) return;
+        saveTrips([]);
+        renderTrips();
+        setMsg("rightMsg", "All trips deleted.", "ok");
+      });
+    });
+  </script>
+</body>
+</html>

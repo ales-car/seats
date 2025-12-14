@@ -419,7 +419,10 @@ document.getElementById("addTripBtn").onclick = async ()=>{
         trip_date: d, 
         route_id: routeInfo.route_id 
     };
-
+    const payload = { 
+        trip_date: d, 
+        route_id: Number(routeInfo.route_id) 
+    };
     try{
         await apiAddTrip(payload);
         setMsg("adminMsg","Trip added to DB ✅","ok");

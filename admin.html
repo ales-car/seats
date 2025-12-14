@@ -187,50 +187,109 @@ function showAdmin(){
 }
 
 /* ====== API calls (Edge Functions) ====== */
-async function apiListTrips(){
+async function apiListTrips() {
   const pin = getPin();
+
   const res = await fetch(FN_LIST, {
+    method: "GET",
     headers: {
+      // POVINNÉ Supabase hlavičky
       "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-      "x-admin-pin": pin
-    }
+      "apikey": SUPABASE_ANON_KEY,
+
+      // tvoje vlastní hlavička
+      "x-admin-pin": pin,
+
+      // doporučeno
+      "Content-Type": "application/json",
+    },
   });
-  const data = await res.json();
-  if (!res.ok || !data.ok) throw new Error(data.error || "List failed");
+
+  // ochrana proti non-JSON odpovědi
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new Error(`List failed: ${res.status}`);
+  }
+
+  if (!res.ok || data.ok === false) {
+    throw new Error(data.error || `List failed (${res.status})`);
+  }
+
   return data.trips || [];
 }
 
-async function apiAddTrip(payload){
+
+async function apiAddTrip(payload) {
   const pin = getPin();
+
   const res = await fetch(FN_ADD, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+      "apikey": SUPABASE_ANON_KEY,
       "Content-Type": "application/json",
       "x-admin-pin": pin
     },
     body: JSON.stringify(payload)
   });
-  const data = await res.json();
-  if (!res.ok || !data.ok) throw new Error(data.error || "Add failed");
+
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new Error("Invalid JSON response from server");
+  }
+
+  if (!res.ok) {
+    throw new Error(
+      data?.error || `HTTP ${res.status} – add-trip failed`
+    );
+  }
+
+  if (!data.ok) {
+    throw new Error(data.error || "Add failed");
+  }
+
   return data.trip;
 }
 
-async function apiDeleteTrip(id){
+
+async function apiDeleteTrip(id) {
   const pin = getPin();
+
   const res = await fetch(FN_DEL, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+      "apikey": SUPABASE_ANON_KEY,
       "Content-Type": "application/json",
       "x-admin-pin": pin
     },
     body: JSON.stringify({ id })
   });
-  const data = await res.json();
-  if (!res.ok || !data.ok) throw new Error(data.error || "Delete failed");
+
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new Error("Invalid JSON response from server");
+  }
+
+  if (!res.ok) {
+    throw new Error(
+      data?.error || `HTTP ${res.status} – delete-trip failed`
+    );
+  }
+
+  if (!data.ok) {
+    throw new Error(data.error || "Delete failed");
+  }
+
   return true;
 }
+
 
 /* ====== Render ====== */
 async function renderTrips(){

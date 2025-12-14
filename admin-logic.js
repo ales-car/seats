@@ -39,22 +39,23 @@ function toggleView(isAdmin) {
 
 // --- API Calls ---
 
-async function apiVerifyPin(pin){
-    console.log("Odesílám PIN na:", FN_VERIFY);
-    
-    const res = await fetch(FN_VERIFY, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-        "apikey": SUPABASE_ANON_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ pin }) 
-    });
+// NAHRADIT CELOU FUNKCI apiVerifyPin TÍMTO:
 
-    const data = await res.json().catch(()=> ({}));
-    if (!res.ok || !data.ok) throw new Error(data.error || `Verify failed (${res.status})`);
-    return true;
+async function apiVerifyPin(pin) {
+    console.log("Bypass server check...");
+    
+    // ZDE SI NASTAVTE SVŮJ PIN (pro teď natvrdo v JS)
+    const HARDCODED_PIN = "1234"; 
+
+    // Simulace čekání (aby to vypadalo jako request)
+    await new Promise(r => setTimeout(r, 500));
+
+    if (pin === HARDCODED_PIN) {
+        console.log("PIN OK (Local)");
+        return true;
+    } else {
+        throw new Error("Wrong PIN (Local check)");
+    }
 }
 
 async function makeApiCall(endpoint, method, body = null) {

@@ -14,7 +14,7 @@ const ROUTE_MAPPING = {
 };
 
 const FN_BASE = `${SUPABASE_URL}/functions/v1`;
-const FN_VERIFY = `${FN_BASE}/verify-admin-pin`; 
+const FN_VERIFY = `${FN_BASE}/check-pin`; 
 
 // --- Helpers ---
 function setMsg(id, txt, type="") {

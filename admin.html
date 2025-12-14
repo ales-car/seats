@@ -1,456 +1,472 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Arteon Ride – Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
-  
-    <style>
-    :root {
-      --primary: #ff3600;
-      --primary-dark: #d42d00;
-      --bg: #0b1120;
-      --card-bg: #020617;
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
+  <meta charset="UTF-8" />
+  <title>Arteon Ride – Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
 
-      /* Barvy pro Dark/Orange Vzhled */
-      --border: rgba(148, 163, 184, 0.35);
-      --bg-gradient: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
-      --card-bg-gradient: linear-gradient(145deg,#020617,#020617f0);
+  <style>
+    /* =========================================
+       CSS Z INDEX.HTML (DARK THEME)
+       ========================================= */
+    :root {
+      --primary: #ff3600;
+      --primary-dark: #d42d00;
+      --bg: #0b1120;
+      --card-bg: #020617;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
 
-      /* Sedadla (pro vizuální konzistenci) */
-      --seat-bg: rgba(15, 23, 42, 0.38);
-      --seat-border: rgba(148, 163, 184, 0.7);
-      --seat-selected-bg: rgba(248, 113, 113, 0.80);
-      --seat-selected-border: rgba(254, 249, 195, 0.95);
-      --seat-booked-bg: rgba(55, 65, 81, 0.85);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 20px 10px 40px;
-    }
-
-    .page { width: 100%; max-width: 1000px; }
-
-    /* HERO BANNER */
-    .hero {
-      position: relative;
-      border-radius: 32px;
-      overflow: hidden;
-      margin-bottom: 18px;
-      box-shadow: 0 32px 80px rgba(15, 23, 42, 0.75);
-      border: 1px solid var(--border);
-    }
-
-    .hero img { width: 100%; display: block; height: 200px; object-fit: cover; opacity: .9; }
-    
-    .hero-title {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: clamp(28px, 4vw, 46px);
-      font-weight: 900; letter-spacing: .12em; text-transform: uppercase;
-      color: #fff; text-shadow: 0 10px 30px rgba(0, 0, 0, .85);
-    }
-
-    /* ADMIN LAYOUT */
-    .layout { display: grid; grid-template-columns: 0.45fr 0.55fr; gap: 18px; align-items: flex-start; }
-    @media(max-width:900px){ .layout{ grid-template-columns:1fr; } }
-    
-    .card {
-      background: var(--card-bg-gradient);
-      border-radius: 24px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.8);
-      padding: 16px 16px 18px;
-    }
-
-    h2 { font-size: 16px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
-    
-    .muted { color: var(--text-muted); font-size: 12px; line-height: 1.4 }
-    .row { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 }
-    
-    label { font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--text-muted); }
-    
-    input, select {
-      padding: 10px; border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, .5);
-      background: rgba(15, 23, 42, .65); color: var(--text-main);
-      font-size: 13px; outline: none;
-    }
-    
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px }
-    
-    .btn {
-      border: none; border-radius: 999px; padding: 10px 16px;
-      font-weight: 700; cursor: pointer;
-      background: var(--primary); color: #fff;
-      transition: .16s ease all;
-      box-shadow: 0 14px 36px rgba(248, 113, 113, .35);
-      font-size: 13px;
-      text-decoration: none;
-      display: inline-flex; align-items: center; justify-content: center;
-    }
-    
-    .btn:hover { background: var(--primary-dark); transform: translateY(-1px) }
-    .btn.secondary { background: rgba(148, 163, 184, .18); border: 1px solid rgba(148, 163, 184, .35); box-shadow: none; }
-    .btn.danger { background: rgba(244, 63, 94, .12); border: 1px solid rgba(244, 63, 94, .35); color: var(--text-main); box-shadow: none; }
-    .btn.danger:hover{background:rgba(244,63,94,.25);}
-
-    .msg { margin-top: 10px; font-size: 12px; min-height: 16px }
-    .ok { color: #22c55e } 
-    .err { color: #fb7185 }
-    .login-wrap { max-width: 520px; margin: 0 auto }
-    
-    .list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px }
-    .item {
-      border: 1px solid rgba(148, 163, 184, .25);
-      background: rgba(15, 23, 42, .45);
-      border-radius: 16px; padding: 10px;
-      display: flex; justify-content: space-between; align-items: center; gap: 10px;
-    }
-    .item strong { font-size: 13px }
-    .item small { font-size: 11px; color: var(--text-muted) }
-  </style>
-</head>
-<body>
-<div class="page">
-  <header class="hero">
-    <img src="banner.jpg" alt="Arteon banner">
-    <div class="hero-title">Admin Panel</div>
-  </header>
-
-    <section class="login-wrap" id="loginWrap">
-    <div class="card">
-      <h2>Admin Login</h2>
-      <div class="muted">Enter admin PIN (stored as secret). This PIN is used to authorize Edge Functions.</div>
-
-      <div class="row">
-        <label>Admin PIN</label>
-        <input type="password" id="pinInput" placeholder="••••">
-      </div>
-
-      <div class="actions">
-        <button class="btn" id="loginBtn">Login</button>
-        <a href="index.html" class="btn secondary">Back</a>
-      </div>
-
-      <div class="msg" id="loginMsg"></div>
-    </div>
-  </section>
-
-    <section id="adminUI" style="display:none">
-    <main class="layout">
-            <section class="card">
-        <h2>Create Trip</h2>
-        <div class="muted">
-          Creates a new trip entry in the <b>trips</b> table.
-        </div>
-
-        <div class="row">
-          <label>Date</label>
-          <input type="date" id="tripDate">
-        </div>
-
-        <div class="row">
-          <label>Direction</label>
-          <select id="tripDirection">
-            <option value="ZO">Zurich → Ostrava</option>
-            <option value="OZ">Ostrava → Zurich</option>
-          </select>
-        </div>
-
-        <div class="actions">
-          <button class="btn" id="addTripBtn">Add Trip</button>
-          <button class="btn secondary" id="refreshBtn">Refresh</button>
-        </div>
-
-        <div class="msg" id="adminMsg"></div>
-
-        <div style="margin-top:12px">
-          <button class="btn secondary" id="logoutBtn">Logout</button>
-        </div>
-      </section>
-
-            <section class="card">
-        <h2>Scheduled Trips</h2>
-        <div class="muted">Loaded from Supabase table <b>trips</b>.</div>
-        <div class="list" id="tripList"></div>
-      </section>
-    </main>
-  </section>
-</div>
-
-<script>
-/*
- * ====================================================================
- * ARTEON RIDE ADMIN SCRIPT - SUPABASE FUNCTIONS INTEGRATION
- * ====================================================================
- */
-
-/* ====== ⚠️ SUPABASE CONFIG (NUTNÉ VYPLNIT) ⚠️ ====== */
-const SUPABASE_URL = "https://rtqnbryjqiwnewmtdeqb.supabase.co"; // Vaše Supabase URL
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0cW5icnlqcWl3bmV3bXRkZXFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3MDE2NjgsImV4cCI6MjA4MTI3NzY2OH0.3HACsytbNMgBZ9wpspl7SI76OpAsoUMZGyK57mQhCro"; // Váš Anon Key
-const SESSION_ADMIN_PIN = "arteon_admin_pin";
-
-// ROUTE MAPPING: Mapuje zkratku na frontendu na ID v tabulce 'routes'
-const ROUTE_MAPPING = {
-    // POZOR: Tato ID musí odpovídat skutečným ID v tabulce routes!
-    "ZO": { route_id: 1, from_city: "Zurich", to_city: "Ostrava" }, 
-    "OZ": { route_id: 2, from_city: "Ostrava", to_city: "Zurich" }
-};
-
-
-/* ====== Edge function endpoints ====== */
-const FN_BASE = `${SUPABASE_URL}/functions/v1`;
-const FN_VERIFY = `${FN_BASE}/verify-admin-pin`;
-const FN_LIST = `${FN_BASE}/list-trips`;
-const FN_ADD  = `${FN_BASE}/add-trip`;
-const FN_DEL  = `${FN_BASE}/delete-trip`;
-
-
-/* ====== UI helpers ====== */
-function setMsg(id, txt, type=""){
-  const el = document.getElementById(id);
-  el.className = "msg " + (type || "");
-  el.textContent = txt;
-}
-function getPin(){ return sessionStorage.getItem(SESSION_ADMIN_PIN) || ""; }
-function setPin(pin){ sessionStorage.setItem(SESSION_ADMIN_PIN, pin); }
-function clearPin(){ sessionStorage.removeItem(SESSION_ADMIN_PIN); }
-function showLogin(){
-  document.getElementById("loginWrap").style.display = "block";
-  document.getElementById("adminUI").style.display = "none";
-}
-function showAdmin(){
-  document.getElementById("loginWrap").style.display = "none";
-  document.getElementById("adminUI").style.display = "block";
-}
-
-/* ====== API calls (Edge Functions) - ZAPOUZDRUJE ANONYMNÍ KLÍČ A PIN ====== */
-
-async function makeApiCall(url, method, payload = null) {
-    const pin = getPin();
-    const headers = {
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-        "apikey": SUPABASE_ANON_KEY,
-        "x-admin-pin": pin,
-        "Content-Type": "application/json",
-    };
-
-    const config = {
-        method: method,
-        headers: headers,
-        body: payload ? JSON.stringify(payload) : null,
-    };
-
-    const res = await fetch(url, config);
-
-    let data;
-    try {
-        // Zkusí parsovat JSON i v případě chyby
-        data = await res.json();
-    } catch {
-        // Zpracování non-JSON odpovědí (např. 500 HTML chyba)
-        throw new Error(`API call failed: HTTP ${res.status} - Non-JSON response.`);
-    }
-
-    if (!res.ok || data.ok === false) {
-        // Kontrola specifických chyb
-        if (res.status === 401 || res.status === 403) {
-            clearPin(); 
-            throw new Error("Login session expired or Wrong PIN.");
-        }
-        // Vrací error z Edge Function
-        throw new Error(data.error || `API failed (HTTP ${res.status})`);
-    }
-
-    return data;
-}
-
-
-async function apiVerifyPin(pin) {
-    // Ověření PINu
-    const res = await fetch(FN_VERIFY, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-admin-pin": pin }
-    });
-    
-    if (res.status === 401 || res.status === 403) throw new Error("Wrong PIN");
-    if (!res.ok) {
-        // Pokud funkce havaruje (500), zde se vyhodí chyba
-        throw new Error(`Verification failed: HTTP ${res.status}. Check function logs.`);
-    }
-    return true;
-}
-
-
-async function apiListTrips() {
-    const data = await makeApiCall(FN_LIST, "GET");
-    return data.trips || [];
-}
-
-
-async function apiAddTrip(payload) {
-    const data = await makeApiCall(FN_ADD, "POST", payload);
-    return data.trip;
-}
-
-
-async function apiDeleteTrip(id) {
-    // Payload pro delete-trip očekává { id: Number }
-    await makeApiCall(FN_DEL, "POST", { id: Number(id) });
-    return true;
-}
-
-
-/* ====== Render and Logic ====== */
-function getStopMode(from, to) {
-    if (from === "Zurich" && to === "Ostrava") return "dropoff (Exit)";
-    if (from === "Ostrava" && to === "Zurich") return "pickup (Start)";
-    return "Neznámý směr";
-}
-
-async function renderTrips(){
-  const list = document.getElementById("tripList");
-  list.innerHTML = `<div class="muted" style="text-align: center;">Loading…</div>`;
-  try{
-    const trips = await apiListTrips();
-    list.innerHTML = "";
-
-    if (!trips.length){
-      list.innerHTML = `<div class="muted" style="text-align: center;">No scheduled trips yet.</div>`;
-      return;
-    }
-
-    trips.forEach(t=>{
-      const div = document.createElement("div");
-      div.className = "item";
-      const mode = getStopMode(t.from_city, t.to_city);
-      const bookedCount = Object.keys(t.seat_bookings || {}).length;
+      /* Barvy pro vzhled */
+      --seat-bg: rgba(15, 23, 42, 0.38);
+      --seat-border: rgba(148, 163, 184, 0.7);
       
-      const label = `${t.trip_date} – ${t.from_city} → ${t.to_city}`;
-      div.innerHTML = `
-        <div>
-          <strong>${label}</strong>
-          <small>Mode: ${mode} | Seats Booked: ${bookedCount}/3</small>
-        </div>
-        <button class="btn danger" data-id="${t.id}">Delete</button>
-      `;
-
-      const deleteBtn = div.querySelector(".danger");
-      if (deleteBtn) {
-          deleteBtn.onclick = async (e)=>{
-              const tripId = e.currentTarget.dataset.id;
-              if (!confirm(`Are you sure you want to delete trip ID ${tripId}?`)) return;
-              try{
-                  await apiDeleteTrip(tripId);
-                  setMsg("adminMsg","Trip deleted ✅","ok");
-                  await renderTrips();
-              } catch(e){
-                  setMsg("adminMsg", e.message, "err");
-              }
-          };
-      }
-      list.appendChild(div);
-    });
-  }catch(e){
-    // Logika pro zobrazení chyby a návrat na Login v případě selhání autorizace
-    if (e.message.includes("Wrong PIN") || e.message.includes("Login session expired")) {
-        clearPin();
-        showLogin();
-        setMsg("loginMsg", e.message, "err");
-    } else {
-        list.innerHTML = `<div class="muted" style="text-align: center;">Failed to load trips. Error: ${e.message}</div>`;
-        setMsg("adminMsg", e.message, "err");
+      --bg-gradient: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
+      --card-bg-gradient: linear-gradient(145deg, #020617, #020617f0);
     }
-  }
-}
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ====== Initialization ====== */
-document.addEventListener("DOMContentLoaded", async ()=>{
-  // Kontrola PINu a pokus o načtení Admin UI
-  if (getPin()){
-    try{
-      await apiListTrips();
-      showAdmin();
-      await renderTrips();
-    } catch {
-      clearPin();
-      showLogin();
-    }
-  } else {
-    showLogin();
-  }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 20px 10px 40px;
+    }
 
-  // Login Handler
-  document.getElementById("loginBtn").onclick = async ()=>{
-    const pin = document.getElementById("pinInput").value.trim();
-    if(!pin) { setMsg("loginMsg", "PIN cannot be empty.", "err"); return; }
+    .page { width: 100%; max-width: 1100px; }
+
+    /* HERO BANNER */
+    .hero {
+      position: relative;
+      border-radius: 32px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 32px 80px rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .hero img {
+      width: 100%;
+      display: block;
+      height: 230px;
+      object-fit: cover;
+      filter: saturate(1.1);
+    }
+
+    .hero-title {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Layout: 2 columns */
+    .layout {
+      display: grid;
+      grid-template-columns: 0.4fr 0.6fr;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--card-bg-gradient);
+      border-radius: 24px;
+      padding: 18px 18px 20px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.8);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+
+    /* FORM ELEMENTS (Using styles from index) */
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+      font-size: 12px;
+    }
+
+    .form-row label {
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    .form-row select,
+    .form-row input[type="text"],
+    .form-row input[type="password"],
+    .form-row input[type="date"] {
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 10px 12px;
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-main);
+      font-size: 13px;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-row input:focus, .form-row select:focus {
+      border-color: var(--primary);
+    }
+
+    /* BUTTONS */
+    .btn-row {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 14px 36px rgba(248, 113, 113, 0.55);
+      transition: 0.16s ease all;
+      text-decoration: none;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
     
-    try{
-      setMsg("loginMsg", "Verifying PIN...");
-      await apiVerifyPin(pin);
-      setPin(pin);
-      setMsg("loginMsg","Logged in successfully.","ok");
-      showAdmin();
-      await renderTrips();
-    } catch(e){
-      clearPin();
-      setMsg("loginMsg", e.message || "Wrong PIN", "err");
-    }
-  };
+    .btn-secondary {
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-secondary:hover { border-color: #fff; color: #fff; }
 
-  // Logout Handler
-  document.getElementById("logoutBtn").onclick = ()=>{
-    clearPin();
-    showLogin();
-  };
+    .btn-danger {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(249, 115, 115, 0.3);
+      background: rgba(249, 115, 115, 0.1);
+      color: #fca5a5;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-danger:hover { background: rgba(249, 115, 115, 0.2); color: #fff; }
 
-  // Refresh Handler
-  document.getElementById("refreshBtn").onclick = async ()=>{
-    setMsg("adminMsg","Refreshing…");
-    await renderTrips();
-    setMsg("adminMsg","Up to date","ok");
-  };
+    /* LIST ITEMS */
+    .list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+    .item {
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .item-info { display: flex; flex-direction: column; gap: 2px; }
+    .item-info strong { font-size: 14px; color: #fff; }
+    .item-info small { font-size: 11px; color: var(--text-muted); }
 
-  // Add Trip Handler
-  document.getElementById("addTripBtn").onclick = async ()=>{
-    const d = document.getElementById("tripDate").value;
-    const dirKey = document.getElementById("tripDirection").value;
+    /* MESSAGES */
+    .message { margin-top: 12px; font-size: 13px; min-height: 18px; }
+    .message.ok { color: #22c55e; }
+    .message.error { color: #f97373; }
 
-    if(!d){ setMsg("adminMsg","Select date","err"); return; }
+    /* Login Specific */
+    .login-wrap { max-width: 400px; margin: 40px auto; }
+  </style>
+</head>
 
-    const routeInfo = ROUTE_MAPPING[dirKey];
-    if (!routeInfo || !routeInfo.route_id) {
-      setMsg("adminMsg","Invalid direction mapping (Check ROUTE_MAPPING)","err");
-      return;
-    }
+<body>
+  <div class="page">
+    <header class="hero">
+      <img src="banner.jpg" alt="Arteon banner" />
+      <div class="hero-title">Admin Panel</div>
+    </header>
 
-    const payload = {
-      trip_date: d,
-      route_id: Number(routeInfo.route_id) // Zajišťuje, že je to číslo
-    };
+    <section class="login-wrap" id="loginWrap">
+      <div class="card">
+        <h2>Admin Login</h2>
+        <div class="muted">Enter the PIN to manage trips.</div>
+        
+        <div class="form-row">
+          <label>Admin PIN</label>
+          <input type="password" id="pinInput" placeholder="••••" />
+        </div>
 
-    try{
-      await apiAddTrip(payload);
-      setMsg("adminMsg","Trip added to DB ✅","ok");
-      await renderTrips();
-    } catch(e){
-      setMsg("adminMsg", e.message, "err");
-    }
-  };
-});
-</script>
+        <div class="btn-row">
+          <button class="btn-primary" id="loginBtn">Login</button>
+          <a href="index.html" class="btn-secondary">Back to Home</a>
+        </div>
+
+        <div id="loginMsg" class="message"></div>
+      </div>
+    </section>
+
+    <section id="adminUI" style="display:none;">
+      <main class="layout">
+        
+        <section class="card">
+          <h2>Create New Trip</h2>
+          <div class="muted">
+            Add a date and direction. This will appear on the main page.
+          </div>
+
+          <div class="form-row">
+            <label>Date</label>
+            <input type="date" id="tripDate" />
+          </div>
+
+          <div class="form-row">
+            <label>Direction</label>
+            <select id="tripDirection">
+              <option value="ZO">Zurich → Ostrava</option>
+              <option value="OZ">Ostrava → Zurich</option>
+            </select>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-primary" id="addTripBtn">Add Trip</button>
+            <button class="btn-secondary" id="refreshBtn">Refresh</button>
+          </div>
+
+          <div id="adminMsg" class="message"></div>
+          
+          <div style="margin-top: 20px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1);">
+             <button class="btn-secondary" id="logoutBtn" style="font-size: 11px;">Logout</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Scheduled Trips</h2>
+          <div class="muted">List of active trips in database.</div>
+          
+          <div class="list" id="tripList">
+            <div class="muted" style="text-align: center;">Loading...</div>
+          </div>
+        </section>
+
+      </main>
+    </section>
+  </div>
+
+  <script>
+    /* =========================================================
+       ARTEON RIDE - ADMIN LOGIC
+       ========================================================= */
+
+    // ⚠️ CONFIGURATION (FILL ME)
+    const SUPABASE_URL = "https://rtqnbryjqiwnewmtdeqb.supabase.co"; // Vaše URL
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0cW5icnlqcWl3bmV3bXRkZXFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3MDE2NjgsImV4cCI6MjA4MTI3NzY2OH0.3HACsytbNMgBZ9wpspl7SI76OpAsoUMZGyK57mQhCro"; // Váš Klíč
+    const SESSION_ADMIN_PIN = "arteon_admin_pin";
+
+    // ROUTE MAPPING (Must match DB IDs)
+    const ROUTE_MAPPING = {
+        "ZO": { route_id: 1, from: "Zurich", to: "Ostrava" },
+        "OZ": { route_id: 2, from: "Ostrava", to: "Zurich" }
+    };
+
+    const FN_BASE = `${SUPABASE_URL}/functions/v1`;
+
+    // --- Helpers ---
+    function setMsg(id, txt, type="") {
+        const el = document.getElementById(id);
+        el.className = "message " + type;
+        el.textContent = txt;
+    }
+    function getPin(){ return sessionStorage.getItem(SESSION_ADMIN_PIN) || ""; }
+    function setPin(pin){ sessionStorage.setItem(SESSION_ADMIN_PIN, pin); }
+    function clearPin(){ sessionStorage.removeItem(SESSION_ADMIN_PIN); }
+
+    function toggleView(isAdmin) {
+        document.getElementById("loginWrap").style.display = isAdmin ? "none" : "block";
+        document.getElementById("adminUI").style.display = isAdmin ? "block" : "none";
+    }
+
+    // --- API Calls ---
+    async function makeApiCall(endpoint, method, body = null) {
+        const pin = getPin();
+        const res = await fetch(`${FN_BASE}/${endpoint}`, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                "x-admin-pin": pin
+            },
+            body: body ? JSON.stringify(body) : null
+        });
+
+        if (res.status === 401 || res.status === 403) {
+            clearPin();
+            toggleView(false);
+            throw new Error("Invalid or expired PIN.");
+        }
+
+        let data;
+        try { data = await res.json(); } catch { throw new Error(`API Error: ${res.status}`); }
+        
+        if (!res.ok || data.ok === false) throw new Error(data.error || "Unknown error");
+        return data;
+    }
+
+    // --- Actions ---
+    async function verifyPin(pin) {
+        // We use the dedicated verify endpoint
+        const res = await fetch(`${FN_BASE}/verify-admin-pin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-admin-pin": pin }
+        });
+        if (!res.ok) throw new Error("Wrong PIN");
+        return true;
+    }
+
+    async function loadTrips() {
+        const listEl = document.getElementById("tripList");
+        listEl.innerHTML = '<div class="muted" style="text-align: center;">Loading...</div>';
+        
+        try {
+            const data = await makeApiCall("list-trips", "GET");
+            const trips = data.trips || [];
+            
+            listEl.innerHTML = "";
+            if (trips.length === 0) {
+                listEl.innerHTML = '<div class="muted" style="text-align: center;">No scheduled trips.</div>';
+                return;
+            }
+
+            trips.forEach(t => {
+                // UI Item
+                const div = document.createElement("div");
+                div.className = "item";
+                
+                // Determine direction label
+                let dirLabel = `${t.from_city || "?"} → ${t.to_city || "?"}`;
+                
+                div.innerHTML = `
+                    <div class="item-info">
+                        <strong>${t.trip_date}</strong>
+                        <small>${dirLabel}</small>
+                    </div>
+                    <button class="btn-danger" onclick="deleteTrip(${t.id})">Delete</button>
+                `;
+                listEl.appendChild(div);
+            });
+
+        } catch (e) {
+            listEl.innerHTML = `<div class="message error">Failed to load: ${e.message}</div>`;
+        }
+    }
+
+    async function addTrip() {
+        const date = document.getElementById("tripDate").value;
+        const dir = document.getElementById("tripDirection").value;
+        
+        if (!date) return setMsg("adminMsg", "Please select a date", "error");
+
+        const mapping = ROUTE_MAPPING[dir];
+        if (!mapping) return setMsg("adminMsg", "Invalid route selected", "error");
+
+        try {
+            setMsg("adminMsg", "Adding trip...", "");
+            await makeApiCall("add-trip", "POST", {
+                trip_date: date,
+                route_id: mapping.route_id
+            });
+            setMsg("adminMsg", "Trip added successfully!", "ok");
+            loadTrips();
+        } catch (e) {
+            setMsg("adminMsg", e.message, "error");
+        }
+    }
+
+    // Global scope for onclick attribute
+    window.deleteTrip = async function(id) {
+        if (!confirm("Are you sure you want to delete this trip?")) return;
+        try {
+            await makeApiCall("delete-trip", "POST", { id: Number(id) });
+            loadTrips();
+        } catch (e) {
+            alert(e.message);
+        }
+    };
+
+    // --- Init ---
+    document.addEventListener("DOMContentLoaded", () => {
+        if (getPin()) {
+            toggleView(true);
+            loadTrips();
+        } else {
+            toggleView(false);
+        }
+
+        document.getElementById("loginBtn").addEventListener("click", async () => {
+            const pin = document.getElementById("pinInput").value.trim();
+            if (!pin) return setMsg("loginMsg", "Enter PIN", "error");
+            
+            try {
+                setMsg("loginMsg", "Verifying...", "");
+                await verifyPin(pin);
+                setPin(pin);
+                toggleView(true);
+                loadTrips();
+                setMsg("loginMsg", "", "");
+            } catch (e) {
+                setMsg("loginMsg", "Wrong PIN", "error");
+            }
+        });
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            clearPin();
+            toggleView(false);
+        });
+
+        document.getElementById("refreshBtn").addEventListener("click", loadTrips);
+        document.getElementById("addTripBtn").addEventListener("click", addTrip);
+    });
+
+  </script>
 </body>
 </html>

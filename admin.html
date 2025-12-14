@@ -5,7 +5,8 @@
   <title>Arteon Ride – Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
-  <style>
+  
+    <style>
     :root{
       /* Barvy pro Dark/Orange Vzhled */
       --primary:#ff3600; --primary-dark:#d42d00;
@@ -71,7 +72,7 @@
     .btn:hover{background:var(--primary-dark); transform:translateY(-1px)}
     .btn.secondary{background:rgba(148,163,184,.18); border:1px solid rgba(148,163,184,.35); box-shadow:none;}
     .btn.danger{background:rgba(244,63,94,.12); border:1px solid rgba(244,63,94,.35); color:var(--text); box-shadow:none;}
-    .btn.danger:hover{background:rgba(244,63,94,.25);}
+    .btn.danger:hover{background:rgba(244,63,94,.25);}
     .msg{margin-top:10px; font-size:12px; min-height:16px}
     .ok{color:#22c55e} .err{color:#fb7185}
     .login-wrap{max-width:520px; margin:0 auto}
@@ -308,8 +309,7 @@ async function renderTrips(){
         <button class="btn danger" data-id="${t.id}">Delete</button>
       `;
 
-      // Aby tlačítko Delete fungovalo v novém kódu, potřebuje style .danger
-      const deleteBtn = div.querySelector(".danger");
+      const deleteBtn = div.querySelector(".danger");
       if (deleteBtn) {
           deleteBtn.onclick = async (e)=>{
               const tripId = e.currentTarget.dataset.id;
@@ -326,7 +326,7 @@ async function renderTrips(){
       list.appendChild(div);
     });
   }catch(e){
-    // Pokud dojde k chybě, která vyžaduje relogin (401/403), zobraz login
+    // Logika pro zobrazení chyby a návrat na Login v případě selhání autorizace
     if (e.message.includes("Wrong PIN") || e.message.includes("Login session expired")) {
         clearPin();
         showLogin();
@@ -344,7 +344,6 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   // Kontrola PINu a pokus o načtení Admin UI
   if (getPin()){
     try{
-      // Použijeme ListTrips jako kontrolu, zda je PIN stále platný
       await apiListTrips();
       showAdmin();
       await renderTrips();

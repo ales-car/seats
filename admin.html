@@ -353,29 +353,22 @@
     }
 
     // --- Actions ---
-   async function apiVerifyPin(pin) {
-  // Ujisti se, že SUPABASE_ANON_KEY a URL funkce (FN_VERIFY) jsou správně definované
+   async function apiVerifyPin(pin){
   const res = await fetch(FN_VERIFY, {
     method: "POST",
     headers: {
-      // Standardní hlavičky, které Supabase Gateway vždy pustí
       "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
       "apikey": SUPABASE_ANON_KEY,
       "Content-Type": "application/json"
     },
-    // PIN posíláme bezpečně v těle
     body: JSON.stringify({ pin })
   });
 
-  // Ošetření prázdné odpovědi nebo chyby parsování
-  const data = await res.json().catch(() => ({}));
-
-  if (!res.ok || !data.ok) {
-    throw new Error(data.error || `Verify failed (${res.status})`);
-  }
-  
+  const data = await res.json().catch(()=> ({}));
+  if (!res.ok || !data.ok) throw new Error(data.error || `Verify failed (${res.status})`);
   return true;
 }
+
 
     async function loadTrips() {
         const listEl = document.getElementById("tripList");

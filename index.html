@@ -11,19 +11,14 @@
        CSS (Dark Theme)
        ========================================= */
     :root {
-      /* Hlavní akcent - tlumená červená/růžová */
       --primary: #be123c; 
       --primary-hover: #9f1239; 
-      
       --bg: #0b1120;
       --text-main: #e2e8f0;
       --text-muted: #94a3b8;
-
-      /* Seat colors */
+      
       --seat-bg: rgba(30, 41, 59, 0.5);
       --seat-border: rgba(51, 65, 85, 0.5);
-      
-      /* Barvy stavů (tlumené) */
       --free-bg: rgba(16, 185, 129, 0.2); 
       --free-border: rgba(16, 185, 129, 0.4);
       --booked-bg: rgba(30, 58, 138, 0.3); 
@@ -70,7 +65,6 @@
     /* STEPS VISUALS */
     .step-container { margin-bottom: 25px; animation: fadeIn 0.4s ease; }
     .step-container.hidden { display: none; }
-    
     .step-header {
       font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.08em;
       margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
@@ -105,61 +99,104 @@
     .driver-mini { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .driver-mini img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); }
 
-    /* === CAR GALLERY === */
+    /* === CAR GALLERY THUMBNAILS === */
     .car-gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 10px;
       margin-bottom: 30px;
     }
     .gallery-thumb {
       width: 100%;
       aspect-ratio: 16/9;
       object-fit: cover;
-      border-radius: 8px;
       cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.1);
       transition: transform 0.2s, filter 0.2s;
+      
+      /* UPRAVENO: Bílý rámeček a zaoblení */
+      border: 2px solid #ffffff; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
     .gallery-thumb:hover {
       transform: scale(1.05);
       filter: brightness(1.2);
       z-index: 1;
-      border-color: rgba(255,255,255,0.4);
+      border-color: var(--primary); /* Při najetí se rámeček změní na červenou (volitelné) */
     }
 
-    /* === LIGHTBOX MODAL === */
+    /* === LIGHTBOX (GALERIE OVERLAY) === */
     .lightbox {
-      display: none;
+      display: none; /* Skryto defaultně */
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.92);
+      inset: 0; /* Roztáhne se přes celou obrazovku */
+      background: rgba(0, 0, 0, 0.8); /* Průhledné pozadí (80% černá) */
       z-index: 9999;
       justify-content: center;
       align-items: center;
-      padding: 20px;
       backdrop-filter: blur(5px);
       animation: fadeIn 0.3s ease;
     }
-    .lightbox img {
-      max-width: 100%;
-      max-height: 90vh;
-      border-radius: 8px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.8);
-      border: 1px solid rgba(255,255,255,0.1);
+
+    .lightbox-content-wrapper {
+      position: relative;
+      width: 60%; /* Požadavek: 60% stránky */
+      max-width: 1000px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
+    .lightbox img {
+      width: 100%;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.2);
+      box-shadow: 0 0 50px rgba(0,0,0,0.9);
+    }
+
+    /* ŠIPKY PRO MYŠ */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 10001;
+    }
+    .nav-btn:hover { background: var(--primary); }
+    .nav-prev { left: -70px; } /* Posunuto vlevo od fotky */
+    .nav-next { right: -70px; } /* Posunuto vpravo od fotky */
+
+    /* Close hint */
     .lightbox-close-hint {
       position: absolute;
       top: 20px;
       right: 20px;
-      color: rgba(255,255,255,0.6);
-      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      pointer-events: none;
+      cursor: pointer;
+      background: rgba(0,0,0,0.5);
+      padding: 8px 12px;
+      border-radius: 8px;
     }
+    .lightbox-close-hint:hover { color: #fff; background: var(--primary); }
 
-    /* CAR VISUAL (RIGHT) */
+    /* CAR VISUAL & SEATS */
     .car-visual {
       position: relative; margin: 10px auto; border-radius: 24px; overflow: hidden;
       border: 1px solid rgba(255,255,255,0.05);
@@ -168,7 +205,6 @@
     }
     .car-visual img { width: 100%; display: block; opacity: 0.9; }
 
-    /* FLOATING STATS */
     .stats-float {
       position: absolute; top: 15px; left: 15px;
       background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(8px);
@@ -178,7 +214,6 @@
     .stat-num { font-size: 16px; font-weight: 700; color: #fff; }
     .stat-num.free { color: #34d399; } 
 
-    /* SEATS */
     .seat-grid {
       position: absolute; top: 43%; left: 30%; right: 35%; bottom: 25%;
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
@@ -194,10 +229,9 @@
     .seat.selected { background: var(--selected-bg); border-color: var(--selected-border); transform: scale(1.05); z-index: 2; box-shadow: 0 0 15px rgba(190, 18, 60, 0.5); color: #fff; }
     .seat.booked { background: var(--booked-bg); border-color: var(--booked-border); cursor: not-allowed; opacity: 0.8; }
     .seat.driver-seat { cursor: default; pointer-events: none; background: rgba(0,0,0,0.4); border-color: transparent; }
-    
     .seat-label { font-size: 10px; font-weight: 700; margin-top: 2px; }
     .seat-icon { width: 24px; opacity: 0.8; }
-    
+
     /* LEGEND */
     .legend { display: flex; gap: 15px; justify-content: center; margin-top: 15px; font-size: 12px; color: var(--text-muted); }
     .dot { width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; display: inline-block; }
@@ -224,7 +258,6 @@
     }
     .success-title { text-align: center; color: #fff; font-weight: 600; margin-bottom: 15px; }
     .social-btns { display: flex; flex-direction: column; gap: 10px; }
-    
     .social-btn {
       display: flex; align-items: center; justify-content: center; gap: 10px;
       padding: 12px; border-radius: 10px; text-decoration: none; color: #fff;
@@ -232,21 +265,24 @@
       border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
     }
     .social-btn:hover { filter: brightness(1.1); }
-    
     .social-btn.wa { background: #15803d; border-color: #166534; }
     .social-btn.ms { background: #0369a1; border-color: #075985; }
     .social-btn.em { background: #334155; border-color: #1e293b; }
-    
     .social-icon { width: 20px; height: 20px; fill: currentColor; }
     .copy-hint { font-size: 11px; font-weight: normal; opacity: 0.8; margin-left: 5px; }
 
     .message { text-align: center; margin-top: 10px; font-size: 13px; min-height: 20px; }
     .message.error { color: #f87171; }
-
     .legal-links { margin-top: 20px; text-align: center; font-size: 11px; color: #64748b; }
     .legal-links a { color: #64748b; text-decoration: underline; margin: 0 8px; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Pro mobily skryjeme boční šipky lightboxu a necháme jen swipe nebo tap */
+    @media (max-width: 600px) {
+        .nav-btn { display: none; }
+        .lightbox-content-wrapper { width: 95%; }
+    }
   </style>
 </head>
 
@@ -276,7 +312,7 @@
           <img src="02.png" class="gallery-thumb" alt="Arteon Rear">
           <img src="03.png" class="gallery-thumb" alt="Interior">
           <img src="04.png" class="gallery-thumb" alt="Trunk">
-          <img src="05.jpg" class="gallery-thumb" alt="Cockpit">
+          <img src="05.png" class="gallery-thumb" alt="Cockpit">
           <img src="06.png" class="gallery-thumb" alt="Side">
         </div>
 
@@ -365,17 +401,14 @@
         <div class="success-box" id="successBox">
           <div class="success-title">✅ Rezervováno! Odeslat potvrzení:</div>
           <div class="social-btns">
-            
             <a href="#" id="waBtn" target="_blank" class="social-btn wa">
               <svg class="social-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               WhatsApp
             </a>
-            
             <a href="#" id="msBtn" class="social-btn ms">
               <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.504 8.658.232.172.376.447.376.733v2.336a.872.872 0 001.352.738l2.646-1.603a.925.925 0 01.597-.133 12.858 12.858 0 002.525.251c6.627 0 12-4.974 12-11.111C24 4.974 18.627 0 12 0zm1.321 14.397L10.3 11.16a.918.918 0 00-1.168-.088l-4.54 3.447c-.504.382-1.156-.257-.804-.791l3.02-4.582a.916.916 0 001.168.087l3.023 2.152a.92.92 0 001.168.088l4.54-3.447c.504-.383 1.155.257.803.79l-3.02 4.583a.918.918 0 00-1.169-.088v-.001z"/></svg>
               Messenger <span class="copy-hint">(text se zkopíruje)</span>
             </a>
-            
             <a href="#" id="emBtn" target="_blank" class="social-btn em">
               <svg class="social-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
               Odeslat Email
@@ -390,8 +423,13 @@
     </main>
     
     <div id="lightbox" class="lightbox">
-        <div class="lightbox-close-hint">Klikni pro zavření</div>
-        <img id="lightboxImg" src="" alt="Full view">
+        <div class="lightbox-close-hint" id="closeLightboxBtn">Zavřít (Esc)</div>
+        
+        <div class="lightbox-content-wrapper">
+          <button class="nav-btn nav-prev" id="prevBtn">❮</button>
+          <img id="lightboxImg" src="" alt="Full view">
+          <button class="nav-btn nav-next" id="nextBtn">❯</button>
+        </div>
     </div>
   </div>
 
@@ -399,7 +437,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // 1) FIREBASE CONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyAi6MYAsAnqJg_5XwQC7b6TAI1ywrrADsM",
       authDomain: "car-seats-booking.firebaseapp.com",
@@ -413,7 +450,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // 2) CONTACT INFO
     const OWNER_WHATSAPP = "+41767775898";
     const OWNER_MESSENGER = "https://www.facebook.com/messages/t/ales.krajina"; 
     const OWNER_EMAIL = "ales.krajina@outlook.com"; 
@@ -430,7 +466,6 @@
     let bookedSeats = new Set(); 
     let currentSummaryText = ""; 
 
-    // UI Helpers
     function setMessage(text, type = "") {
       const msgEl = document.getElementById("message");
       msgEl.className = "message " + type;
@@ -439,27 +474,20 @@
 
     function formatTripLabel(t) { return `${t.date} – ${t.from} → ${t.to}`; }
 
-    // WIZARD STEPS LOGIC
+    // WIZARD LOGIC
     function updateStepsVisibility() {
       const step2 = document.getElementById("step2");
       const step3 = document.getElementById("step3");
-
       if (currentTripId) {
         step2.classList.remove("hidden");
         const stopTitle = document.getElementById("stopHeaderTitle");
         if(currentTripObj.from === "Zurich") stopTitle.textContent = "KDE VYSTUPUJI?";
         else stopTitle.textContent = "KDE NASTUPUJI?";
       } else {
-        step2.classList.add("hidden");
-        step3.classList.add("hidden");
-        return;
+        step2.classList.add("hidden"); step3.classList.add("hidden"); return;
       }
-
-      if (currentStop) {
-        step3.classList.remove("hidden");
-      } else {
-        step3.classList.add("hidden");
-      }
+      if (currentStop) step3.classList.remove("hidden");
+      else step3.classList.add("hidden");
     }
 
     function updateSeatVisuals() {
@@ -467,10 +495,8 @@
       seats.forEach(seat => {
         const id = seat.dataset.seatId;
         seat.classList.remove("selected", "booked", "disabled", "driver-seat");
-
         if (id === "DRV") { seat.classList.add("driver-seat"); return; }
         if (!currentTripId) { seat.classList.add("disabled"); return; }
-        
         if (bookedSeats.has(id)) { seat.classList.add("booked"); return; }
         if (selectedSeats.has(id)) { seat.classList.add("selected"); }
       });
@@ -488,12 +514,8 @@
       confirmBtn.style.display = "inline-block";
 
       if (!currentTripId) {
-        statsBox.style.display = "none";
-        priceEl.textContent = "";
-        confirmBtn.disabled = true;
-        return;
+        statsBox.style.display = "none"; priceEl.textContent = ""; confirmBtn.disabled = true; return;
       }
-
       statsBox.style.display = "block";
       const bookedCount = [...bookedSeats].filter(s => SEAT_IDS.includes(s)).length;
       const freeCount = SEAT_IDS.length - bookedCount;
@@ -501,25 +523,19 @@
       freeVal.textContent = freeCount;
 
       if (!currentStop) {
-        priceEl.textContent = "Vyber zastávku (Krok 2)";
-        confirmBtn.disabled = true;
-        return;
+        priceEl.textContent = "Vyber zastávku (Krok 2)"; confirmBtn.disabled = true; return;
       }
-
       const basePrice = STOP_PRICES[currentStop] || 0;
       const seatCount = selectedSeats.size;
-
       if (seatCount > 0) {
         const total = seatCount * basePrice;
         priceEl.textContent = `${seatCount} × ${basePrice} CHF = ${total} CHF`;
         confirmBtn.disabled = false;
       } else {
-        priceEl.textContent = "Vyber sedadla (Krok 4)";
-        confirmBtn.disabled = true;
+        priceEl.textContent = "Vyber sedadla (Krok 4)"; confirmBtn.disabled = true;
       }
     }
 
-    // --- LOGIC ---
     async function fetchTrips() {
       const q = await getDocs(collection(db, "trips"));
       const list = [];
@@ -558,69 +574,100 @@
       const total = seats.length * basePrice;
       const stopLocative = STOP_NAMES_LOCATIVE[stop] || stop;
       const seatsStr = Array.from(seats).join(", ");
-      
       let msg = `Ahoj Aleši,\n\nrád bych si objednal cestu ${trip.date} – ${trip.from} → ${trip.to}.\n`;
       msg += `Nástup v ${stopLocative}, sedadla: ${seatsStr}.\n`;
       msg += `Cena: ${seats.length} × ${basePrice} CHF = ${total} CHF.\n`;
-      
       if(name) msg += `\nJméno: ${name}`;
       if(phone) msg += `\nTel: ${phone}`;
-      
       msg += `\n\nProsím potvrď, že to platí. Děkuji.`;
       return msg;
     }
 
     function showSuccess(summaryText) {
       currentSummaryText = summaryText; 
-
       const box = document.getElementById("successBox");
       const btn = document.getElementById("confirmBtn");
-      
       btn.style.display = "none";
-      
       const waBtn = document.getElementById("waBtn");
       const emBtn = document.getElementById("emBtn");
-
       const waPhone = OWNER_WHATSAPP.replace(/\D/g, ""); 
       waBtn.href = `https://wa.me/${waPhone}?text=${encodeURIComponent(summaryText)}`;
-      
       emBtn.href = `mailto:${OWNER_EMAIL}?subject=Rezervace Arteon&body=${encodeURIComponent(summaryText)}`;
-
       box.style.display = "block";
       box.scrollIntoView({ behavior: 'smooth' });
     }
 
+    // === LIGHTBOX LOGIC ===
+    let galleryImages = []; // Array of sources
+    let currentImgIndex = 0;
+
+    function openLightbox(index) {
+        const lightbox = document.getElementById('lightbox');
+        const img = document.getElementById('lightboxImg');
+        currentImgIndex = index;
+        img.src = galleryImages[currentImgIndex];
+        lightbox.style.display = 'flex';
+        document.addEventListener('keydown', handleKeydown);
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').style.display = 'none';
+        document.removeEventListener('keydown', handleKeydown);
+    }
+
+    function nextImage() {
+        currentImgIndex = (currentImgIndex + 1) % galleryImages.length;
+        document.getElementById('lightboxImg').src = galleryImages[currentImgIndex];
+    }
+
+    function prevImage() {
+        currentImgIndex = (currentImgIndex - 1 + galleryImages.length) % galleryImages.length;
+        document.getElementById('lightboxImg').src = galleryImages[currentImgIndex];
+    }
+
+    function handleKeydown(e) {
+        if(e.key === 'Escape') closeLightbox();
+        if(e.key === 'ArrowRight') nextImage();
+        if(e.key === 'ArrowLeft') prevImage();
+    }
+
     // --- INIT ---
     document.addEventListener("DOMContentLoaded", async () => {
-      // 1. Lightbox Logic
-      const lightbox = document.getElementById('lightbox');
-      const lightboxImg = document.getElementById('lightboxImg');
       
-      document.querySelectorAll('.gallery-thumb').forEach(thumb => {
-          thumb.addEventListener('click', () => {
-              lightboxImg.src = thumb.src;
-              lightbox.style.display = 'flex';
-          });
+      // Setup Lightbox
+      const thumbs = document.querySelectorAll('.gallery-thumb');
+      galleryImages = Array.from(thumbs).map(img => img.src);
+      
+      thumbs.forEach((thumb, index) => {
+          thumb.addEventListener('click', () => openLightbox(index));
       });
+
+      document.getElementById('closeLightboxBtn').addEventListener('click', closeLightbox);
       
-      lightbox.addEventListener('click', (e) => {
-          // Close if clicked on background (not image)
-          if(e.target === lightbox) {
-              lightbox.style.display = 'none';
+      // Close on background click
+      document.getElementById('lightbox').addEventListener('click', (e) => {
+          if(e.target.id === 'lightbox' || e.target.classList.contains('lightbox-content-wrapper')) {
+              closeLightbox();
           }
       });
 
-      // 2. Data Loading
+      document.getElementById('nextBtn').addEventListener('click', (e) => {
+          e.stopPropagation(); nextImage();
+      });
+      document.getElementById('prevBtn').addEventListener('click', (e) => {
+          e.stopPropagation(); prevImage();
+      });
+
+
+      // Load Trips
       setMessage("Načítám jízdy...");
       try {
         trips = await fetchTrips();
         const sel = document.getElementById("tripSelect");
         sel.innerHTML = "";
-        
         const def = document.createElement("option");
         def.value = ""; def.textContent = "– Vyber termín –";
         sel.appendChild(def);
-
         trips.forEach(t => {
           const opt = document.createElement("option");
           opt.value = t.id; opt.textContent = formatTripLabel(t);
@@ -629,16 +676,13 @@
         setMessage("");
       } catch(e) { console.error(e); setMessage("Chyba připojení.", "error"); }
 
-      // 3. Event Listeners
+      // Listeners
       document.getElementById("tripSelect").addEventListener("change", async (e) => {
         currentTripId = e.target.value;
         currentTripObj = trips.find(t => t.id === currentTripId);
-        
         currentStop = ""; selectedSeats.clear(); bookedSeats.clear();
         document.querySelectorAll('input[name="stop"]').forEach(r => r.checked = false);
-        
         updateStepsVisibility();
-        
         if(currentTripId) {
           setMessage("Ověřuji obsazenost...");
           bookedSeats = await fetchBookedSeats(currentTripId);
@@ -660,10 +704,8 @@
         seat.addEventListener("click", (e) => {
           const id = e.currentTarget.dataset.seatId;
           if(id === "DRV" || !currentTripId || bookedSeats.has(id)) return;
-          
           if(selectedSeats.has(id)) selectedSeats.delete(id);
           else selectedSeats.add(id);
-          
           updateSeatVisuals();
           updateStatusAndPrice();
         });
@@ -681,38 +723,24 @@
 
       document.getElementById("confirmBtn").addEventListener("click", async () => {
         if(!currentTripId || !currentStop || selectedSeats.size === 0) return;
-
         const name = document.getElementById("custName").value.trim();
         const phone = document.getElementById("custPhone").value.trim();
         const basePrice = STOP_PRICES[currentStop];
         const seatsArr = [...selectedSeats];
-
         setMessage("Ukládám...");
         try {
           await createBookings({
-            tripId: currentTripId,
-            stopCity: currentStop,
-            price: basePrice,
-            seats: seatsArr,
-            name, phone
+            tripId: currentTripId, stopCity: currentStop, price: basePrice, seats: seatsArr, name, phone
           });
-          
           bookedSeats = await fetchBookedSeats(currentTripId);
-          
           const summary = buildSummaryText({
-            trip: currentTripObj,
-            stop: currentStop,
-            seats: selectedSeats,
-            basePrice, name, phone
+            trip: currentTripObj, stop: currentStop, seats: selectedSeats, basePrice, name, phone
           });
-
           selectedSeats.clear();
           updateSeatVisuals();
           updateStatusAndPrice();
           setMessage("");
-          
           showSuccess(summary);
-
         } catch(e) {
           console.error(e);
           setMessage("Chyba: Sedadlo už je možná obsazené.", "error");
@@ -720,7 +748,6 @@
           updateSeatVisuals();
         }
       });
-      
       updateStepsVisibility();
     });
   </script>

@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Arteon Ride – Rezervace</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
 
   <style>
@@ -12,430 +11,301 @@
        CSS (Dark Theme)
        ========================================= */
     :root {
-      --primary: #ff3600;
-      --primary-dark: #d42d00;
+      /* Tlumenější červená pro tlačítka a akcenty */
+      --primary: #be123c; /* Rose-700 */
+      --primary-hover: #9f1239; /* Rose-800 */
+      
       --bg: #0b1120;
       --card-bg: #020617;
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
 
       /* Seat colors */
-      --seat-bg: rgba(15, 23, 42, 0.38);
-      --seat-border: rgba(148, 163, 184, 0.7);
-      --seat-selected-bg: rgba(248, 113, 113, 0.80);
-      --seat-selected-border: rgba(254, 249, 195, 0.95);
-      --seat-booked-bg: rgba(55, 65, 81, 0.85);
+      --seat-bg: rgba(30, 41, 59, 0.5); /* Default Free */
+      --seat-border: rgba(51, 65, 85, 0.5);
+      
+      /* Barvy stavů */
+      --free-bg: rgba(16, 185, 129, 0.2); /* Tlumená zelená */
+      --free-border: rgba(16, 185, 129, 0.4);
+      
+      --booked-bg: rgba(30, 58, 138, 0.3); /* Tlumená modrá */
+      --booked-border: rgba(30, 58, 138, 0.5);
+
+      --selected-bg: rgba(190, 18, 60, 0.8); /* Ladí s primary */
+      --selected-border: rgba(253, 164, 175, 0.8);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1f2937 0, #020617 55%, #020617 100%);
+      background: radial-gradient(circle at top, #1e293b 0, #020617 60%, #020617 100%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      padding: 20px 10px 40px;
+      padding: 20px 10px 60px;
     }
 
     .page { width: 100%; max-width: 1100px; }
 
-    /* HERO BANNER */
+    /* HERO */
     .hero {
-      position: relative;
-      border-radius: 32px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      box-shadow: 0 32px 80px rgba(15, 23, 42, 0.75);
-      border: 1px solid rgba(148, 163, 184, 0.35);
+      position: relative; border-radius: 24px; overflow: hidden; margin-bottom: 25px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-    .hero img {
-      width: 100%;
-      display: block;
-      height: 230px;
-      object-fit: cover;
-      filter: saturate(1.1);
-    }
-
+    .hero img { width: 100%; display: block; height: 200px; object-fit: cover; filter: brightness(0.8); }
     .hero-title {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(32px, 5vw, 52px);
-      font-weight: 800;
-      color: #fff;
-      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-size: clamp(28px, 4vw, 42px); font-weight: 800; color: #fff;
+      text-transform: uppercase; letter-spacing: 0.05em; text-shadow: 0 4px 20px rgba(0,0,0,0.8);
     }
 
-    /* Layout */
-    .layout {
-      display: grid;
-      grid-template-columns: 0.4fr 0.6fr;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-    }
+    /* LAYOUT */
+    .layout { display: grid; grid-template-columns: 0.45fr 0.55fr; gap: 25px; align-items: flex-start; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
 
     .card {
-      background: linear-gradient(145deg, #020617, #020617f0);
-      border-radius: 24px;
-      padding: 18px 18px 20px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.8);
+      background: linear-gradient(160deg, #0f172a, #020617);
+      border-radius: 20px; padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     }
 
-    .card h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+    /* STEPS VISUALS */
+    .step-container { margin-bottom: 25px; animation: fadeIn 0.4s ease; }
+    .step-container.hidden { display: none; }
+    
+    .step-header {
+      font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+    }
+    .step-num {
+      background: var(--primary); color: #fff; width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 11px;
     }
 
-    .section-title {
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--text-muted);
-      margin-bottom: 6px;
+    /* FORMS */
+    select, input {
+      width: 100%; border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 12px; background: rgba(15, 23, 42, 0.6); color: #fff; font-size: 14px; outline: none;
+      transition: border-color 0.2s;
     }
+    select:focus, input:focus { border-color: var(--primary); }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: rgba(15, 23, 42, 0.8);
-      margin-bottom: 10px;
+    .radio-group { display: flex; flex-direction: column; gap: 8px; }
+    .radio-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer;
+      border: 1px solid transparent; transition: 0.2s;
     }
+    .radio-item:hover { background: rgba(255,255,255,0.06); }
+    .radio-item.active { border-color: var(--primary); background: rgba(190, 18, 60, 0.1); }
+    .radio-item input { width: auto; margin: 0; accent-color: var(--primary); }
 
-    .pill-dot { width: 8px; height: 8px; border-radius: 999px; background: #22c55e; }
+    /* INFO SECTION */
+    .info-box { margin-bottom: 30px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    .info-box strong { color: #fff; }
+    .driver-mini { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .driver-mini img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); }
 
-    /* DRIVER HEADER */
-    .driver-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-    .driver-avatar {
-      width: 58px; height: 58px; border-radius: 50%; object-fit: cover;
-      border: 2px solid rgba(248, 250, 252, 0.9); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.8);
-    }
-    .driver-name { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
-    .driver-meta { font-size: 12px; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 10px; }
-    .driver-meta span::before { content: "• "; color: var(--primary); }
-    .driver-meta span:first-child::before { content: ""; }
-
-    .driver-list { list-style: none; margin: 10px 0 12px; padding-left: 0; font-size: 13px; color: var(--text-main); }
-    .driver-list li { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-    .driver-list li::before { content: "•"; color: var(--primary); font-size: 16px; }
-
-    .car-specs { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
-    .car-specs strong { color: #e5e7eb; }
-
-    /* TRIP SECTION */
-    .trip-section { margin-top: 16px; padding-top: 12px; border-top: 1px dashed rgba(148, 163, 184, 0.4); }
-    .trip-current { font-size: 12px; color: var(--text-muted); margin: 0 0 6px; }
-
-    .form-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; font-size: 12px; }
-    .form-row label { color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; }
-    .form-row select, .form-row input {
-      border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.5); padding: 8px 10px;
-      background: rgba(15, 23, 42, 0.7); color: var(--text-main); font-size: 13px; outline: none;
-    }
-    .form-row select:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .radio-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 2px; }
-    .radio-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-main); }
-    .radio-item input[type="radio"] { width: 14px; height: 14px; accent-color: var(--primary); cursor: pointer; }
-    .radio-item span { cursor: pointer; }
-
-    /* CAR VISUAL & FLOATING STATS */
-    .car-card-title { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 10px; flex-wrap: wrap; }
-    .car-card-title h2 { margin-bottom: 0; }
-    .car-card-title small { font-size: 11px; color: var(--text-muted); }
-
+    /* CAR VISUAL */
     .car-visual {
-      position: relative; margin-top: 8px; border-radius: 24px; overflow: hidden;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: radial-gradient(circle at top, #111827 0, #020617 45%);
-      max-width: 380px; margin-left: auto; margin-right: auto;
+      position: relative; margin: 10px auto; border-radius: 24px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+      background: radial-gradient(circle, #1e293b 0%, #020617 60%);
+      max-width: 340px;
     }
-    .car-visual img { width: 100%; display: block; opacity: 0.92; }
+    .car-visual img { width: 100%; display: block; opacity: 0.9; }
 
-    /* === NEW FLOATING STATUS BOX (Left Side) === */
-    .car-status-float {
-      position: absolute;
-      top: 20px;
-      left: 15px;
-      background: rgba(2, 6, 23, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(4px);
-      padding: 10px 14px;
-      border-radius: 12px;
-      z-index: 10;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      text-align: left;
-      min-width: 120px;
+    /* FLOATING STATS */
+    .stats-float {
+      position: absolute; top: 15px; left: 15px;
+      background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(8px);
+      padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
     }
-    .status-label { font-size: 10px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 2px; }
-    .status-value { font-size: 20px; font-weight: 700; color: #fff; line-height: 1.1; }
-    .status-value span { font-size: 12px; font-weight: 400; color: var(--text-muted); margin-left: 2px; }
-    .status-value.free { color: #22c55e; }
-    .status-value.booked { color: #f97373; }
+    .stat-row { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; }
+    .stat-num { font-size: 16px; font-weight: 700; color: #fff; }
+    .stat-num.free { color: #34d399; } 
 
-    /* SEAT GRID */
+    /* SEATS */
     .seat-grid {
-      position: absolute;
-      top: 43%; left: 30%; right: 35%; bottom: 25%;
-      display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);
-      gap: 6px; pointer-events: none;
+      position: absolute; top: 43%; left: 30%; right: 35%; bottom: 25%;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
     }
     .seat {
       position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
       background: var(--seat-bg); border-radius: 8px; border: 1px solid var(--seat-border);
-      color: #fff; font-size: 13px; backdrop-filter: blur(6px); pointer-events: auto;
-      cursor: pointer; transition: 0.16s ease all; text-align: center; padding: 4px 2px;
+      color: rgba(255,255,255,0.8); cursor: pointer; transition: 0.2s all; padding: 4px;
     }
-    .seat-label { font-weight: 600; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
-    .seat-small { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.9; }
-    .seat-icon { width: 32px; height: auto; opacity: 0.75; margin-bottom: 2px; }
+    .seat.disabled { opacity: 0.3; cursor: not-allowed; }
+    .seat:not(.booked):not(.selected):not(.disabled):not(.driver-seat) { background: var(--free-bg); border-color: var(--free-border); }
+    .seat:not(.booked):not(.selected):not(.disabled):not(.driver-seat):hover { background: rgba(16, 185, 129, 0.4); }
+    .seat.selected { background: var(--selected-bg); border-color: var(--selected-border); transform: scale(1.05); z-index: 2; box-shadow: 0 0 15px rgba(190, 18, 60, 0.5); color: #fff; }
+    .seat.booked { background: var(--booked-bg); border-color: var(--booked-border); cursor: not-allowed; opacity: 0.8; }
+    .seat.driver-seat { opacity: 0; pointer-events: none; }
+    .seat-label { font-size: 10px; font-weight: 700; margin-top: 2px; }
+    .seat-icon { width: 24px; opacity: 0.8; }
     
-    .seat.driver-seat { cursor: default; pointer-events: none; background: rgba(0, 0, 0, 0.35); }
-    .seat.selected { background: var(--seat-selected-bg); border-color: var(--seat-selected-border); box-shadow: 0 8px 24px rgba(255, 102, 0, 0.55); transform: translateY(-1px); }
-    .seat.booked { background: var(--seat-booked-bg); border-color: rgba(0, 0, 0, 0.6); box-shadow: none; cursor: not-allowed; transform: none; }
-    
-    .booked-tag {
-      position: absolute; top: 3px; right: 4px; padding: 2px 6px; border-radius: 999px;
-      font-size: 8px; font-weight: 600; background: rgba(0, 0, 0, 0.85); color: #fff;
-      opacity: 0; pointer-events: none;
-    }
-    .seat.booked .booked-tag { opacity: 1; }
-    .seat.disabled { cursor: not-allowed; opacity: 0.4; }
-
     /* LEGEND */
-    .legend { display: flex; gap: 12px; font-size: 11px; margin-top: 10px; color: var(--text-muted); flex-wrap: wrap; justify-content: center;}
-    .legend-item { display: flex; align-items: center; gap: 6px; }
-    .legend-dot { width: 10px; height: 10px; border-radius: 3px; border: 1px solid rgba(148, 163, 184, 0.9); background: rgba(15, 23, 42, 0.7); }
-    .legend-dot.selected { background: var(--seat-selected-bg); }
-    .legend-dot.booked { background: var(--seat-booked-bg); }
-    .legend-dot.driver { background: rgba(0, 0, 0, 0.9); }
+    .legend { display: flex; gap: 15px; justify-content: center; margin-top: 15px; font-size: 12px; color: var(--text-muted); }
+    .dot { width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; display: inline-block; }
+    .dot.free { background: var(--free-bg); border: 1px solid var(--free-border); }
+    .dot.booked { background: var(--booked-bg); border: 1px solid var(--booked-border); }
+    .dot.selected { background: var(--selected-bg); border: 1px solid var(--selected-border); }
 
-    /* CONFIRM SECTION */
-    .btn-row { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
-    .price-chip { font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 5px; }
-
-    .btn-primary {
-      padding: 12px 32px; border-radius: 12px; border: none; background: var(--primary); color: #fff;
-      font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 14px 36px rgba(248, 113, 113, 0.4);
-      transition: 0.2s ease all; width: 100%; text-transform: uppercase; letter-spacing: 0.05em;
+    /* CONFIRM & SUCCESS */
+    .btn-block { margin-top: 20px; }
+    .btn-main {
+      width: 100%; padding: 14px; border-radius: 12px; border: none;
+      background: var(--primary); color: #fff; font-size: 15px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer;
+      transition: 0.2s; box-shadow: 0 4px 15px rgba(190, 18, 60, 0.3);
     }
-    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-2px); }
-    .btn-primary:disabled { background: #374151; box-shadow: none; cursor: not-allowed; color: #9ca3af; }
+    .btn-main:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
+    .btn-main:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; }
+    .price-display { text-align: center; font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 10px; min-height: 24px; }
 
-    .message { margin-top: 10px; font-size: 13px; min-height: 16px; text-align: center; }
-    .message.ok { color: #22c55e; }
-    .message.error { color: #f97373; }
-
-    /* === NEW BIG ACTION BUTTONS === */
-    .contact-actions {
-      margin-top: 25px; display: none; flex-direction: column; gap: 12px;
-      animation: fadeIn 0.5s ease;
-      background: rgba(255,255,255,0.03); padding: 15px; border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.1);
+    .success-box {
+      margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.03);
+      border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);
+      display: none; animation: fadeIn 0.5s;
     }
-    
-    .action-title { text-align: center; font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 5px; }
-    
-    .big-btn {
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      padding: 14px; border-radius: 12px; text-decoration: none;
-      font-weight: 600; font-size: 15px; transition: transform 0.2s;
-      border: 1px solid rgba(255,255,255,0.1); color: #fff;
+    .success-title { text-align: center; color: #fff; font-weight: 600; margin-bottom: 15px; }
+    .social-btns { display: flex; flex-direction: column; gap: 10px; }
+    .social-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 12px; border-radius: 10px; text-decoration: none; color: #fff;
+      font-weight: 600; font-size: 14px; transition: 0.2s;
+      background: var(--primary); border: 1px solid rgba(255,255,255,0.1);
     }
-    .big-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    
-    .btn-wa { background: #25D366; border-color: #25D366; }
-    .btn-ms { background: #0084FF; border-color: #0084FF; }
-    .btn-em { background: #334155; border-color: #475569; }
+    .social-btn:hover { background: var(--primary-hover); filter: brightness(1.1); }
+    .social-icon { width: 20px; height: 20px; fill: currentColor; }
+    .message { text-align: center; margin-top: 10px; font-size: 13px; min-height: 20px; }
+    .message.error { color: #f87171; }
 
-    .icon-svg { width: 24px; height: 24px; fill: currentColor; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    footer { margin-top: 18px; text-align: center; color: #9ca3af; font-size: 12px; }
-    footer a { color: #9ca3af; text-decoration: underline; margin: 0 10px; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 
 <body>
   <div class="page">
     <header class="hero">
-      <img src="banner.jpg" alt="Arteon banner" />
+      <img src="banner.jpg" alt="Banner" />
       <div class="hero-title">Rezervace Místa</div>
     </header>
 
     <main class="layout">
       <section class="card">
-        <div class="pill">
-          <span class="pill-dot"></span>
-          Ověřená jízda · VW Arteon R-Line · Max 3 pasažéři
-        </div>
-
-        <div class="driver-header">
-          <img src="driver-photo.jpg" alt="Aleš" class="driver-avatar" />
-          <div>
-            <div class="driver-name">Aleš Krajina</div>
-            <div class="driver-meta">
-              <span>Nekuřák</span>
-              <span>Bezpečná jízda</span>
-              <span>Pohodlí</span>
+        
+        <div class="info-box">
+          <div class="driver-mini">
+            <img src="driver-photo.jpg" alt="Aleš">
+            <div>
+              <strong>Aleš Krajina</strong><br>
+              <span style="color:var(--primary)">VW Arteon R-Line</span>
             </div>
           </div>
+          <p>Ověřená jízda, nekuřák, hudba, pohodlí. Zavazadla dle domluvy.</p>
         </div>
 
-        <ul class="driver-list">
-          <li>Čech ve Švýcarsku – dálkové trasy Curych ↔ Česko.</li>
-          <li>Klidná jízda, dobrá hudba, čisté auto.</li>
-          <li>Booknout můžeš 1–3 místa (VIP / Mood Bringer / Chief DJ).</li>
-        </ul>
-
-        <div class="car-specs">
-          <strong>Auto:</strong> VW Arteon 2.0 TDI Shooting Brake <strong>R-Line</strong> (147 kW) – prémiové svezení, velký kufr.
+        <div class="step-container" id="step1">
+          <div class="step-header"><div class="step-num">1</div> VYBER CESTU</div>
+          <select id="tripSelect">
+            <option value="">– Načítám termíny... –</option>
+          </select>
         </div>
 
-        <div class="trip-section">
-          <div class="section-title">1. Výběr cesty</div>
-          <p id="tripCurrent" class="trip-current">Vyber si termín níže.</p>
-
-          <div class="form-row">
-            <label for="tripSelect">Dostupné jízdy</label>
-            <select id="tripSelect">
-              <option value="">– Načítám jízdy... –</option>
-            </select>
+        <div class="step-container hidden" id="step2">
+          <div class="step-header"><div class="step-num">2</div> <span id="stopHeaderTitle">KDE VYSTUPUJI?</span></div>
+          <div class="radio-group" id="stopRadios">
+            <label class="radio-item">
+              <input type="radio" name="stop" value="praha" data-price="50">
+              <span>Praha (50 CHF)</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="stop" value="brno" data-price="70">
+              <span>Brno (70 CHF)</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="stop" value="ostrava" data-price="80">
+              <span>Ostrava (80 CHF)</span>
+            </label>
           </div>
+        </div>
 
-          <div class="form-row">
-            <label id="stopLabel">Zastávka</label>
-            <div class="radio-group" id="stopRadios">
-              <label class="radio-item">
-                <input type="radio" name="stop" value="praha" data-price="50" disabled />
-                <span>Praha (50 CHF)</span>
-              </label>
-              <label class="radio-item">
-                <input type="radio" name="stop" value="brno" data-price="70" disabled />
-                <span>Brno (70 CHF)</span>
-              </label>
-              <label class="radio-item">
-                <input type="radio" name="stop" value="ostrava" data-price="80" disabled />
-                <span>Ostrava (80 CHF)</span>
-              </label>
-            </div>
+        <div class="step-container hidden" id="step3">
+          <div class="step-header"><div class="step-num">3</div> O MĚ (NEPOVINNÉ)</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <input type="text" id="custName" placeholder="Tvé jméno (Např. Jakub)" />
+            <input type="tel" id="custPhone" placeholder="Telefon (+420...)" />
           </div>
+          <div style="margin-top:10px; font-size:11px; color:#64748b;">
+            Zrychlí to komunikaci, ale není to nutné.
+          </div>
+        </div>
 
-          <div class="form-row">
-            <label for="custName">Tvé jméno (nepovinné)</label>
-            <input id="custName" type="text" placeholder="např. Jakub" />
-          </div>
-          <div class="form-row">
-            <label for="custPhone">Telefon (nepovinné)</label>
-            <input id="custPhone" type="tel" placeholder="+420..." />
-          </div>
-
-          <p style="margin-top:15px;font-size:11px;color:#64748b;">
-            Jsi řidič? <a href="admin.html" style="color:#ff3600;">Vstup pro admina</a>
-          </p>
+        <div style="margin-top:20px; font-size:11px; text-align:center;">
+          <a href="admin.html" style="color:#475569; text-decoration:none;">Admin přístup</a>
         </div>
       </section>
 
-      <section class="card" style="position:relative;">
-        <div class="car-card-title">
-          <h2>2. Vyber si místo</h2>
-          <small>Klikni na sedadlo</small>
-        </div>
-
+      <section class="card">
+        <div class="step-header"><div class="step-num">4</div> VYBER MÍSTO</div>
+        
         <div class="car-visual">
-          <img src="car-top-vertical.jpg" alt="VW Arteon Top View" />
+          <img src="car-top-vertical.jpg" alt="Car Top View" />
 
-          <div class="car-status-float" id="statusBox" style="display:none;">
-            <div style="margin-bottom:8px;">
-              <div class="status-label">Obsazeno</div>
-              <div class="status-value booked" id="bookedVal">0<span>/3</span></div>
-            </div>
-            <div>
-              <div class="status-label">Volno</div>
-              <div class="status-value free" id="freeVal">3<span>místa</span></div>
-            </div>
+          <div class="stats-float" id="statsBox" style="display:none;">
+            <div class="stat-row">Volno: <strong class="stat-num free" id="freeVal">3</strong></div>
+            <div class="stat-row">Obsazeno: <strong class="stat-num" id="bookedVal">0</strong></div>
           </div>
 
           <div class="seat-grid">
-            <div class="seat driver-seat" data-seat-id="DRV">
-              <img src="driver-wheel-icon.png" alt="Driver" class="seat-icon" />
-              <div class="seat-label">DRIVER</div>
-            </div>
-
+            <div class="seat driver-seat" data-seat-id="DRV"></div>
             <div class="seat" data-seat-id="VIP">
-              <img src="vip-icon.png" alt="VIP" class="seat-icon" />
+              <img src="vip-icon.png" class="seat-icon">
               <div class="seat-label">CO-PILOT</div>
-              <div class="seat-small">Vepředu</div>
-              <div class="booked-tag">BOOKED</div>
             </div>
-
             <div class="seat" data-seat-id="MB">
-              <div class="seat-label">MOOD BRINGER</div>
-              <div class="seat-small">Vzadu L</div>
-              <div class="booked-tag">BOOKED</div>
+              <div class="seat-label">MOOD<br>BRINGER</div>
             </div>
-
             <div class="seat" data-seat-id="DJ">
-              <div class="seat-label">CHIEF DJ</div>
-              <div class="seat-small">Vzadu P</div>
-              <div class="booked-tag">BOOKED</div>
+              <div class="seat-label">CHIEF<br>DJ</div>
             </div>
           </div>
         </div>
 
         <div class="legend">
-          <div class="legend-item"><span class="legend-dot driver"></span> Řidič</div>
-          <div class="legend-item"><span class="legend-dot"></span> Volno</div>
-          <div class="legend-item"><span class="legend-dot selected"></span> Vybráno</div>
-          <div class="legend-item"><span class="legend-dot booked"></span> Obsazeno</div>
+          <div><span class="dot free"></span>Volno</div>
+          <div><span class="dot selected"></span>Vybráno</div>
+          <div><span class="dot booked"></span>Obsazeno</div>
         </div>
 
-        <div class="btn-row">
-          <div class="price-chip" id="priceDisplay">Vyber sedadla</div>
-          <button type="button" class="btn-primary" id="confirmBtn" disabled>
-            Potvrdit Rezervaci
-          </button>
+        <div class="btn-block">
+          <div class="price-display" id="priceDisplay"></div>
+          <button id="confirmBtn" class="btn-main" disabled>Potvrdit výběr</button>
+          <div id="message" class="message"></div>
         </div>
 
-        <div id="message" class="message"></div>
-
-        <div class="contact-actions" id="contactActions">
-          <div class="action-title">✅ Rezervace uložena! Teď mi prosím pošli zprávu:</div>
-          
-          <a class="big-btn btn-wa" id="waBtn" href="#" target="_blank">
-            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-            WhatsApp
-          </a>
-          
-          <a class="big-btn btn-ms" id="msBtn" href="#" target="_blank">
-            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.504 8.658.232.172.376.447.376.733v2.336a.872.872 0 001.352.738l2.646-1.603a.925.925 0 01.597-.133 12.858 12.858 0 002.525.251c6.627 0 12-4.974 12-11.111C24 4.974 18.627 0 12 0zm1.321 14.397L10.3 11.16a.918.918 0 00-1.168-.088l-4.54 3.447c-.504.382-1.156-.257-.804-.791l3.02-4.582a.916.916 0 001.168.087l3.023 2.152a.92.92 0 001.168.088l4.54-3.447c.504-.383 1.155.257.803.79l-3.02 4.583a.918.918 0 00-1.169-.088v-.001z"/></svg>
-            Messenger
-          </a>
-
-          <a class="big-btn btn-em" id="emBtn" href="#" target="_blank">
-            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-            Odeslat Email
-          </a>
+        <div class="success-box" id="successBox">
+          <div class="success-title">✅ Rezervováno! Odeslat potvrzení:</div>
+          <div class="social-btns">
+            <a href="#" id="waBtn" target="_blank" class="social-btn">
+              <svg class="social-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              WhatsApp
+            </a>
+            <a href="#" id="msBtn" target="_blank" class="social-btn">
+              <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.504 8.658.232.172.376.447.376.733v2.336a.872.872 0 001.352.738l2.646-1.603a.925.925 0 01.597-.133 12.858 12.858 0 002.525.251c6.627 0 12-4.974 12-11.111C24 4.974 18.627 0 12 0zm1.321 14.397L10.3 11.16a.918.918 0 00-1.168-.088l-4.54 3.447c-.504.382-1.156-.257-.804-.791l3.02-4.582a.916.916 0 001.168.087l3.023 2.152a.92.92 0 001.168.088l4.54-3.447c.504-.383 1.155.257.803.79l-3.02 4.583a.918.918 0 00-1.169-.088v-.001z"/></svg>
+              Messenger
+            </a>
+            <a href="#" id="emBtn" target="_blank" class="social-btn">
+              <svg class="social-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              Odeslat Email
+            </a>
+          </div>
         </div>
+
       </section>
     </main>
 
@@ -449,7 +319,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // 1) KONFIGURACE FIREBASE
+    // 1) FIREBASE CONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyAi6MYAsAnqJg_5XwQC7b6TAI1ywrrADsM",
       authDomain: "car-seats-booking.firebaseapp.com",
@@ -463,21 +333,14 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // 2) KONTAKTNÍ ÚDAJE
+    // 2) CONTACT INFO
     const OWNER_WHATSAPP = "+41767775898";
-    // Použijeme m.me pro spolehlivější mobilní link
     const OWNER_MESSENGER = "https://m.me/ales.krajina"; 
     const OWNER_EMAIL = "ales.krajina@outlook.com"; 
 
     const SEAT_IDS = ["VIP", "MB", "DJ"]; 
     const STOP_PRICES = { praha: 50, brno: 70, ostrava: 80 };
-
-    // Pomocná funkce pro skloňování měst do zprávy
-    const STOP_NAMES_LOCATIVE = {
-        praha: "Praze",
-        brno: "Brně",
-        ostrava: "Ostravě"
-    };
+    const STOP_NAMES_LOCATIVE = { praha: "Praze", brno: "Brně", ostrava: "Ostravě" };
 
     let trips = [];
     let currentTripId = "";
@@ -486,40 +349,36 @@
     let selectedSeats = new Set();
     let bookedSeats = new Set(); 
 
-    // 3) UI POMOCNÉ FUNKCE
+    // UI Helpers
     function setMessage(text, type = "") {
       const msgEl = document.getElementById("message");
       msgEl.className = "message " + type;
       msgEl.textContent = text;
     }
 
-    function setStopRadiosEnabled(enabled) {
-      document.querySelectorAll('input[name="stop"]').forEach(r => {
-        r.disabled = !enabled;
-        if (!enabled) r.checked = false;
-      });
-    }
+    function formatTripLabel(t) { return `${t.date} – ${t.from} → ${t.to}`; }
 
-    function clearStopSelection() {
-      document.querySelectorAll('input[name="stop"]').forEach(r => r.checked = false);
-    }
+    // WIZARD STEPS LOGIC
+    function updateStepsVisibility() {
+      const step2 = document.getElementById("step2");
+      const step3 = document.getElementById("step3");
 
-    function formatTripLabel(t) {
-      return `${t.date} – ${t.from} → ${t.to}`;
-    }
-
-    function updateStopLabel() {
-      const stopLabel = document.getElementById("stopLabel");
-      if (!currentTripObj) {
-        stopLabel.textContent = "Zastávka";
+      if (currentTripId) {
+        step2.classList.remove("hidden");
+        // Update label based on direction
+        const stopTitle = document.getElementById("stopHeaderTitle");
+        if(currentTripObj.from === "Zurich") stopTitle.textContent = "KDE VYSTUPUJI?";
+        else stopTitle.textContent = "KDE NASTUPUJI?";
+      } else {
+        step2.classList.add("hidden");
+        step3.classList.add("hidden");
         return;
       }
-      if (currentTripObj.from === "Zurich" && currentTripObj.to === "Ostrava") {
-        stopLabel.textContent = "Vystupuji:";
-      } else if (currentTripObj.from === "Ostrava" && currentTripObj.to === "Zurich") {
-        stopLabel.textContent = "Nastupuji:";
+
+      if (currentStop) {
+        step3.classList.remove("hidden");
       } else {
-        stopLabel.textContent = "Zastávka:";
+        step3.classList.add("hidden");
       }
     }
 
@@ -530,7 +389,9 @@
         seat.classList.remove("selected", "booked", "disabled", "driver-seat");
 
         if (id === "DRV") { seat.classList.add("driver-seat"); return; }
-        if (!currentTripId || !currentStop) { seat.classList.add("disabled"); return; }
+        // Seat is clickable only if Trip is selected (Step 1 done)
+        if (!currentTripId) { seat.classList.add("disabled"); return; }
+        
         if (bookedSeats.has(id)) { seat.classList.add("booked"); return; }
         if (selectedSeats.has(id)) { seat.classList.add("selected"); }
       });
@@ -539,31 +400,30 @@
     function updateStatusAndPrice() {
       const priceEl = document.getElementById("priceDisplay");
       const confirmBtn = document.getElementById("confirmBtn");
-      const contactActions = document.getElementById("contactActions");
-      const statusBox = document.getElementById("statusBox");
+      const successBox = document.getElementById("successBox");
+      const statsBox = document.getElementById("statsBox");
       const bookedVal = document.getElementById("bookedVal");
       const freeVal = document.getElementById("freeVal");
 
-      // Schovat tlačítka pokud uživatel změní výběr před potvrzením
-      contactActions.style.display = "none";
+      // Hide success if user changes something
+      successBox.style.display = "none";
+      confirmBtn.style.display = "inline-block";
 
       if (!currentTripId) {
-        statusBox.style.display = "none";
-        priceEl.textContent = "Vyber jízdu";
+        statsBox.style.display = "none";
+        priceEl.textContent = "";
         confirmBtn.disabled = true;
         return;
       }
 
-      // Zobrazit plovoucí box
-      statusBox.style.display = "block";
+      statsBox.style.display = "block";
       const bookedCount = [...bookedSeats].filter(s => SEAT_IDS.includes(s)).length;
       const freeCount = SEAT_IDS.length - bookedCount;
-
-      bookedVal.innerHTML = `${bookedCount}<span>/3</span>`;
-      freeVal.innerHTML = `${freeCount}<span>místa</span>`;
+      bookedVal.textContent = bookedCount;
+      freeVal.textContent = freeCount;
 
       if (!currentStop) {
-        priceEl.textContent = "Vyber zastávku";
+        priceEl.textContent = "Vyber zastávku (Krok 2)";
         confirmBtn.disabled = true;
         return;
       }
@@ -571,39 +431,34 @@
       const basePrice = STOP_PRICES[currentStop] || 0;
       const seatCount = selectedSeats.size;
 
-      if (seatCount > 0 && basePrice > 0) {
+      if (seatCount > 0) {
         const total = seatCount * basePrice;
         priceEl.textContent = `${seatCount} × ${basePrice} CHF = ${total} CHF`;
         confirmBtn.disabled = false;
       } else {
-        priceEl.textContent = "Vyber sedadla";
+        priceEl.textContent = "Vyber sedadla (Krok 4)";
         confirmBtn.disabled = true;
       }
     }
 
-    // 4) FIREBASE OPERACE
+    // --- LOGIC ---
     async function fetchTrips() {
-      const querySnapshot = await getDocs(collection(db, "trips"));
+      const q = await getDocs(collection(db, "trips"));
       const list = [];
-      querySnapshot.forEach((doc) => {
-        const t = doc.data();
-        list.push({
-          id: doc.id,
-          date: t.trip_date,
-          from: t.from_city || "?",
-          to: t.to_city || "?"
-        });
+      q.forEach(d => {
+        const t = d.data();
+        list.push({ id: d.id, date: t.trip_date, from: t.from_city||"?", to: t.to_city||"?" });
       });
-      list.sort((a, b) => new Date(a.date) - new Date(b.date));
+      list.sort((a,b) => new Date(a.date) - new Date(b.date));
       return list;
     }
 
     async function fetchBookedSeats(tripId) {
       const q = query(collection(db, "bookings"), where("trip_id", "==", tripId));
-      const querySnapshot = await getDocs(q);
-      const seats = new Set();
-      querySnapshot.forEach((doc) => seats.add(doc.data().seat_code));
-      return seats;
+      const snap = await getDocs(q);
+      const s = new Set();
+      snap.forEach(d => s.add(d.data().seat_code));
+      return s;
     }
 
     async function createBookings({ tripId, stopCity, price, seats, name, phone }) {
@@ -621,153 +476,79 @@
       await Promise.all(promises);
     }
 
-    // 5) TEXT ZPRÁVY
-    function buildSummaryText({ trip, stop, seats, basePrice }) {
-      const seatsArr = [...seats];
-      const total = seatsArr.length * basePrice;
-      const stopLocative = STOP_NAMES_LOCATIVE[stop] || stop; // Praha -> Praze
-
-      return `Ahoj Aleši,
-
-rád bych si objednal cestu ${trip.date} – ${trip.from} → ${trip.to}.
-
-Nástup v ${stopLocative}, sedadla ${seatsArr.join(", ")}.
-Cena: ${seatsArr.length} × ${basePrice} CHF = ${total} CHF.
-
-Prosím potvrď, že to platí. Děkuji.`;
+    function buildSummaryText({ trip, stop, seats, basePrice, name, phone }) {
+      const total = seats.length * basePrice;
+      const stopLocative = STOP_NAMES_LOCATIVE[stop] || stop;
+      const seatsStr = Array.from(seats).join(", ");
+      
+      let msg = `Ahoj Aleši,\n\nrád bych si objednal cestu ${trip.date} – ${trip.from} → ${trip.to}.\n`;
+      msg += `Nástup v ${stopLocative}, sedadla: ${seatsStr}.\n`;
+      msg += `Cena: ${seats.length} × ${basePrice} CHF = ${total} CHF.\n`;
+      
+      if(name) msg += `\nJméno: ${name}`;
+      if(phone) msg += `\nTel: ${phone}`;
+      
+      msg += `\n\nProsím potvrď, že to platí. Děkuji.`;
+      return msg;
     }
 
-    function showContactButtons(summaryText) {
-      const contactActions = document.getElementById("contactActions");
+    function showSuccess(summaryText) {
+      const box = document.getElementById("successBox");
+      const btn = document.getElementById("confirmBtn");
+      
+      btn.style.display = "none"; // Hide confirm button
+      
+      // Update links
       const waBtn = document.getElementById("waBtn");
       const msBtn = document.getElementById("msBtn");
       const emBtn = document.getElementById("emBtn");
 
-      // WhatsApp
-      const waText = encodeURIComponent(summaryText);
       const waPhone = OWNER_WHATSAPP.replace(/\D/g, ""); 
-      waBtn.href = `https://wa.me/${waPhone}?text=${waText}`;
-
-      // Messenger (Mobile link is safer)
+      waBtn.href = `https://wa.me/${waPhone}?text=${encodeURIComponent(summaryText)}`;
       msBtn.href = OWNER_MESSENGER;
+      emBtn.href = `mailto:${OWNER_EMAIL}?subject=Rezervace Arteon&body=${encodeURIComponent(summaryText)}`;
 
-      // Email
-      const mailSubj = encodeURIComponent(`Rezervace Arteon: ${currentTripObj.date}`);
-      const mailBody = encodeURIComponent(summaryText);
-      emBtn.href = `mailto:${OWNER_EMAIL}?subject=${mailSubj}&body=${mailBody}`;
-
-      contactActions.style.display = "flex";
-      // Scroll to buttons
-      contactActions.scrollIntoView({ behavior: 'smooth' });
+      box.style.display = "block";
+      box.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // 6) OBSLUHA UDÁLOSTÍ
-    async function handleConfirmBooking() {
-      if (!currentTripId || !selectedSeats.size) return;
-
-      const basePrice = STOP_PRICES[currentStop] || 0;
-      const seatsToBook = [...selectedSeats];
-      const name = document.getElementById("custName").value.trim();
-      const phone = document.getElementById("custPhone").value.trim();
-
-      try {
-        setMessage("Ukládám rezervaci...");
-        document.getElementById("confirmBtn").disabled = true;
-
-        await createBookings({
-          tripId: currentTripId,
-          stopCity: currentStop,
-          price: basePrice,
-          seats: seatsToBook,
-          name,
-          phone
-        });
-
-        bookedSeats = await fetchBookedSeats(currentTripId);
-        
-        const summary = buildSummaryText({
-          trip: currentTripObj,
-          stop: currentStop,
-          seats: new Set(seatsToBook),
-          basePrice
-        });
-
-        selectedSeats.clear();
-        updateSeatVisuals();
-        updateStatusAndPrice();
-
-        setMessage(""); // Vyčistit text zprávy, teď to řeší velký blok
-        showContactButtons(summary);
-
-      } catch (e) {
-        console.error(e);
-        setMessage("Někdo tě předběhl! Sedadlo už je obsazené.", "error");
-        // Refresh
-        try {
-          bookedSeats = await fetchBookedSeats(currentTripId);
-          selectedSeats.clear();
-          updateSeatVisuals();
-          updateStatusAndPrice();
-        } catch {}
-      }
-    }
-
-    // 7) INIT
+    // --- INIT ---
     document.addEventListener("DOMContentLoaded", async () => {
+      setMessage("Načítám jízdy...");
       try {
-        setMessage("Načítám jízdy...");
         trips = await fetchTrips();
-        
         const sel = document.getElementById("tripSelect");
         sel.innerHTML = "";
-        const opt0 = document.createElement("option");
-        opt0.value = ""; opt0.textContent = "– Vyber termín –";
-        sel.appendChild(opt0);
+        
+        const def = document.createElement("option");
+        def.value = ""; def.textContent = "– Vyber termín –";
+        sel.appendChild(def);
 
-        if (!trips.length) {
-          opt0.textContent = "Žádné jízdy nejsou vypsané.";
-        } else {
-          trips.forEach(t => {
-            const opt = document.createElement("option");
-            opt.value = t.id; opt.textContent = formatTripLabel(t);
-            sel.appendChild(opt);
-          });
-        }
-        setMessage("");
-
-      } catch (e) {
-        console.error(e);
-        setMessage("Chyba databáze. Zkontroluj internet.", "error");
-      }
-
-      document.querySelectorAll(".seat").forEach(seat => {
-        seat.addEventListener("click", (e) => {
-          const id = e.currentTarget.dataset.seatId;
-          if (id === "DRV" || !currentTripId || !currentStop || bookedSeats.has(id)) return;
-          
-          if (selectedSeats.has(id)) selectedSeats.delete(id);
-          else selectedSeats.add(id);
-          
-          updateSeatVisuals();
-          updateStatusAndPrice();
+        trips.forEach(t => {
+          const opt = document.createElement("option");
+          opt.value = t.id; opt.textContent = formatTripLabel(t);
+          sel.appendChild(opt);
         });
-      });
+        setMessage("");
+      } catch(e) { console.error(e); setMessage("Chyba připojení.", "error"); }
 
+      // Event Listeners
       document.getElementById("tripSelect").addEventListener("change", async (e) => {
         currentTripId = e.target.value;
         currentTripObj = trips.find(t => t.id === currentTripId);
         
-        selectedSeats.clear(); bookedSeats = new Set(); currentStop = "";
-        clearStopSelection(); setStopRadiosEnabled(!!currentTripId);
-        updateStopLabel();
-
-        if (currentTripId) {
+        // Reset flows
+        currentStop = ""; selectedSeats.clear(); bookedSeats.clear();
+        document.querySelectorAll('input[name="stop"]').forEach(r => r.checked = false);
+        
+        updateStepsVisibility();
+        
+        if(currentTripId) {
           setMessage("Ověřuji obsazenost...");
-          try {
-            bookedSeats = await fetchBookedSeats(currentTripId);
-            setMessage("");
-          } catch { setMessage("Chyba připojení", "error"); }
+          bookedSeats = await fetchBookedSeats(currentTripId);
+          setMessage("");
         }
+        
         updateSeatVisuals();
         updateStatusAndPrice();
       });
@@ -775,17 +556,69 @@ Prosím potvrď, že to platí. Děkuji.`;
       document.querySelectorAll('input[name="stop"]').forEach(radio => {
         radio.addEventListener("change", (e) => {
           currentStop = e.target.value;
-          selectedSeats.clear();
+          updateStepsVisibility();
+          updateStatusAndPrice();
+        });
+      });
+
+      document.querySelectorAll(".seat").forEach(seat => {
+        seat.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.seatId;
+          // Check: Trip must be selected, Seat not booked/driver
+          if(id === "DRV" || !currentTripId || bookedSeats.has(id)) return;
+          
+          if(selectedSeats.has(id)) selectedSeats.delete(id);
+          else selectedSeats.add(id);
+          
           updateSeatVisuals();
           updateStatusAndPrice();
         });
       });
 
-      document.getElementById("confirmBtn").addEventListener("click", handleConfirmBooking);
+      document.getElementById("confirmBtn").addEventListener("click", async () => {
+        if(!currentTripId || !currentStop || selectedSeats.size === 0) return;
 
-      setStopRadiosEnabled(false);
-      updateSeatVisuals();
-      updateStatusAndPrice();
+        const name = document.getElementById("custName").value.trim();
+        const phone = document.getElementById("custPhone").value.trim();
+        const basePrice = STOP_PRICES[currentStop];
+        const seatsArr = [...selectedSeats];
+
+        setMessage("Ukládám...");
+        try {
+          await createBookings({
+            tripId: currentTripId,
+            stopCity: currentStop,
+            price: basePrice,
+            seats: seatsArr,
+            name, phone
+          });
+          
+          // Refresh booked state
+          bookedSeats = await fetchBookedSeats(currentTripId);
+          
+          const summary = buildSummaryText({
+            trip: currentTripObj,
+            stop: currentStop,
+            seats: selectedSeats,
+            basePrice, name, phone
+          });
+
+          selectedSeats.clear();
+          updateSeatVisuals();
+          updateStatusAndPrice();
+          setMessage("");
+          
+          showSuccess(summary);
+
+        } catch(e) {
+          console.error(e);
+          setMessage("Chyba: Sedadlo už je možná obsazené.", "error");
+          bookedSeats = await fetchBookedSeats(currentTripId);
+          updateSeatVisuals();
+        }
+      });
+      
+      updateStepsVisibility();
     });
   </script>
 </body>

@@ -24,11 +24,11 @@
       --seat-border: rgba(51, 65, 85, 0.5);
       
       /* Barvy stavů (tlumené) */
-      --free-bg: rgba(16, 185, 129, 0.2); /* Smaragdová */
+      --free-bg: rgba(16, 185, 129, 0.2); 
       --free-border: rgba(16, 185, 129, 0.4);
-      --booked-bg: rgba(30, 58, 138, 0.3); /* Tmavě modrá */
+      --booked-bg: rgba(30, 58, 138, 0.3); 
       --booked-border: rgba(30, 58, 138, 0.5);
-      --selected-bg: rgba(190, 18, 60, 0.8); /* Ladí s primary */
+      --selected-bg: rgba(190, 18, 60, 0.8); 
       --selected-border: rgba(253, 164, 175, 0.8);
     }
 
@@ -67,7 +67,7 @@
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     }
 
-    /* STEPS VISUALS - UPRAVENO (Bílé kruhy, šedý text) */
+    /* STEPS VISUALS */
     .step-container { margin-bottom: 25px; animation: fadeIn 0.4s ease; }
     .step-container.hidden { display: none; }
     
@@ -76,7 +76,7 @@
       margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
     }
     .step-num {
-      background: rgba(255,255,255,0.9); color: #0f172a; /* Bílé pozadí, tmavý text */
+      background: rgba(255,255,255,0.9); color: #0f172a;
       width: 20px; height: 20px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;
     }
@@ -99,13 +99,67 @@
     .radio-item.active { border-color: var(--primary); background: rgba(190, 18, 60, 0.1); }
     .radio-item input { width: auto; margin: 0; accent-color: var(--primary); }
 
-    /* INFO SECTION */
-    .info-box { margin-bottom: 30px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    /* INFO & GALLERY */
+    .info-box { margin-bottom: 20px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
     .info-box strong { color: #fff; }
     .driver-mini { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .driver-mini img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); }
 
-    /* CAR VISUAL */
+    /* === CAR GALLERY === */
+    .car-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+    .gallery-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.2s, filter 0.2s;
+    }
+    .gallery-thumb:hover {
+      transform: scale(1.05);
+      filter: brightness(1.2);
+      z-index: 1;
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    /* === LIGHTBOX MODAL === */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      backdrop-filter: blur(5px);
+      animation: fadeIn 0.3s ease;
+    }
+    .lightbox img {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .lightbox-close-hint {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: rgba(255,255,255,0.6);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      pointer-events: none;
+    }
+
+    /* CAR VISUAL (RIGHT) */
     .car-visual {
       position: relative; margin: 10px auto; border-radius: 24px; overflow: hidden;
       border: 1px solid rgba(255,255,255,0.05);
@@ -135,14 +189,10 @@
       color: rgba(255,255,255,0.8); cursor: pointer; transition: 0.2s all; padding: 4px;
     }
     .seat.disabled { opacity: 0.3; cursor: not-allowed; }
-    /* Free state */
     .seat:not(.booked):not(.selected):not(.disabled):not(.driver-seat) { background: var(--free-bg); border-color: var(--free-border); }
     .seat:not(.booked):not(.selected):not(.disabled):not(.driver-seat):hover { background: rgba(16, 185, 129, 0.4); }
-    /* Selected state */
     .seat.selected { background: var(--selected-bg); border-color: var(--selected-border); transform: scale(1.05); z-index: 2; box-shadow: 0 0 15px rgba(190, 18, 60, 0.5); color: #fff; }
-    /* Booked state */
     .seat.booked { background: var(--booked-bg); border-color: var(--booked-border); cursor: not-allowed; opacity: 0.8; }
-    /* Driver seat (vráceno zpět) */
     .seat.driver-seat { cursor: default; pointer-events: none; background: rgba(0,0,0,0.4); border-color: transparent; }
     
     .seat-label { font-size: 10px; font-weight: 700; margin-top: 2px; }
@@ -175,27 +225,24 @@
     .success-title { text-align: center; color: #fff; font-weight: 600; margin-bottom: 15px; }
     .social-btns { display: flex; flex-direction: column; gap: 10px; }
     
-    /* SOCIAL BUTTONS - Tlumené barvy */
     .social-btn {
       display: flex; align-items: center; justify-content: center; gap: 10px;
       padding: 12px; border-radius: 10px; text-decoration: none; color: #fff;
       font-weight: 600; font-size: 14px; transition: 0.2s;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
     }
     .social-btn:hover { filter: brightness(1.1); }
     
-    /* WhatsApp - Tlumená zelená */
     .social-btn.wa { background: #15803d; border-color: #166534; }
-    /* Messenger - Tlumená modrá */
     .social-btn.ms { background: #0369a1; border-color: #075985; }
-    /* Email - Tmavě šedá */
     .social-btn.em { background: #334155; border-color: #1e293b; }
     
     .social-icon { width: 20px; height: 20px; fill: currentColor; }
+    .copy-hint { font-size: 11px; font-weight: normal; opacity: 0.8; margin-left: 5px; }
+
     .message { text-align: center; margin-top: 10px; font-size: 13px; min-height: 20px; }
     .message.error { color: #f87171; }
 
-    /* LEGAL LINKS (PŘESUNUTO POD AUTO) */
     .legal-links { margin-top: 20px; text-align: center; font-size: 11px; color: #64748b; }
     .legal-links a { color: #64748b; text-decoration: underline; margin: 0 8px; }
 
@@ -222,6 +269,15 @@
             </div>
           </div>
           <p>Ověřená jízda, nekuřák, hudba, pohodlí. Zavazadla dle domluvy.</p>
+        </div>
+
+        <div class="car-gallery-grid">
+          <img src="01.jpg" class="gallery-thumb" alt="Arteon Front">
+          <img src="02.jpg" class="gallery-thumb" alt="Arteon Rear">
+          <img src="03.jpg" class="gallery-thumb" alt="Interior">
+          <img src="04.jpg" class="gallery-thumb" alt="Trunk">
+          <img src="05.jpg" class="gallery-thumb" alt="Cockpit">
+          <img src="06.jpg" class="gallery-thumb" alt="Side">
         </div>
 
         <div class="step-container" id="step1">
@@ -256,7 +312,7 @@
             <input type="tel" id="custPhone" placeholder="Telefon (+420...)" />
           </div>
           <div style="margin-top:10px; font-size:11px; color:#64748b;">
-            Zrychlí to komunikaci, ale není to nutné.
+            Zrychlí to komunikaci.
           </div>
         </div>
 
@@ -309,27 +365,34 @@
         <div class="success-box" id="successBox">
           <div class="success-title">✅ Rezervováno! Odeslat potvrzení:</div>
           <div class="social-btns">
+            
             <a href="#" id="waBtn" target="_blank" class="social-btn wa">
               <svg class="social-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               WhatsApp
             </a>
-            <a href="#" id="msBtn" target="_blank" class="social-btn ms">
+            
+            <a href="#" id="msBtn" class="social-btn ms">
               <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.504 8.658.232.172.376.447.376.733v2.336a.872.872 0 001.352.738l2.646-1.603a.925.925 0 01.597-.133 12.858 12.858 0 002.525.251c6.627 0 12-4.974 12-11.111C24 4.974 18.627 0 12 0zm1.321 14.397L10.3 11.16a.918.918 0 00-1.168-.088l-4.54 3.447c-.504.382-1.156-.257-.804-.791l3.02-4.582a.916.916 0 001.168.087l3.023 2.152a.92.92 0 001.168.088l4.54-3.447c.504-.383 1.155.257.803.79l-3.02 4.583a.918.918 0 00-1.169-.088v-.001z"/></svg>
-              Messenger
+              Messenger <span class="copy-hint">(text se zkopíruje)</span>
             </a>
+            
             <a href="#" id="emBtn" target="_blank" class="social-btn em">
               <svg class="social-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
               Odeslat Email
             </a>
           </div>
         </div>
-        
+
         <div class="legal-links">
           <a href="./privacy-policy.html">Ochrana soukromí</a> | <a href="./terms.html">Podmínky</a>
         </div>
-
       </section>
     </main>
+    
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-close-hint">Klikni pro zavření</div>
+        <img id="lightboxImg" src="" alt="Full view">
+    </div>
   </div>
 
   <script type="module">
@@ -352,7 +415,7 @@
 
     // 2) CONTACT INFO
     const OWNER_WHATSAPP = "+41767775898";
-    const OWNER_MESSENGER = "https://m.me/ales.krajina"; 
+    const OWNER_MESSENGER = "https://www.facebook.com/messages/t/ales.krajina"; 
     const OWNER_EMAIL = "ales.krajina@outlook.com"; 
 
     const SEAT_IDS = ["VIP", "MB", "DJ"]; 
@@ -365,6 +428,7 @@
     let currentStop = "";
     let selectedSeats = new Set();
     let bookedSeats = new Set(); 
+    let currentSummaryText = ""; 
 
     // UI Helpers
     function setMessage(text, type = "") {
@@ -507,18 +571,19 @@
     }
 
     function showSuccess(summaryText) {
+      currentSummaryText = summaryText; 
+
       const box = document.getElementById("successBox");
       const btn = document.getElementById("confirmBtn");
       
       btn.style.display = "none";
       
       const waBtn = document.getElementById("waBtn");
-      const msBtn = document.getElementById("msBtn");
       const emBtn = document.getElementById("emBtn");
 
       const waPhone = OWNER_WHATSAPP.replace(/\D/g, ""); 
       waBtn.href = `https://wa.me/${waPhone}?text=${encodeURIComponent(summaryText)}`;
-      msBtn.href = OWNER_MESSENGER;
+      
       emBtn.href = `mailto:${OWNER_EMAIL}?subject=Rezervace Arteon&body=${encodeURIComponent(summaryText)}`;
 
       box.style.display = "block";
@@ -527,6 +592,25 @@
 
     // --- INIT ---
     document.addEventListener("DOMContentLoaded", async () => {
+      // 1. Lightbox Logic
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      
+      document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+          thumb.addEventListener('click', () => {
+              lightboxImg.src = thumb.src;
+              lightbox.style.display = 'flex';
+          });
+      });
+      
+      lightbox.addEventListener('click', (e) => {
+          // Close if clicked on background (not image)
+          if(e.target === lightbox) {
+              lightbox.style.display = 'none';
+          }
+      });
+
+      // 2. Data Loading
       setMessage("Načítám jízdy...");
       try {
         trips = await fetchTrips();
@@ -545,6 +629,7 @@
         setMessage("");
       } catch(e) { console.error(e); setMessage("Chyba připojení.", "error"); }
 
+      // 3. Event Listeners
       document.getElementById("tripSelect").addEventListener("change", async (e) => {
         currentTripId = e.target.value;
         currentTripObj = trips.find(t => t.id === currentTripId);
@@ -581,6 +666,16 @@
           
           updateSeatVisuals();
           updateStatusAndPrice();
+        });
+      });
+
+      document.getElementById("msBtn").addEventListener("click", (e) => {
+        e.preventDefault(); 
+        navigator.clipboard.writeText(currentSummaryText).then(() => {
+            alert("Text zprávy zkopírován! V Messengeru ho vložte (Ctrl+V).");
+            window.open(OWNER_MESSENGER, '_blank');
+        }).catch(() => {
+            window.open(OWNER_MESSENGER, '_blank');
         });
       });
 

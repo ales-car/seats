@@ -2,14 +2,15 @@
    ARTEON RIDE - ADMIN LOGIC (FIREBASE EDITION)
    ========================================================= */
 
-// ⚠️ CONFIGURATION - Get these from Firebase Console -> Project Settings
+// ⚠️ CONFIGURATION - UPDATED WITH YOUR CREDENTIALS
 const firebaseConfig = {
-    apiKey: "AIzaSy...",
-    authDomain: "your-project.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123...",
-    appId: "1:123..."
+    apiKey: "AIzaSyAi6MYAsAnqJg_5XwQC7b6TAI1ywrrADsM",
+    authDomain: "car-seats-booking.firebaseapp.com",
+    projectId: "car-seats-booking",
+    storageBucket: "car-seats-booking.firebasestorage.app",
+    messagingSenderId: "193508754028",
+    appId: "1:193508754028:web:f7bc0b8cbdee9ef355ce49",
+    measurementId: "G-QGXXTCG7XG"
 };
 
 const SESSION_ADMIN_PIN = "arteon_admin_pin";
@@ -21,7 +22,7 @@ const ROUTE_MAPPING = {
 };
 
 // --- Firebase Initialization ---
-// We access the modules we loaded in the HTML
+// We access the modules that were loaded in the HTML file
 const { initializeApp, getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, where } = window.firebaseModules;
 
 const app = initializeApp(firebaseConfig);
@@ -56,6 +57,7 @@ async function apiVerifyPin(pinInput) {
     
     try {
         // We assume you have a collection 'settings' with a document that has the field 'admin_pin'
+        // If this is your first time, you might need to create this manually in Firebase Console
         const q = query(collection(db, "settings"), where("admin_pin", "==", pinInput));
         const querySnapshot = await getDocs(q);
 
@@ -64,6 +66,10 @@ async function apiVerifyPin(pinInput) {
         }
         return true;
     } catch (e) {
+        // If permission denied (usually means rules block reading settings), handle gracefully
+        if(e.code === 'permission-denied') {
+             throw new Error("Access Denied: Check Firebase Rules");
+        }
         throw e;
     }
 }
@@ -147,7 +153,7 @@ window.deleteTrip = async function(docId) {
     }
 };
 
-// --- INIT (Same as before) ---
+// --- INIT ---
 document.addEventListener("DOMContentLoaded", () => {
     console.log("🚀 Firebase Admin Logic Loaded");
 
@@ -188,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 loadTrips();
                 setMsg("loginMsg", "", "");
             } catch (e) {
+                console.error(e);
                 setMsg("loginMsg", "Wrong PIN", "error");
             } finally {
                 loginBtn.disabled = false;

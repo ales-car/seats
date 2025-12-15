@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
   <meta charset="UTF-8" />
-  <title>Arteon Ride – Seat Booking</title>
+  <title>Arteon Ride – Rezervace</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
 
   <style>
     /* =========================================
-       CSS (Dark Theme - Same as before)
+       CSS (Dark Theme)
        ========================================= */
     :root {
       --primary: #ff3600;
@@ -120,344 +120,157 @@
       margin-bottom: 10px;
     }
 
-    .pill-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #22c55e;
-    }
+    .pill-dot { width: 8px; height: 8px; border-radius: 999px; background: #22c55e; }
 
     /* DRIVER HEADER */
-    .driver-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
+    .driver-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
     .driver-avatar {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(248, 250, 252, 0.9);
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.8);
+      width: 58px; height: 58px; border-radius: 50%; object-fit: cover;
+      border: 2px solid rgba(248, 250, 252, 0.9); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.8);
     }
-
     .driver-name { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
-
-    .driver-meta {
-      font-size: 12px;
-      color: var(--text-muted);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
+    .driver-meta { font-size: 12px; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 10px; }
     .driver-meta span::before { content: "• "; color: var(--primary); }
     .driver-meta span:first-child::before { content: ""; }
 
-    .driver-list {
-      list-style: none;
-      margin: 10px 0 12px;
-      padding-left: 0;
-      font-size: 13px;
-      color: var(--text-main);
-    }
-
-    .driver-list li {
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .driver-list li::before {
-      content: "•";
-      color: var(--primary);
-      font-size: 16px;
-    }
+    .driver-list { list-style: none; margin: 10px 0 12px; padding-left: 0; font-size: 13px; color: var(--text-main); }
+    .driver-list li { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .driver-list li::before { content: "•"; color: var(--primary); font-size: 16px; }
 
     .car-specs { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
     .car-specs strong { color: #e5e7eb; }
 
-    /* Trip + date + stop section */
-    .trip-section {
-      margin-top: 16px;
-      padding-top: 12px;
-      border-top: 1px dashed rgba(148, 163, 184, 0.4);
-    }
-
+    /* TRIP SECTION */
+    .trip-section { margin-top: 16px; padding-top: 12px; border-top: 1px dashed rgba(148, 163, 184, 0.4); }
     .trip-current { font-size: 12px; color: var(--text-muted); margin: 0 0 6px; }
 
-    .form-row {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 8px;
-      font-size: 12px;
+    .form-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; font-size: 12px; }
+    .form-row label { color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; }
+    .form-row select, .form-row input {
+      border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.5); padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.7); color: var(--text-main); font-size: 13px; outline: none;
     }
-
-    .form-row label {
-      color: var(--text-muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 11px;
-    }
-
-    .form-row select,
-    .form-row input[type="text"],
-    .form-row input[type="tel"] {
-      border-radius: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      padding: 6px 8px;
-      background: rgba(15, 23, 42, 0.7);
-      color: var(--text-main);
-      font-size: 12px;
-      outline: none;
-    }
-
     .form-row select:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* Radio group */
-    .radio-group {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 2px;
-    }
-
+    .radio-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 2px; }
     .radio-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-main); }
     .radio-item input[type="radio"] { width: 14px; height: 14px; accent-color: var(--primary); cursor: pointer; }
     .radio-item span { cursor: pointer; }
 
-    /* Right card: car + seats */
-    .car-card-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 8px;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
+    /* CAR VISUAL & FLOATING STATS */
+    .car-card-title { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 10px; flex-wrap: wrap; }
     .car-card-title h2 { margin-bottom: 0; }
     .car-card-title small { font-size: 11px; color: var(--text-muted); }
 
     .car-visual {
-      position: relative;
-      margin-top: 8px;
-      border-radius: 24px;
-      overflow: hidden;
+      position: relative; margin-top: 8px; border-radius: 24px; overflow: hidden;
       border: 1px solid rgba(148, 163, 184, 0.4);
       background: radial-gradient(circle at top, #111827 0, #020617 45%);
-      max-width: 320px;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 380px; margin-left: auto; margin-right: auto;
     }
-
     .car-visual img { width: 100%; display: block; opacity: 0.92; }
 
-    /* === SEAT GRID ==================== */
+    /* === NEW FLOATING STATUS BOX (Left Side) === */
+    .car-status-float {
+      position: absolute;
+      top: 20px;
+      left: 15px;
+      background: rgba(2, 6, 23, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      padding: 10px 14px;
+      border-radius: 12px;
+      z-index: 10;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      text-align: left;
+      min-width: 120px;
+    }
+    .status-label { font-size: 10px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 2px; }
+    .status-value { font-size: 20px; font-weight: 700; color: #fff; line-height: 1.1; }
+    .status-value span { font-size: 12px; font-weight: 400; color: var(--text-muted); margin-left: 2px; }
+    .status-value.free { color: #22c55e; }
+    .status-value.booked { color: #f97373; }
+
+    /* SEAT GRID */
     .seat-grid {
       position: absolute;
-      top: 43%;
-      left: 30%;
-      right: 35%;
-      bottom: 25%;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 6px;
-      pointer-events: none;
+      top: 43%; left: 30%; right: 35%; bottom: 25%;
+      display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr);
+      gap: 6px; pointer-events: none;
     }
-
     .seat {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--seat-bg);
-      border-radius: 8px;
-      border: 1px solid var(--seat-border);
-      color: #fff;
-      font-size: 13px;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      pointer-events: auto;
-      cursor: pointer;
-      transition: 0.16s ease all;
-      text-align: center;
-      padding: 4px 2px;
+      position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: var(--seat-bg); border-radius: 8px; border: 1px solid var(--seat-border);
+      color: #fff; font-size: 13px; backdrop-filter: blur(6px); pointer-events: auto;
+      cursor: pointer; transition: 0.16s ease all; text-align: center; padding: 4px 2px;
     }
-
-    .seat-label {
-      font-weight: 600;
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-
-    .seat-small {
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      opacity: 0.9;
-    }
-
-    .seat-icon {
-      width: 32px;
-      height: auto;
-      opacity: 0.75;
-      margin-bottom: 2px;
-    }
-
-    .seat.driver-seat {
-      cursor: default;
-      pointer-events: none;
-      background: rgba(0, 0, 0, 0.35);
-    }
-
-    .seat.selected {
-      background: var(--seat-selected-bg);
-      border-color: var(--seat-selected-border);
-      box-shadow: 0 8px 24px rgba(255, 102, 0, 0.55);
-      transform: translateY(-1px);
-    }
-
-    .seat.booked {
-      background: var(--seat-booked-bg);
-      border-color: rgba(0, 0, 0, 0.6);
-      box-shadow: none;
-      cursor: not-allowed;
-      transform: none;
-    }
-
+    .seat-label { font-weight: 600; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+    .seat-small { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.9; }
+    .seat-icon { width: 32px; height: auto; opacity: 0.75; margin-bottom: 2px; }
+    
+    .seat.driver-seat { cursor: default; pointer-events: none; background: rgba(0, 0, 0, 0.35); }
+    .seat.selected { background: var(--seat-selected-bg); border-color: var(--seat-selected-border); box-shadow: 0 8px 24px rgba(255, 102, 0, 0.55); transform: translateY(-1px); }
+    .seat.booked { background: var(--seat-booked-bg); border-color: rgba(0, 0, 0, 0.6); box-shadow: none; cursor: not-allowed; transform: none; }
+    
     .booked-tag {
-      position: absolute;
-      top: 3px;
-      right: 4px;
-      padding: 2px 6px;
-      border-radius: 999px;
-      font-size: 8px;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      background: rgba(0, 0, 0, 0.85);
-      color: #fff;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.16s ease;
+      position: absolute; top: 3px; right: 4px; padding: 2px 6px; border-radius: 999px;
+      font-size: 8px; font-weight: 600; background: rgba(0, 0, 0, 0.85); color: #fff;
+      opacity: 0; pointer-events: none;
     }
-
     .seat.booked .booked-tag { opacity: 1; }
-
     .seat.disabled { cursor: not-allowed; opacity: 0.4; }
 
-    /* Legend & status */
-    .status-row {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--text-muted);
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 6px;
-    }
-
-    .status-row strong { color: #fbbf24; }
-
-    .legend {
-      display: flex;
-      gap: 12px;
-      font-size: 11px;
-      margin-top: 10px;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-    }
-
+    /* LEGEND */
+    .legend { display: flex; gap: 12px; font-size: 11px; margin-top: 10px; color: var(--text-muted); flex-wrap: wrap; justify-content: center;}
     .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 3px; border: 1px solid rgba(148, 163, 184, 0.9); background: rgba(15, 23, 42, 0.7); }
+    .legend-dot.selected { background: var(--seat-selected-bg); }
+    .legend-dot.booked { background: var(--seat-booked-bg); }
+    .legend-dot.driver { background: rgba(0, 0, 0, 0.9); }
 
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 3px;
-      border: 1px solid rgba(148, 163, 184, 0.9);
-      background: rgba(15, 23, 42, 0.7);
-    }
-
-    .legend-dot.selected { background: var(--seat-selected-bg); border-color: var(--seat-selected-border); }
-    .legend-dot.booked { background: var(--seat-booked-bg); border-color: rgba(0, 0, 0, 0.8); }
-    .legend-dot.driver { background: rgba(0, 0, 0, 0.9); border-color: #000; }
-
-    .btn-row {
-      margin-top: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    /* CONFIRM SECTION */
+    .btn-row { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    .price-chip { font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 5px; }
 
     .btn-primary {
-      padding: 9px 22px;
-      border-radius: 999px;
-      border: none;
-      background: var(--primary);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 14px 36px rgba(248, 113, 113, 0.55);
-      transition: 0.16s ease all;
+      padding: 12px 32px; border-radius: 12px; border: none; background: var(--primary); color: #fff;
+      font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 14px 36px rgba(248, 113, 113, 0.4);
+      transition: 0.2s ease all; width: 100%; text-transform: uppercase; letter-spacing: 0.05em;
     }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-2px); }
+    .btn-primary:disabled { background: #374151; box-shadow: none; cursor: not-allowed; color: #9ca3af; }
 
-    .btn-primary:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
-    .btn-primary:disabled { background: #4b5563; box-shadow: none; cursor: not-allowed; }
-
-    .price-chip {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.85);
-    }
-
-    .message { margin-top: 10px; font-size: 12px; min-height: 16px; }
+    .message { margin-top: 10px; font-size: 13px; min-height: 16px; text-align: center; }
     .message.ok { color: #22c55e; }
     .message.error { color: #f97373; }
 
+    /* === NEW BIG ACTION BUTTONS === */
     .contact-actions {
-      margin-top: 10px;
-      display: none;
-      gap: 8px;
-      flex-wrap: wrap;
+      margin-top: 25px; display: none; flex-direction: column; gap: 12px;
+      animation: fadeIn 0.5s ease;
+      background: rgba(255,255,255,0.03); padding: 15px; border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
     }
-
-    .btn-ghost {
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.55);
-      color: #e5e7eb;
-      font-size: 13px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    
+    .action-title { text-align: center; font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 5px; }
+    
+    .big-btn {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      padding: 14px; border-radius: 12px; text-decoration: none;
+      font-weight: 600; font-size: 15px; transition: transform 0.2s;
+      border: 1px solid rgba(255,255,255,0.1); color: #fff;
     }
+    .big-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    
+    .btn-wa { background: #25D366; border-color: #25D366; }
+    .btn-ms { background: #0084FF; border-color: #0084FF; }
+    .btn-em { background: #334155; border-color: #475569; }
 
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.6); }
+    .icon-svg { width: 24px; height: 24px; fill: currentColor; }
 
-    footer {
-      margin-top: 18px;
-      text-align: center;
-      color: #9ca3af;
-      font-size: 12px;
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    footer { margin-top: 18px; text-align: center; color: #9ca3af; font-size: 12px; }
     footer a { color: #9ca3af; text-decoration: underline; margin: 0 10px; }
   </style>
 </head>
@@ -466,55 +279,51 @@
   <div class="page">
     <header class="hero">
       <img src="banner.jpg" alt="Arteon banner" />
-      <div class="hero-title">Select Your Car Seat</div>
+      <div class="hero-title">Rezervace Místa</div>
     </header>
 
     <main class="layout">
       <section class="card">
         <div class="pill">
           <span class="pill-dot"></span>
-          Verified ride · Real driver · 3 passenger seats only
+          Ověřená jízda · VW Arteon R-Line · Max 3 pasažéři
         </div>
 
         <div class="driver-header">
-          <img src="driver-photo.jpg" alt="Your driver" class="driver-avatar" />
+          <img src="driver-photo.jpg" alt="Aleš" class="driver-avatar" />
           <div>
             <div class="driver-name">Aleš Krajina</div>
             <div class="driver-meta">
-              <span>Non-smoker</span>
-              <span>Safe ride</span>
-              <span>Comfort first</span>
+              <span>Nekuřák</span>
+              <span>Bezpečná jízda</span>
+              <span>Pohodlí</span>
             </div>
           </div>
         </div>
 
         <ul class="driver-list">
-          <li>Czech guy in Switzerland – long-distance rides Zürich ↔ Czechia.</li>
-          <li>Calm driving, good music, clean car.</li>
-          <li>You can book 1–3 seats (VIP / Mood Bringer / Chief DJ).</li>
+          <li>Čech ve Švýcarsku – dálkové trasy Curych ↔ Česko.</li>
+          <li>Klidná jízda, dobrá hudba, čisté auto.</li>
+          <li>Booknout můžeš 1–3 místa (VIP / Mood Bringer / Chief DJ).</li>
         </ul>
 
         <div class="car-specs">
-          <strong>About the car:</strong><br />
-          VW Arteon 2.0 TDI Shooting Brake <strong>R-Line</strong> (147 kW) – premium long-distance cruiser,
-          big luggage area and comfy rear seats.
+          <strong>Auto:</strong> VW Arteon 2.0 TDI Shooting Brake <strong>R-Line</strong> (147 kW) – prémiové svezení, velký kufr.
         </div>
 
         <div class="trip-section">
-          <div class="section-title">Trip & Date</div>
-          <p id="tripCurrent" class="trip-current">
-            No trip selected yet – choose one below.
-          </p>
+          <div class="section-title">1. Výběr cesty</div>
+          <p id="tripCurrent" class="trip-current">Vyber si termín níže.</p>
 
           <div class="form-row">
-            <label for="tripSelect">Available trips</label>
+            <label for="tripSelect">Dostupné jízdy</label>
             <select id="tripSelect">
-              <option value="">– Loading trips… –</option>
+              <option value="">– Načítám jízdy... –</option>
             </select>
           </div>
 
           <div class="form-row">
-            <label id="stopLabel">Stop</label>
+            <label id="stopLabel">Zastávka</label>
             <div class="radio-group" id="stopRadios">
               <label class="radio-item">
                 <input type="radio" name="stop" value="praha" data-price="50" disabled />
@@ -532,88 +341,107 @@
           </div>
 
           <div class="form-row">
-            <label for="custName">Your name (optional)</label>
-            <input id="custName" type="text" placeholder="e.g. Jakub" />
+            <label for="custName">Tvé jméno (nepovinné)</label>
+            <input id="custName" type="text" placeholder="např. Jakub" />
           </div>
-
           <div class="form-row">
-            <label for="custPhone">Phone (optional)</label>
+            <label for="custPhone">Telefon (nepovinné)</label>
             <input id="custPhone" type="tel" placeholder="+420..." />
           </div>
-          <p style="margin-top:10px;font-size:12px;color:#9ca3af;">
-            Driver only: <a href="admin.html" style="color:#ff3600;">open admin</a>
+
+          <p style="margin-top:15px;font-size:11px;color:#64748b;">
+            Jsi řidič? <a href="admin.html" style="color:#ff3600;">Vstup pro admina</a>
           </p>
         </div>
       </section>
 
-      <section class="card">
+      <section class="card" style="position:relative;">
         <div class="car-card-title">
-          <h2>Choose your place in the Arteon</h2>
-          <small>VIP + Mood Bringer + Chief DJ</small>
+          <h2>2. Vyber si místo</h2>
+          <small>Klikni na sedadlo</small>
         </div>
 
         <div class="car-visual">
-          <img src="car-top-vertical.jpg" alt="Top-down view of VW Arteon" />
+          <img src="car-top-vertical.jpg" alt="VW Arteon Top View" />
+
+          <div class="car-status-float" id="statusBox" style="display:none;">
+            <div style="margin-bottom:8px;">
+              <div class="status-label">Obsazeno</div>
+              <div class="status-value booked" id="bookedVal">0<span>/3</span></div>
+            </div>
+            <div>
+              <div class="status-label">Volno</div>
+              <div class="status-value free" id="freeVal">3<span>místa</span></div>
+            </div>
+          </div>
 
           <div class="seat-grid">
             <div class="seat driver-seat" data-seat-id="DRV">
               <img src="driver-wheel-icon.png" alt="Driver" class="seat-icon" />
               <div class="seat-label">DRIVER</div>
-              <div class="seat-small">Not bookable</div>
             </div>
 
             <div class="seat" data-seat-id="VIP">
               <img src="vip-icon.png" alt="VIP" class="seat-icon" />
               <div class="seat-label">CO-PILOT</div>
-              <div class="seat-small">Front passenger</div>
+              <div class="seat-small">Vepředu</div>
               <div class="booked-tag">BOOKED</div>
             </div>
 
             <div class="seat" data-seat-id="MB">
               <div class="seat-label">MOOD BRINGER</div>
-              <div class="seat-small">Rear left</div>
+              <div class="seat-small">Vzadu L</div>
               <div class="booked-tag">BOOKED</div>
             </div>
 
             <div class="seat" data-seat-id="DJ">
               <div class="seat-label">CHIEF DJ</div>
-              <div class="seat-small">Rear right</div>
+              <div class="seat-small">Vzadu P</div>
               <div class="booked-tag">BOOKED</div>
             </div>
           </div>
         </div>
 
-        <div class="status-row" id="seatStatus">
-          Select a trip and stop to see seat availability.
-        </div>
-
         <div class="legend">
-          <div class="legend-item"><span class="legend-dot driver"></span> Driver</div>
-          <div class="legend-item"><span class="legend-dot"></span> Free</div>
-          <div class="legend-item"><span class="legend-dot selected"></span> Selected</div>
-          <div class="legend-item"><span class="legend-dot booked"></span> Booked</div>
+          <div class="legend-item"><span class="legend-dot driver"></span> Řidič</div>
+          <div class="legend-item"><span class="legend-dot"></span> Volno</div>
+          <div class="legend-item"><span class="legend-dot selected"></span> Vybráno</div>
+          <div class="legend-item"><span class="legend-dot booked"></span> Obsazeno</div>
         </div>
 
         <div class="btn-row">
-          <div class="price-chip" id="priceDisplay">Choose stop & seat(s) to see price</div>
+          <div class="price-chip" id="priceDisplay">Vyber sedadla</div>
           <button type="button" class="btn-primary" id="confirmBtn" disabled>
-            Confirm Booking
+            Potvrdit Rezervaci
           </button>
         </div>
 
         <div id="message" class="message"></div>
 
         <div class="contact-actions" id="contactActions">
-          <a class="btn-ghost" id="waBtn" href="#" target="_blank" rel="noopener">WhatsApp</a>
-          <a class="btn-ghost" id="msBtn" href="#" target="_blank" rel="noopener">Messenger</a>
-          <a class="btn-ghost" id="emBtn" href="#" target="_blank" rel="noopener">Email</a>
+          <div class="action-title">✅ Rezervace uložena! Teď mi prosím pošli zprávu:</div>
+          
+          <a class="big-btn btn-wa" id="waBtn" href="#" target="_blank">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            WhatsApp
+          </a>
+          
+          <a class="big-btn btn-ms" id="msBtn" href="#" target="_blank">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.504 8.658.232.172.376.447.376.733v2.336a.872.872 0 001.352.738l2.646-1.603a.925.925 0 01.597-.133 12.858 12.858 0 002.525.251c6.627 0 12-4.974 12-11.111C24 4.974 18.627 0 12 0zm1.321 14.397L10.3 11.16a.918.918 0 00-1.168-.088l-4.54 3.447c-.504.382-1.156-.257-.804-.791l3.02-4.582a.916.916 0 001.168.087l3.023 2.152a.92.92 0 001.168.088l4.54-3.447c.504-.383 1.155.257.803.79l-3.02 4.583a.918.918 0 00-1.169-.088v-.001z"/></svg>
+            Messenger
+          </a>
+
+          <a class="big-btn btn-em" id="emBtn" href="#" target="_blank">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            Odeslat Email
+          </a>
         </div>
       </section>
     </main>
 
     <footer>
-      <a href="./privacy-policy.html">Zásady ochrany soukromí</a>
-      <a href="./terms.html">Podmínky použití</a>
+      <a href="./privacy-policy.html">Ochrana soukromí</a>
+      <a href="./terms.html">Podmínky</a>
     </footer>
   </div>
 
@@ -621,7 +449,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // 1) FIREBASE CONFIG
+    // 1) KONFIGURACE FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyAi6MYAsAnqJg_5XwQC7b6TAI1ywrrADsM",
       authDomain: "car-seats-booking.firebaseapp.com",
@@ -632,21 +460,23 @@
       measurementId: "G-QGXXTCG7XG"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // 2) APP CONFIG
+    // 2) KONTAKTNÍ ÚDAJE
     const OWNER_WHATSAPP = "+41767775898";
-    const OWNER_FB_PROFILE = "https://www.facebook.com/ales.krajina/";
-    const OWNER_EMAIL = "ales.krajina@yourmail.com"; 
+    // Použijeme m.me pro spolehlivější mobilní link
+    const OWNER_MESSENGER = "https://m.me/ales.krajina"; 
+    const OWNER_EMAIL = "ales.krajina@outlook.com"; 
 
-    const SEAT_IDS = ["VIP", "MB", "DJ"]; // DRV not bookable
+    const SEAT_IDS = ["VIP", "MB", "DJ"]; 
+    const STOP_PRICES = { praha: 50, brno: 70, ostrava: 80 };
 
-    const STOP_PRICES = {
-      praha: 50,
-      brno: 70,
-      ostrava: 80
+    // Pomocná funkce pro skloňování měst do zprávy
+    const STOP_NAMES_LOCATIVE = {
+        praha: "Praze",
+        brno: "Brně",
+        ostrava: "Ostravě"
     };
 
     let trips = [];
@@ -656,10 +486,10 @@
     let selectedSeats = new Set();
     let bookedSeats = new Set(); 
 
-    // 3) UI HELPERS
+    // 3) UI POMOCNÉ FUNKCE
     function setMessage(text, type = "") {
       const msgEl = document.getElementById("message");
-      msgEl.className = "message " + (type || "");
+      msgEl.className = "message " + type;
       msgEl.textContent = text;
     }
 
@@ -681,15 +511,15 @@
     function updateStopLabel() {
       const stopLabel = document.getElementById("stopLabel");
       if (!currentTripObj) {
-        stopLabel.textContent = "Stop";
+        stopLabel.textContent = "Zastávka";
         return;
       }
       if (currentTripObj.from === "Zurich" && currentTripObj.to === "Ostrava") {
-        stopLabel.textContent = "I get off in:";
+        stopLabel.textContent = "Vystupuji:";
       } else if (currentTripObj.from === "Ostrava" && currentTripObj.to === "Zurich") {
-        stopLabel.textContent = "I start from:";
+        stopLabel.textContent = "Nastupuji:";
       } else {
-        stopLabel.textContent = "Stop:";
+        stopLabel.textContent = "Zastávka:";
       }
     }
 
@@ -699,84 +529,71 @@
         const id = seat.dataset.seatId;
         seat.classList.remove("selected", "booked", "disabled", "driver-seat");
 
-        if (id === "DRV") {
-          seat.classList.add("driver-seat");
-          return;
-        }
-
-        if (!currentTripId || !currentStop) {
-          seat.classList.add("disabled");
-          return;
-        }
-
-        if (bookedSeats.has(id)) {
-          seat.classList.add("booked");
-          return;
-        }
-
-        if (selectedSeats.has(id)) {
-          seat.classList.add("selected");
-        }
+        if (id === "DRV") { seat.classList.add("driver-seat"); return; }
+        if (!currentTripId || !currentStop) { seat.classList.add("disabled"); return; }
+        if (bookedSeats.has(id)) { seat.classList.add("booked"); return; }
+        if (selectedSeats.has(id)) { seat.classList.add("selected"); }
       });
     }
 
     function updateStatusAndPrice() {
-      const statusEl = document.getElementById("seatStatus");
       const priceEl = document.getElementById("priceDisplay");
       const confirmBtn = document.getElementById("confirmBtn");
       const contactActions = document.getElementById("contactActions");
+      const statusBox = document.getElementById("statusBox");
+      const bookedVal = document.getElementById("bookedVal");
+      const freeVal = document.getElementById("freeVal");
 
+      // Schovat tlačítka pokud uživatel změní výběr před potvrzením
       contactActions.style.display = "none";
 
       if (!currentTripId) {
-        statusEl.textContent = "Select a trip to see seat availability.";
-        priceEl.textContent = "Choose stop & seat(s) to see price";
+        statusBox.style.display = "none";
+        priceEl.textContent = "Vyber jízdu";
         confirmBtn.disabled = true;
         return;
       }
 
-      if (!currentStop) {
-        statusEl.textContent = "Trip selected. Now choose your stop (Praha / Brno / Ostrava).";
-        priceEl.textContent = "Select stop & seat(s) to see total price";
-        confirmBtn.disabled = true;
-        return;
-      }
-
+      // Zobrazit plovoucí box
+      statusBox.style.display = "block";
       const bookedCount = [...bookedSeats].filter(s => SEAT_IDS.includes(s)).length;
       const freeCount = SEAT_IDS.length - bookedCount;
+
+      bookedVal.innerHTML = `${bookedCount}<span>/3</span>`;
+      freeVal.innerHTML = `${freeCount}<span>místa</span>`;
+
+      if (!currentStop) {
+        priceEl.textContent = "Vyber zastávku";
+        confirmBtn.disabled = true;
+        return;
+      }
 
       const basePrice = STOP_PRICES[currentStop] || 0;
       const seatCount = selectedSeats.size;
 
-      statusEl.innerHTML = `For this trip: <strong>${bookedCount}</strong> booked, <strong>${freeCount}</strong> free.`;
-
       if (seatCount > 0 && basePrice > 0) {
         const total = seatCount * basePrice;
-        priceEl.textContent = `${seatCount} seat(s) × ${basePrice} CHF = ${total} CHF`;
+        priceEl.textContent = `${seatCount} × ${basePrice} CHF = ${total} CHF`;
         confirmBtn.disabled = false;
       } else {
-        priceEl.textContent = "Select at least one seat to see total price.";
+        priceEl.textContent = "Vyber sedadla";
         confirmBtn.disabled = true;
       }
     }
 
-    // 4) FIREBASE DATA OPERATIONS
+    // 4) FIREBASE OPERACE
     async function fetchTrips() {
       const querySnapshot = await getDocs(collection(db, "trips"));
       const list = [];
-      
       querySnapshot.forEach((doc) => {
         const t = doc.data();
         list.push({
           id: doc.id,
           date: t.trip_date,
-          // Since we stored fields directly in Firestore, we access them directly
           from: t.from_city || "?",
           to: t.to_city || "?"
         });
       });
-
-      // Sort trips by date locally
       list.sort((a, b) => new Date(a.date) - new Date(b.date));
       return list;
     }
@@ -784,16 +601,12 @@
     async function fetchBookedSeats(tripId) {
       const q = query(collection(db, "bookings"), where("trip_id", "==", tripId));
       const querySnapshot = await getDocs(q);
-      
       const seats = new Set();
-      querySnapshot.forEach((doc) => {
-        seats.add(doc.data().seat_code);
-      });
+      querySnapshot.forEach((doc) => seats.add(doc.data().seat_code));
       return seats;
     }
 
-    async function createBookings({ tripId, stopCity, price, seats, name, phone, channel }) {
-      // Create a promise for each seat booking
+    async function createBookings({ tripId, stopCity, price, seats, name, phone }) {
       const promises = seats.map(seat => {
         return addDoc(collection(db, "bookings"), {
           trip_id: tripId,
@@ -802,119 +615,26 @@
           price_chf: price,
           customer_name: name || null,
           customer_phone: phone || null,
-          contact_channel: channel,
           created_at: new Date().toISOString()
         });
       });
-
       await Promise.all(promises);
     }
 
-    // 5) UI EVENT HANDLERS
-    async function refreshTripSelect() {
-      const sel = document.getElementById("tripSelect");
-      sel.innerHTML = "";
-
-      const opt0 = document.createElement("option");
-      opt0.value = "";
-      opt0.textContent = "– Select a trip –";
-      sel.appendChild(opt0);
-
-      if (!trips.length) {
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.disabled = true;
-        opt.textContent = "No trips available (admin needs to add them)";
-        sel.appendChild(opt);
-        return;
-      }
-
-      trips.forEach(t => {
-        const opt = document.createElement("option");
-        opt.value = t.id;
-        opt.textContent = formatTripLabel(t);
-        sel.appendChild(opt);
-      });
-    }
-
-    async function handleTripChange() {
-      const sel = document.getElementById("tripSelect");
-      const tripCurrent = document.getElementById("tripCurrent");
-
-      currentTripId = sel.value || "";
-      currentTripObj = trips.find(t => t.id === currentTripId) || null;
-
-      selectedSeats.clear();
-      bookedSeats = new Set();
-      currentStop = "";
-      clearStopSelection();
-      setStopRadiosEnabled(!!currentTripId);
-      updateStopLabel();
-
-      if (!currentTripId) {
-        tripCurrent.textContent = "No trip selected yet – choose one below.";
-        updateSeatVisuals();
-        updateStatusAndPrice();
-        setMessage("");
-        return;
-      }
-
-      tripCurrent.textContent = `Selected trip: ${formatTripLabel(currentTripObj)}`;
-
-      try {
-        setMessage("Loading seat availability…");
-        bookedSeats = await fetchBookedSeats(currentTripId);
-        setMessage("");
-      } catch (e) {
-        console.error(e);
-        setMessage("Failed to load bookings. Check internet connection.", "error");
-      }
-
-      updateSeatVisuals();
-      updateStatusAndPrice();
-    }
-
-    function handleStopChange(e) {
-      const radio = e.target;
-      if (!radio.checked) return;
-
-      currentStop = radio.value || "";
-      selectedSeats.clear();
-
-      updateSeatVisuals();
-      updateStatusAndPrice();
-      setMessage("");
-    }
-
-    function handleSeatClick(e) {
-      const seatElem = e.currentTarget;
-      const seatId = seatElem.dataset.seatId;
-
-      if (seatId === "DRV") return;
-      if (!currentTripId || !currentStop) return;
-      if (bookedSeats.has(seatId)) return;
-
-      if (selectedSeats.has(seatId)) selectedSeats.delete(seatId);
-      else selectedSeats.add(seatId);
-
-      updateSeatVisuals();
-      updateStatusAndPrice();
-      setMessage("");
-    }
-
+    // 5) TEXT ZPRÁVY
     function buildSummaryText({ trip, stop, seats, basePrice }) {
       const seatsArr = [...seats];
       const total = seatsArr.length * basePrice;
+      const stopLocative = STOP_NAMES_LOCATIVE[stop] || stop; // Praha -> Praze
 
-      return [
-        "🚗 Arteon Ride booking",
-        `Trip: ${trip.date} – ${trip.from} → ${trip.to}`,
-        (trip.from === "Zurich" && trip.to === "Ostrava") ? `Drop-off: ${stop}` :
-        (trip.from === "Ostrava" && trip.to === "Zurich") ? `Pickup: ${stop}` :
-        `Stop: ${stop}`,
-        `Seats: ${seatsArr.join(", ")}`,
-        `Price: ${seatsArr.length} × ${basePrice} CHF = ${total} CHF`
-      ].join("\n");
+      return `Ahoj Aleši,
+
+rád bych si objednal cestu ${trip.date} – ${trip.from} → ${trip.to}.
+
+Nástup v ${stopLocative}, sedadla ${seatsArr.join(", ")}.
+Cena: ${seatsArr.length} × ${basePrice} CHF = ${total} CHF.
+
+Prosím potvrď, že to platí. Děkuji.`;
     }
 
     function showContactButtons(summaryText) {
@@ -923,41 +643,36 @@
       const msBtn = document.getElementById("msBtn");
       const emBtn = document.getElementById("emBtn");
 
+      // WhatsApp
       const waText = encodeURIComponent(summaryText);
-      const waPhone = OWNER_WHATSAPP.replace(/\D/g, ""); // digits only
+      const waPhone = OWNER_WHATSAPP.replace(/\D/g, ""); 
       waBtn.href = `https://wa.me/${waPhone}?text=${waText}`;
 
-      msBtn.href = "https://www.messenger.com/t/" + encodeURIComponent(OWNER_FB_PROFILE);
+      // Messenger (Mobile link is safer)
+      msBtn.href = OWNER_MESSENGER;
 
-      const mailSubj = encodeURIComponent("Arteon Ride booking");
+      // Email
+      const mailSubj = encodeURIComponent(`Rezervace Arteon: ${currentTripObj.date}`);
       const mailBody = encodeURIComponent(summaryText);
-      emBtn.href = `mailto:${encodeURIComponent(OWNER_EMAIL)}?subject=${mailSubj}&body=${mailBody}`;
+      emBtn.href = `mailto:${OWNER_EMAIL}?subject=${mailSubj}&body=${mailBody}`;
 
       contactActions.style.display = "flex";
+      // Scroll to buttons
+      contactActions.scrollIntoView({ behavior: 'smooth' });
     }
 
+    // 6) OBSLUHA UDÁLOSTÍ
     async function handleConfirmBooking() {
-      if (!currentTripId || !currentTripObj) {
-        setMessage("Please select a trip first.", "error");
-        return;
-      }
-      if (!currentStop) {
-        setMessage("Please select a stop (Praha/Brno/Ostrava).", "error");
-        return;
-      }
-      if (!selectedSeats.size) {
-        setMessage("Select at least one seat.", "error");
-        return;
-      }
+      if (!currentTripId || !selectedSeats.size) return;
 
       const basePrice = STOP_PRICES[currentStop] || 0;
       const seatsToBook = [...selectedSeats];
-
       const name = document.getElementById("custName").value.trim();
       const phone = document.getElementById("custPhone").value.trim();
 
       try {
-        setMessage("Saving booking…");
+        setMessage("Ukládám rezervaci...");
+        document.getElementById("confirmBtn").disabled = true;
 
         await createBookings({
           tripId: currentTripId,
@@ -965,13 +680,11 @@
           price: basePrice,
           seats: seatsToBook,
           name,
-          phone,
-          channel: "web"
+          phone
         });
 
-        // refresh booked seats from DB (source of truth)
         bookedSeats = await fetchBookedSeats(currentTripId);
-
+        
         const summary = buildSummaryText({
           trip: currentTripObj,
           stop: currentStop,
@@ -983,14 +696,13 @@
         updateSeatVisuals();
         updateStatusAndPrice();
 
-        setMessage("✅ Booking stored! Send me the message to confirm.", "ok");
+        setMessage(""); // Vyčistit text zprávy, teď to řeší velký blok
         showContactButtons(summary);
 
       } catch (e) {
         console.error(e);
-        setMessage("⚠️ Booking failed (Seat might be taken).", "error");
-        
-        // Refresh to check if someone else took it
+        setMessage("Někdo tě předběhl! Sedadlo už je obsazené.", "error");
+        // Refresh
         try {
           bookedSeats = await fetchBookedSeats(currentTripId);
           selectedSeats.clear();
@@ -1000,29 +712,73 @@
       }
     }
 
-    // 6) INIT
+    // 7) INIT
     document.addEventListener("DOMContentLoaded", async () => {
       try {
-        setMessage("Loading trips…");
+        setMessage("Načítám jízdy...");
         trips = await fetchTrips();
-        await refreshTripSelect();
+        
+        const sel = document.getElementById("tripSelect");
+        sel.innerHTML = "";
+        const opt0 = document.createElement("option");
+        opt0.value = ""; opt0.textContent = "– Vyber termín –";
+        sel.appendChild(opt0);
+
+        if (!trips.length) {
+          opt0.textContent = "Žádné jízdy nejsou vypsané.";
+        } else {
+          trips.forEach(t => {
+            const opt = document.createElement("option");
+            opt.value = t.id; opt.textContent = formatTripLabel(t);
+            sel.appendChild(opt);
+          });
+        }
         setMessage("");
 
       } catch (e) {
         console.error(e);
-        const sel = document.getElementById("tripSelect");
-        sel.innerHTML = `<option value="">DB error</option>`;
-        setMessage("DB error – check console.", "error");
+        setMessage("Chyba databáze. Zkontroluj internet.", "error");
       }
 
       document.querySelectorAll(".seat").forEach(seat => {
-        seat.addEventListener("click", handleSeatClick);
+        seat.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.seatId;
+          if (id === "DRV" || !currentTripId || !currentStop || bookedSeats.has(id)) return;
+          
+          if (selectedSeats.has(id)) selectedSeats.delete(id);
+          else selectedSeats.add(id);
+          
+          updateSeatVisuals();
+          updateStatusAndPrice();
+        });
       });
 
-      document.getElementById("tripSelect").addEventListener("change", handleTripChange);
+      document.getElementById("tripSelect").addEventListener("change", async (e) => {
+        currentTripId = e.target.value;
+        currentTripObj = trips.find(t => t.id === currentTripId);
+        
+        selectedSeats.clear(); bookedSeats = new Set(); currentStop = "";
+        clearStopSelection(); setStopRadiosEnabled(!!currentTripId);
+        updateStopLabel();
+
+        if (currentTripId) {
+          setMessage("Ověřuji obsazenost...");
+          try {
+            bookedSeats = await fetchBookedSeats(currentTripId);
+            setMessage("");
+          } catch { setMessage("Chyba připojení", "error"); }
+        }
+        updateSeatVisuals();
+        updateStatusAndPrice();
+      });
 
       document.querySelectorAll('input[name="stop"]').forEach(radio => {
-        radio.addEventListener("change", handleStopChange);
+        radio.addEventListener("change", (e) => {
+          currentStop = e.target.value;
+          selectedSeats.clear();
+          updateSeatVisuals();
+          updateStatusAndPrice();
+        });
       });
 
       document.getElementById("confirmBtn").addEventListener("click", handleConfirmBooking);

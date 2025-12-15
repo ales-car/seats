@@ -5,13 +5,12 @@
   <title>Arteon Ride – Seat Booking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Page icon (favicon) -->
   <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
 
-  <!-- Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
+    /* =========================================
+       CSS (Dark Theme - Same as before)
+       ========================================= */
     :root {
       --primary: #ff3600;
       --primary-dark: #d42d00;
@@ -74,7 +73,7 @@
       text-transform: uppercase;
     }
 
-    /* Layout: 2 columns (40% / 60%) */
+    /* Layout */
     .layout {
       display: grid;
       grid-template-columns: 0.4fr 0.6fr;
@@ -220,7 +219,7 @@
 
     .form-row select:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* Radio group for Praha/Brno/Ostrava */
+    /* Radio group */
     .radio-group {
       display: flex;
       gap: 10px;
@@ -243,7 +242,6 @@
     }
 
     .car-card-title h2 { margin-bottom: 0; }
-
     .car-card-title small { font-size: 11px; color: var(--text-muted); }
 
     .car-visual {
@@ -253,17 +251,16 @@
       overflow: hidden;
       border: 1px solid rgba(148, 163, 184, 0.4);
       background: radial-gradient(circle at top, #111827 0, #020617 45%);
-      max-width: 320px; /* smaller car */
+      max-width: 320px;
       margin-left: auto;
       margin-right: auto;
     }
 
     .car-visual img { width: 100%; display: block; opacity: 0.92; }
 
-    /* === SEAT GRID & STYLE (YOUR FINAL SNIPPET) ==================== */
+    /* === SEAT GRID ==================== */
     .seat-grid {
       position: absolute;
-      /* These percentages are tuned to sit over the cabin of car-top-vertical.jpg */
       top: 43%;
       left: 30%;
       right: 35%;
@@ -338,7 +335,6 @@
       transform: none;
     }
 
-    /* Small BOOKED tag (no overlay over text) */
     .booked-tag {
       position: absolute;
       top: 3px;
@@ -360,7 +356,7 @@
 
     .seat.disabled { cursor: not-allowed; opacity: 0.4; }
 
-    /* Status & legend & button */
+    /* Legend & status */
     .status-row {
       margin-top: 10px;
       font-size: 12px;
@@ -468,14 +464,12 @@
 
 <body>
   <div class="page">
-    <!-- HERO BANNER -->
     <header class="hero">
       <img src="banner.jpg" alt="Arteon banner" />
       <div class="hero-title">Select Your Car Seat</div>
     </header>
 
     <main class="layout">
-      <!-- LEFT: DRIVER + TRIP -->
       <section class="card">
         <div class="pill">
           <span class="pill-dot"></span>
@@ -506,7 +500,6 @@
           big luggage area and comfy rear seats.
         </div>
 
-        <!-- TRIP / STOP -->
         <div class="trip-section">
           <div class="section-title">Trip & Date</div>
           <p id="tripCurrent" class="trip-current">
@@ -538,7 +531,6 @@
             </div>
           </div>
 
-          <!-- Optional contact fields (saved to DB) -->
           <div class="form-row">
             <label for="custName">Your name (optional)</label>
             <input id="custName" type="text" placeholder="e.g. Jakub" />
@@ -549,12 +541,11 @@
             <input id="custPhone" type="tel" placeholder="+420..." />
           </div>
           <p style="margin-top:10px;font-size:12px;color:#9ca3af;">
-  Driver only: <a href="admin.html" style="color:#ff3600;">open admin</a>
-</p>
+            Driver only: <a href="admin.html" style="color:#ff3600;">open admin</a>
+          </p>
         </div>
       </section>
 
-      <!-- RIGHT: CAR + SEAT BOOKING -->
       <section class="card">
         <div class="car-card-title">
           <h2>Choose your place in the Arteon</h2>
@@ -565,14 +556,12 @@
           <img src="car-top-vertical.jpg" alt="Top-down view of VW Arteon" />
 
           <div class="seat-grid">
-            <!-- Driver (not bookable) -->
             <div class="seat driver-seat" data-seat-id="DRV">
               <img src="driver-wheel-icon.png" alt="Driver" class="seat-icon" />
               <div class="seat-label">DRIVER</div>
               <div class="seat-small">Not bookable</div>
             </div>
 
-            <!-- VIP -->
             <div class="seat" data-seat-id="VIP">
               <img src="vip-icon.png" alt="VIP" class="seat-icon" />
               <div class="seat-label">CO-PILOT</div>
@@ -580,14 +569,12 @@
               <div class="booked-tag">BOOKED</div>
             </div>
 
-            <!-- Mood Bringer -->
             <div class="seat" data-seat-id="MB">
               <div class="seat-label">MOOD BRINGER</div>
               <div class="seat-small">Rear left</div>
               <div class="booked-tag">BOOKED</div>
             </div>
 
-            <!-- Chief DJ -->
             <div class="seat" data-seat-id="DJ">
               <div class="seat-label">CHIEF DJ</div>
               <div class="seat-small">Rear right</div>
@@ -630,20 +617,29 @@
     </footer>
   </div>
 
-  <script>
-    // ==========================
-    // 1) SUPABASE CONFIG
-    // ==========================
-    const SUPABASE_URL = "https://rtqnbryjqiwnewmtdeqb.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0cW5icnlqcWl3bmV3bXRkZXFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3MDE2NjgsImV4cCI6MjA4MTI3NzY2OH0.3HACsytbNMgBZ9wpspl7SI76OpAsoUMZGyK57mQhCro";
-    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // ==========================
+    // 1) FIREBASE CONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyAi6MYAsAnqJg_5XwQC7b6TAI1ywrrADsM",
+      authDomain: "car-seats-booking.firebaseapp.com",
+      projectId: "car-seats-booking",
+      storageBucket: "car-seats-booking.firebasestorage.app",
+      messagingSenderId: "193508754028",
+      appId: "1:193508754028:web:f7bc0b8cbdee9ef355ce49",
+      measurementId: "G-QGXXTCG7XG"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     // 2) APP CONFIG
-    // ==========================
     const OWNER_WHATSAPP = "+41767775898";
     const OWNER_FB_PROFILE = "https://www.facebook.com/ales.krajina/";
-    const OWNER_EMAIL = "ales.krajina@yourmail.com"; // change or keep dummy
+    const OWNER_EMAIL = "ales.krajina@yourmail.com"; 
 
     const SEAT_IDS = ["VIP", "MB", "DJ"]; // DRV not bookable
 
@@ -658,11 +654,9 @@
     let currentTripObj = null;
     let currentStop = "";
     let selectedSeats = new Set();
-    let bookedSeats = new Set(); // from DB
+    let bookedSeats = new Set(); 
 
-    // ==========================
     // 3) UI HELPERS
-    // ==========================
     function setMessage(text, type = "") {
       const msgEl = document.getElementById("message");
       msgEl.className = "message " + (type || "");
@@ -766,61 +760,57 @@
       }
     }
 
-    // ==========================
-    // 4) SUPABASE DATA
-    // ==========================
+    // 4) FIREBASE DATA OPERATIONS
     async function fetchTrips() {
-      // trips join routes
-      const { data, error } = await sb
-        .from("trips")
-        .select("id, trip_date, routes(from_city,to_city)")
-        .eq("is_active", true)
-        .order("trip_date", { ascending: true });
+      const querySnapshot = await getDocs(collection(db, "trips"));
+      const list = [];
+      
+      querySnapshot.forEach((doc) => {
+        const t = doc.data();
+        list.push({
+          id: doc.id,
+          date: t.trip_date,
+          // Since we stored fields directly in Firestore, we access them directly
+          from: t.from_city || "?",
+          to: t.to_city || "?"
+        });
+      });
 
-      if (error) throw error;
-
-      return (data || []).map(t => ({
-        id: t.id,
-        date: t.trip_date,
-        from: t.routes?.from_city || "?",
-        to: t.routes?.to_city || "?"
-      }));
+      // Sort trips by date locally
+      list.sort((a, b) => new Date(a.date) - new Date(b.date));
+      return list;
     }
 
     async function fetchBookedSeats(tripId) {
-      const { data, error } = await sb
-        .from("bookings")
-        .select("seat_code")
-        .eq("trip_id", tripId);
-
-      if (error) throw error;
-
-      return new Set((data || []).map(x => x.seat_code));
+      const q = query(collection(db, "bookings"), where("trip_id", "==", tripId));
+      const querySnapshot = await getDocs(q);
+      
+      const seats = new Set();
+      querySnapshot.forEach((doc) => {
+        seats.add(doc.data().seat_code);
+      });
+      return seats;
     }
 
     async function createBookings({ tripId, stopCity, price, seats, name, phone, channel }) {
-      const rows = seats.map(seat => ({
-        trip_id: tripId,
-        seat_code: seat,
-        stop_city: stopCity,
-        price_chf: price,
-        customer_name: name || null,
-        customer_phone: phone || null,
-        contact_channel: channel
-      }));
+      // Create a promise for each seat booking
+      const promises = seats.map(seat => {
+        return addDoc(collection(db, "bookings"), {
+          trip_id: tripId,
+          seat_code: seat,
+          stop_city: stopCity,
+          price_chf: price,
+          customer_name: name || null,
+          customer_phone: phone || null,
+          contact_channel: channel,
+          created_at: new Date().toISOString()
+        });
+      });
 
-      const { data, error } = await sb
-        .from("bookings")
-        .insert(rows)
-        .select();
-
-      if (error) throw error;
-      return data;
+      await Promise.all(promises);
     }
 
-    // ==========================
     // 5) UI EVENT HANDLERS
-    // ==========================
     async function refreshTripSelect() {
       const sel = document.getElementById("tripSelect");
       sel.innerHTML = "";
@@ -877,7 +867,7 @@
         setMessage("");
       } catch (e) {
         console.error(e);
-        setMessage("Failed to load bookings from DB. Check Supabase policies/keys.", "error");
+        setMessage("Failed to load bookings. Check internet connection.", "error");
       }
 
       updateSeatVisuals();
@@ -937,8 +927,6 @@
       const waPhone = OWNER_WHATSAPP.replace(/\D/g, ""); // digits only
       waBtn.href = `https://wa.me/${waPhone}?text=${waText}`;
 
-      // Messenger: auto-send without FB app/API is not possible.
-      // We open messenger and user pastes text (still fastest + no verification hell).
       msBtn.href = "https://www.messenger.com/t/" + encodeURIComponent(OWNER_FB_PROFILE);
 
       const mailSubj = encodeURIComponent("Arteon Ride booking");
@@ -969,7 +957,7 @@
       const phone = document.getElementById("custPhone").value.trim();
 
       try {
-        setMessage("Saving booking to DB…");
+        setMessage("Saving booking…");
 
         await createBookings({
           tripId: currentTripId,
@@ -995,15 +983,14 @@
         updateSeatVisuals();
         updateStatusAndPrice();
 
-        setMessage("✅ Booking stored in DB. Now send me the message to confirm.", "ok");
+        setMessage("✅ Booking stored! Send me the message to confirm.", "ok");
         showContactButtons(summary);
 
       } catch (e) {
         console.error(e);
-
-        // Most common: UNIQUE constraint violation => someone booked same seat
-        setMessage("⚠️ Booking failed (seat may have been taken). Refreshing availability…", "error");
-
+        setMessage("⚠️ Booking failed (Seat might be taken).", "error");
+        
+        // Refresh to check if someone else took it
         try {
           bookedSeats = await fetchBookedSeats(currentTripId);
           selectedSeats.clear();
@@ -1013,9 +1000,7 @@
       }
     }
 
-    // ==========================
     // 6) INIT
-    // ==========================
     document.addEventListener("DOMContentLoaded", async () => {
       try {
         setMessage("Loading trips…");
@@ -1026,8 +1011,8 @@
       } catch (e) {
         console.error(e);
         const sel = document.getElementById("tripSelect");
-        sel.innerHTML = `<option value="">DB error – check Supabase URL/Key & RLS policies</option>`;
-        setMessage("DB error – check Supabase URL/Key & RLS policies.", "error");
+        sel.innerHTML = `<option value="">DB error</option>`;
+        setMessage("DB error – check console.", "error");
       }
 
       document.querySelectorAll(".seat").forEach(seat => {

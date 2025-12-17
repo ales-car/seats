@@ -70,7 +70,7 @@
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     }
 
-    /* === NOVÉ STYLY PRO BIO A AUTO === */
+    /* INFO BOX */
     .info-box { margin-bottom: 25px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
     
     .driver-mini { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; position: relative; }
@@ -88,12 +88,10 @@
     .social-mini-link:hover { color: #fff; background: var(--primary); border-color: var(--primary); transform: translateY(-2px); }
     .social-mini-icon { width: 18px; height: 18px; fill: currentColor; }
 
-    /* Bio Typography */
     .bio-highlight { display: block; color: #fff; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
     .bio-text p { margin-bottom: 12px; font-size: 13px; opacity: 0.9; }
     .bio-text p:last-child { margin-bottom: 0; }
 
-    /* Fun Fact Pill */
     .fun-fact-box {
         margin-top: 15px; padding: 12px 16px; border-radius: 12px;
         background: rgba(190, 18, 60, 0.1); border: 1px solid rgba(190, 18, 60, 0.25);
@@ -101,25 +99,16 @@
     }
     .fun-fact-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 
-    /* CAR CARD - SAMOSTATNÁ KARTA */
+    /* CAR CARD */
     .car-card {
-        margin-top: 30px;
-        background: rgba(30, 41, 59, 0.35); /* Tmavší podklad */
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 16px;
-        padding: 18px;
+        margin-top: 30px; background: rgba(30, 41, 59, 0.35); border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px; padding: 18px;
     }
-    .car-header {
-        display: flex; align-items: center; gap: 8px;
-        font-size: 15px; font-weight: 700; color: #fff;
-        text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;
-    }
+    .car-header { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
     .car-model { font-size: 13px; color: var(--primary); font-weight: 600; margin-bottom: 12px; display: block; }
-    
     .car-specs-list { list-style: none; padding: 0; margin: 0 0 15px 0; }
     .car-specs-list li { margin-bottom: 6px; font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
     .check-icon { color: var(--primary); font-weight: bold; font-size: 14px; }
-
     .car-features-mini { display: flex; gap: 15px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px; }
     .feature-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); flex: 1; }
     .feature-icon { width: 20px; height: 20px; fill: #e2e8f0; opacity: 0.8; }
@@ -183,6 +172,7 @@
     .dot.booked { background: var(--booked-bg); border: 1px solid var(--booked-border); }
     .dot.selected { background: var(--selected-bg); border: 1px solid var(--selected-border); }
 
+    /* CONFIRM & SUCCESS */
     .btn-block { margin-top: 20px; }
     .btn-main { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--primary); color: #fff; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(190, 18, 60, 0.3); }
     .btn-main:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
@@ -215,7 +205,7 @@
   <div class="page">
     <header class="hero">
       <img src="banner.jpg" alt="Banner" />
-      <div class="hero-title">Spolujízda s Alešem</div>
+      <div class="hero-title">Spolujízda S Alešem</div>
     </header>
 
     <main class="layout">
@@ -251,9 +241,7 @@
           </div>
 
           <div class="car-card">
-              <div class="car-header">
-                  🚗 Auto, kterým pojedeš
-              </div>
+              <div class="car-header">🚗 Auto, kterým pojedeš</div>
               <span class="car-model">Volkswagen Arteon Shooting Brake</span>
               
               <ul class="car-specs-list">
@@ -302,19 +290,7 @@
         <div class="step-container hidden" id="step2">
           <div class="step-header"><div class="step-num">2</div> <span id="stopHeaderTitle">KDE VYSTUPUJI?</span></div>
           <div class="radio-group" id="stopRadios">
-            <label class="radio-item">
-              <input type="radio" name="stop" value="praha" data-price="50">
-              <span>Praha (50 CHF)</span>
-            </label>
-            <label class="radio-item">
-              <input type="radio" name="stop" value="brno" data-price="70">
-              <span>Brno (70 CHF)</span>
-            </label>
-            <label class="radio-item">
-              <input type="radio" name="stop" value="ostrava" data-price="80">
-              <span>Ostrava (80 CHF)</span>
-            </label>
-          </div>
+             </div>
         </div>
 
         <div class="step-container hidden" id="step3">
@@ -448,8 +424,38 @@
     };
 
     const SEAT_IDS = ["VIP", "MB", "DJ"]; 
-    const STOP_PRICES = { praha: 50, brno: 70, ostrava: 80 };
-    const STOP_NAMES_LOCATIVE = { praha: "Praze", brno: "Brně", ostrava: "Ostravě" };
+    
+    // DEFINICE TRAS (Aby web věděl co nabízet v radio buttonech)
+    const ROUTES_CONFIG = {
+      1: { // Zurich -> Ostrava
+        direction: "outbound",
+        stops: [
+          { id: "praha", label: "Praha", price: 50 },
+          { id: "brno", label: "Brno", price: 70 },
+          { id: "ostrava", label: "Ostrava", price: 80 }
+        ]
+      },
+      2: { // Ostrava -> Zurich
+        direction: "inbound",
+        stops: [
+          { id: "ostrava", label: "Ostrava", price: 80 },
+          { id: "brno", label: "Brno", price: 70 },
+          { id: "praha", label: "Praha", price: 50 }
+        ]
+      },
+      3: { // Zurich -> Praha
+        direction: "outbound",
+        stops: [
+          { id: "praha", label: "Praha", price: 50 }
+        ]
+      },
+      4: { // Praha -> Zurich
+        direction: "inbound",
+        stops: [
+          { id: "praha", label: "Praha", price: 50 }
+        ]
+      }
+    };
 
     // DEFINICE DODATKOVÝCH SLUŽEB
     const ADDONS = [
@@ -499,7 +505,6 @@
                 if(data.instagram) config.instagram = data.instagram;
                 if(data.facebook_profile) config.facebook_profile = data.facebook_profile;
                 
-                // Update Social Icons UI
                 const instaBtn = document.getElementById("lnkInsta");
                 const fbBtn = document.getElementById("lnkFb");
                 
@@ -509,24 +514,21 @@
                 const instaBtn = document.getElementById("lnkInsta");
                 if(config.instagram) { instaBtn.href = config.instagram; instaBtn.style.display = "flex"; }
             }
-        } catch (e) {
-            console.warn("DB config load failed, using defaults.");
-        }
+        } catch (e) { console.warn("DB config load failed, using defaults."); }
     }
 
     async function fetchTrips() {
       const q = await getDocs(collection(db, "trips"));
       const list = [];
-      
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
 
       q.forEach(d => {
         const t = d.data();
         const tripDate = new Date(t.trip_date);
-        
         if (tripDate >= yesterday) {
-            list.push({ id: d.id, date: t.trip_date, from: t.from_city||"?", to: t.to_city||"?" });
+            // POZOR: Musíme načíst route_id, abychom věděli co nabízet
+            list.push({ id: d.id, date: t.trip_date, route_id: t.route_id, from: t.from_city||"?", to: t.to_city||"?" });
         }
       });
       list.sort((a,b) => new Date(a.date) - new Date(b.date));
@@ -541,10 +543,7 @@
       return s;
     }
 
-    // EMAIL AUTOMATION FUNCTION
     function sendEmailNotification(summary, customerEmail, customerName, tripInfo, addonsText, totalPrice) {
-        
-        // 1. EMAIL PRO MAJITELE (ALEŠE)
         const templateParamsOwner = {
             to_email: config.email,
             subject: `Nová rezervace: ${currentTripObj.date} (${customerName || 'Neznámý'})`,
@@ -554,9 +553,7 @@
             .then(() => console.log("Email owner sent"))
             .catch(e => console.error("Email owner failed", e));
 
-        // 2. EMAIL PRO ZÁKAZNÍKA (POKUD VYPLNIL EMAIL)
         if (customerEmail && customerEmail.includes("@")) {
-            
             const customerMsg = `Ahoj ${customerName || "cestovateli"},\n\n` +
                                 `potvrzuji přijetí tvé rezervace na cestu ${tripInfo}.\n\n` +
                                 `Detaily:\n` +
@@ -596,7 +593,6 @@
     function renderAddons() {
         const container = document.getElementById("addonsList");
         container.innerHTML = "";
-        
         ADDONS.forEach(item => {
             if(item.category) {
                 const cat = document.createElement("div");
@@ -605,7 +601,6 @@
                 container.appendChild(cat);
                 return;
             }
-            
             const label = document.createElement("label");
             label.className = "addon-item";
             if(item.disabled) label.style.opacity = "0.7";
@@ -639,12 +634,54 @@
                 spanPrice.textContent = `+${item.price} CHF`;
                 label.appendChild(spanPrice);
             }
-            
             container.appendChild(label);
         });
     }
 
-    // WIZARD UI LOGIC
+    // NOVÁ FUNKCE: Generování zastávek podle typu trasy
+    function renderStopsForRoute(routeId) {
+        const container = document.getElementById("stopRadios");
+        container.innerHTML = "";
+        
+        const routeData = ROUTES_CONFIG[routeId];
+        if(!routeData) return; // Error handling
+
+        // Update Header Title
+        const headerTitle = document.getElementById("stopHeaderTitle");
+        if(routeData.direction === "outbound") headerTitle.textContent = "KDE VYSTUPUJI?";
+        else headerTitle.textContent = "KDE NASTUPUJI?";
+
+        // Create Radio Buttons
+        routeData.stops.forEach(stop => {
+            const label = document.createElement("label");
+            label.className = "radio-item";
+            
+            const input = document.createElement("input");
+            input.type = "radio";
+            input.name = "stop";
+            input.value = stop.id;
+            input.dataset.price = stop.price;
+            
+            input.addEventListener("change", (e) => {
+                currentStop = e.target.value;
+                
+                // Highlight active item
+                document.querySelectorAll('.radio-item').forEach(el => el.classList.remove('active'));
+                label.classList.add('active');
+                
+                updateStepsVisibility();
+                updateStatusAndPrice();
+            });
+
+            const spanText = document.createElement("span");
+            spanText.textContent = `${stop.label} (${stop.price} CHF)`;
+            
+            label.appendChild(input);
+            label.appendChild(spanText);
+            container.appendChild(label);
+        });
+    }
+
     function updateStepsVisibility() {
       const step2 = document.getElementById("step2");
       const step3 = document.getElementById("step3");
@@ -658,9 +695,6 @@
             return;
         }
         step2.classList.remove("hidden");
-        const stopTitle = document.getElementById("stopHeaderTitle");
-        if(currentTripObj.from === "Zurich") stopTitle.textContent = "KDE VYSTUPUJI?";
-        else stopTitle.textContent = "KDE NASTUPUJI?";
         setMessage("");
       } else {
         step2.classList.add("hidden"); step3.classList.add("hidden"); step5.classList.add("hidden");
@@ -712,7 +746,13 @@
         priceEl.textContent = "Vyber zastávku (Krok 2)"; confirmBtn.disabled = true; return;
       }
       
-      const baseSeatPrice = STOP_PRICES[currentStop] || 0;
+      // Get price from currently selected radio button dataset or config
+      // But we can just use the config array search for safety
+      let baseSeatPrice = 0;
+      const routeInfo = ROUTES_CONFIG[currentTripObj.route_id];
+      const stopInfo = routeInfo.stops.find(s => s.id === currentStop);
+      if(stopInfo) baseSeatPrice = stopInfo.price;
+
       const seatCount = selectedSeats.size;
       
       let addonsTotal = 0;
@@ -737,9 +777,20 @@
 
     function buildSummaryText({ trip, stop, seats, basePrice, name, phone, addonsTotal }) {
       let seatsArr = Array.isArray(seats) ? seats : Array.from(seats);
-      const seatsTotal = seatsArr.length * basePrice;
+      // Recalculate price here to be sure
+      let routeInfo = ROUTES_CONFIG[trip.route_id];
+      let stopInfo = routeInfo.stops.find(s => s.id === stop);
+      let realBasePrice = stopInfo ? stopInfo.price : basePrice;
+
+      const seatsTotal = seatsArr.length * realBasePrice;
       const finalTotal = seatsTotal + addonsTotal;
-      const stopLocative = STOP_NAMES_LOCATIVE[stop] || stop;
+      
+      // Get nice label for stop (Praze vs Praha)
+      let stopLabel = stopInfo ? stopInfo.label : stop;
+      // Simple locative mapping for message
+      const locativeMap = { "Praha": "Praze", "Brno": "Brně", "Ostrava": "Ostravě" };
+      let stopLocative = locativeMap[stopLabel] || stopLabel;
+
       const seatsStr = seatsArr.join(", ");
       
       let selectedAddonLabels = [];
@@ -777,7 +828,6 @@
       box.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // === LIGHTBOX LOGIC ===
     let galleryImages = [];
     let currentImgIndex = 0;
 
@@ -811,7 +861,6 @@
         if(e.key === 'ArrowLeft') prevImage();
     }
 
-    // NOVÁ FUNKCE: Check availability
     async function checkAllTripsAvailability() {
         for(const t of trips) {
             const seats = await fetchBookedSeats(t.id);
@@ -864,29 +913,23 @@
       document.getElementById("tripSelect").addEventListener("change", async (e) => {
         currentTripId = e.target.value;
         currentTripObj = trips.find(t => t.id === currentTripId);
-        currentStop = ""; selectedSeats.clear(); bookedSeats.clear();
-        document.querySelectorAll('input[name="stop"]').forEach(r => r.checked = false);
         
-        updateStepsVisibility();
+        currentStop = ""; selectedSeats.clear(); bookedSeats.clear();
+        // Clear stops container first
+        document.getElementById("stopRadios").innerHTML = "";
+        
+        if(currentTripId) {
+            // RENDER STOPS BASED ON ROUTE ID
+            renderStopsForRoute(currentTripObj.route_id);
+            
+            setMessage("Ověřuji obsazenost...");
+            bookedSeats = await fetchBookedSeats(currentTripId);
+            setMessage("");
+        }
+        
+        updateStepsVisibility(); 
         updateSeatVisuals();
         updateStatusAndPrice();
-
-        if(currentTripId) {
-          setMessage("Ověřuji obsazenost...");
-          bookedSeats = await fetchBookedSeats(currentTripId);
-          setMessage("");
-          updateStepsVisibility(); 
-          updateSeatVisuals();
-          updateStatusAndPrice();
-        }
-      });
-
-      document.querySelectorAll('input[name="stop"]').forEach(radio => {
-        radio.addEventListener("change", (e) => {
-          currentStop = e.target.value;
-          updateStepsVisibility();
-          updateStatusAndPrice();
-        });
       });
 
       document.querySelectorAll(".seat").forEach(seat => {
@@ -916,9 +959,9 @@
         const phone = document.getElementById("custPhone").value.trim();
         const email = document.getElementById("custEmail").value.trim();
         
-        const basePrice = STOP_PRICES[currentStop];
         const seatsArr = [...selectedSeats];
         
+        // Calc addons
         let addonsTotal = 0;
         let addonsArr = [];
         ADDONS.forEach(a => {
@@ -927,24 +970,34 @@
                 addonsArr.push(a.id);
             }
         });
+        
+        // Base price is now dynamic based on stop selection
+        let basePrice = 0; // Temp placeholder, calculated in buildSummary
 
         setMessage("Ukládám...");
         try {
+          // Note: Price saved to DB is per seat base price or total? 
+          // Let's save the calculated total per seat for simplicity in DB record, 
+          // or just the seat price. For now, let's keep it consistent.
+          // Re-fetching price from config to be safe
+          const routeInfo = ROUTES_CONFIG[currentTripObj.route_id];
+          const stopInfo = routeInfo.stops.find(s => s.id === currentStop);
+          const realPrice = stopInfo ? stopInfo.price : 0;
+
           await createBookings({
-            tripId: currentTripId, stopCity: currentStop, price: basePrice, 
+            tripId: currentTripId, stopCity: currentStop, price: realPrice, 
             seats: seatsArr, addons: addonsArr, name, phone, email
           });
           
           bookedSeats = await fetchBookedSeats(currentTripId);
           
           const summaryData = buildSummaryText({
-            trip: currentTripObj, stop: currentStop, seats: seatsArr, basePrice, name, phone, addonsTotal
+            trip: currentTripObj, stop: currentStop, seats: seatsArr, basePrice: realPrice, name, phone, addonsTotal
           });
           
           const fullMsg = summaryData.msg;
           const addonsText = summaryData.selectedAddonLabels.join(", ");
           
-          // ODESLAT EMAIL AUTOMATICKY (Owner + Customer)
           sendEmailNotification(fullMsg, email, name, formatTripLabel(currentTripObj), addonsText, summaryData.finalTotal);
 
           selectedSeats.clear();

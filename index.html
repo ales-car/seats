@@ -99,104 +99,52 @@
     .driver-mini { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .driver-mini img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); }
 
-    /* === CAR GALLERY THUMBNAILS === */
+    /* CAR GALLERY THUMBNAILS */
     .car-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 30px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px;
     }
     .gallery-thumb {
-      width: 100%;
-      aspect-ratio: 16/9;
-      object-fit: cover;
-      cursor: pointer;
+      width: 100%; aspect-ratio: 16/9; object-fit: cover; cursor: pointer;
       transition: transform 0.2s, filter 0.2s;
-      
-      /* UPRAVENO: Bílý rámeček a zaoblení */
-      border: 2px solid #ffffff; 
-      border-radius: 12px; 
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      border: 2px solid #ffffff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
     .gallery-thumb:hover {
-      transform: scale(1.05);
-      filter: brightness(1.2);
-      z-index: 1;
-      border-color: var(--primary); /* Při najetí se rámeček změní na červenou (volitelné) */
+      transform: scale(1.05); filter: brightness(1.2); z-index: 1; border-color: var(--primary);
     }
 
-    /* === LIGHTBOX (GALERIE OVERLAY) === */
+    /* LIGHTBOX */
     .lightbox {
-      display: none; /* Skryto defaultně */
-      position: fixed;
-      inset: 0; /* Roztáhne se přes celou obrazovku */
-      background: rgba(0, 0, 0, 0.8); /* Průhledné pozadí (80% černá) */
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(5px);
-      animation: fadeIn 0.3s ease;
+      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
+      z-index: 9999; justify-content: center; align-items: center;
+      backdrop-filter: blur(5px); animation: fadeIn 0.3s ease;
     }
-
     .lightbox-content-wrapper {
-      position: relative;
-      width: 75%; /* Požadavek: 60% stránky */
-      max-width: 1000px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      position: relative; width: 60%; max-width: 1000px;
+      display: flex; justify-content: center; align-items: center;
     }
-
     .lightbox img {
-      width: 100%;
-      height: auto;
-      max-height: 85vh;
-      object-fit: contain;
-      border-radius: 12px;
-      border: 2px solid rgba(255,255,255,0.2);
+      width: 100%; height: auto; max-height: 85vh; object-fit: contain;
+      border-radius: 12px; border: 2px solid rgba(255,255,255,0.2);
       box-shadow: 0 0 50px rgba(0,0,0,0.9);
     }
-
-    /* ŠIPKY PRO MYŠ */
     .nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-      z-index: 10001;
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5); color: white; border: none;
+      width: 50px; height: 50px; border-radius: 50%; font-size: 24px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; z-index: 10001;
     }
     .nav-btn:hover { background: var(--primary); }
-    .nav-prev { left: -70px; } /* Posunuto vlevo od fotky */
-    .nav-next { right: -70px; } /* Posunuto vpravo od fotky */
-
-    /* Close hint */
+    .nav-prev { left: -70px; } 
+    .nav-next { right: -70px; } 
     .lightbox-close-hint {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      color: rgba(255,255,255,0.7);
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      cursor: pointer;
-      background: rgba(0,0,0,0.5);
-      padding: 8px 12px;
-      border-radius: 8px;
+      position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.7);
+      font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em;
+      cursor: pointer; background: rgba(0,0,0,0.5); padding: 8px 12px; border-radius: 8px;
     }
     .lightbox-close-hint:hover { color: #fff; background: var(--primary); }
 
-    /* CAR VISUAL & SEATS */
+    /* CAR VISUAL (RIGHT) */
     .car-visual {
       position: relative; margin: 10px auto; border-radius: 24px; overflow: hidden;
       border: 1px solid rgba(255,255,255,0.05);
@@ -205,6 +153,7 @@
     }
     .car-visual img { width: 100%; display: block; opacity: 0.9; }
 
+    /* FLOATING STATS */
     .stats-float {
       position: absolute; top: 15px; left: 15px;
       background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(8px);
@@ -214,6 +163,7 @@
     .stat-num { font-size: 16px; font-weight: 700; color: #fff; }
     .stat-num.free { color: #34d399; } 
 
+    /* SEATS */
     .seat-grid {
       position: absolute; top: 43%; left: 30%; right: 35%; bottom: 25%;
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
@@ -277,8 +227,7 @@
     .legal-links a { color: #64748b; text-decoration: underline; margin: 0 8px; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Pro mobily skryjeme boční šipky lightboxu a necháme jen swipe nebo tap */
+    
     @media (max-width: 600px) {
         .nav-btn { display: none; }
         .lightbox-content-wrapper { width: 95%; }
@@ -312,7 +261,7 @@
           <img src="02.png" class="gallery-thumb" alt="Arteon Rear">
           <img src="03.png" class="gallery-thumb" alt="Interior">
           <img src="04.png" class="gallery-thumb" alt="Trunk">
-          <img src="05.jpg" class="gallery-thumb" alt="Cockpit">
+          <img src="05.png" class="gallery-thumb" alt="Cockpit">
           <img src="06.png" class="gallery-thumb" alt="Side">
         </div>
 
@@ -451,7 +400,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // 2) CONTACT INFO (Načítají se z DB, toto jsou záložní hodnoty)
+    // 2) CONTACT INFO (from DB)
     let config = {
         whatsapp: "+41767775898",
         messenger: "https://www.facebook.com/messages/t/ales.krajina",
@@ -479,22 +428,18 @@
     function formatTripLabel(t) { return `${t.date} – ${t.from} → ${t.to}`; }
 
     // --- LOGIC ---
-
-    // 3) NOVÁ FUNKCE: NAČTENÍ KONTAKTŮ Z DB
     async function fetchContactSettings() {
         try {
             const docRef = doc(db, "settings", "public_contact");
             const docSnap = await getDoc(docRef);
-            
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 if(data.whatsapp) config.whatsapp = data.whatsapp;
                 if(data.messenger) config.messenger = data.messenger;
                 if(data.email) config.email = data.email;
-                console.log("Kontakty načteny z DB:", config);
             }
         } catch (e) {
-            console.warn("Nepodařilo se načíst kontakty z DB, používám výchozí.", e);
+            console.warn("DB config load failed, using defaults.");
         }
     }
 
@@ -595,12 +540,15 @@
     }
 
     function buildSummaryText({ trip, stop, seats, basePrice, name, phone }) {
-      const total = seats.length * basePrice;
+      // HANDLE BOTH ARRAY AND SET
+      let seatsArr = Array.isArray(seats) ? seats : Array.from(seats);
+      const total = seatsArr.length * basePrice;
       const stopLocative = STOP_NAMES_LOCATIVE[stop] || stop;
-      const seatsStr = Array.from(seats).join(", ");
+      const seatsStr = seatsArr.join(", ");
+      
       let msg = `Ahoj Aleši,\n\nrád bych si objednal cestu ${trip.date} – ${trip.from} → ${trip.to}.\n`;
       msg += `Nástup v ${stopLocative}, sedadla: ${seatsStr}.\n`;
-      msg += `Cena: ${seats.length} × ${basePrice} CHF = ${total} CHF.\n`;
+      msg += `Cena: ${seatsArr.length} × ${basePrice} CHF = ${total} CHF.\n`;
       if(name) msg += `\nJméno: ${name}`;
       if(phone) msg += `\nTel: ${phone}`;
       msg += `\n\nProsím potvrď, že to platí. Děkuji.`;
@@ -612,16 +560,11 @@
       const box = document.getElementById("successBox");
       const btn = document.getElementById("confirmBtn");
       btn.style.display = "none";
-      
       const waBtn = document.getElementById("waBtn");
       const emBtn = document.getElementById("emBtn");
-      
-      // ZDE SE POUŽÍVAJÍ DATA Z DB (config)
       const waPhone = config.whatsapp.replace(/\D/g, ""); 
       waBtn.href = `https://wa.me/${waPhone}?text=${encodeURIComponent(summaryText)}`;
-      
       emBtn.href = `mailto:${config.email}?subject=Rezervace Arteon&body=${encodeURIComponent(summaryText)}`;
-      
       box.style.display = "block";
       box.scrollIntoView({ behavior: 'smooth' });
     }
@@ -662,8 +605,6 @@
 
     // --- INIT ---
     document.addEventListener("DOMContentLoaded", async () => {
-      
-      // 1. Spustíme načítání kontaktů na pozadí
       fetchContactSettings();
 
       // Setup Lightbox
@@ -729,7 +670,6 @@
         });
       });
 
-      // MESSENGER CLICK (použije config z DB)
       document.getElementById("msBtn").addEventListener("click", (e) => {
         e.preventDefault(); 
         navigator.clipboard.writeText(currentSummaryText).then(() => {
@@ -745,16 +685,22 @@
         const name = document.getElementById("custName").value.trim();
         const phone = document.getElementById("custPhone").value.trim();
         const basePrice = STOP_PRICES[currentStop];
-        const seatsArr = [...selectedSeats];
+        
+        // CORRECTION HERE: Convert Set to Array
+        const seatsArr = [...selectedSeats]; 
+
         setMessage("Ukládám...");
         try {
           await createBookings({
             tripId: currentTripId, stopCity: currentStop, price: basePrice, seats: seatsArr, name, phone
           });
           bookedSeats = await fetchBookedSeats(currentTripId);
+          
+          // Pass the ARRAY here, not the Set
           const summary = buildSummaryText({
-            trip: currentTripObj, stop: currentStop, seats: selectedSeats, basePrice, name, phone
+            trip: currentTripObj, stop: currentStop, seats: seatsArr, basePrice, name, phone
           });
+          
           selectedSeats.clear();
           updateSeatVisuals();
           updateStatusAndPrice();

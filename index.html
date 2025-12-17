@@ -8,9 +8,9 @@
 
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script type="text/javascript">
-     // ZDE VLOŽTE SVŮJ PUBLIC KEY Z EMAILJS
+     // VÁŠ PUBLIC KEY
      (function(){
-        emailjs.init("YOUR_PUBLIC_KEY"); 
+        emailjs.init("su3dGUSnWheulaTcr"); 
      })();
   </script>
 
@@ -70,145 +70,90 @@
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     }
 
-    /* INFO BOX STYLES (UPDATED) */
+    /* INFO BOX & SOCIALS */
     .info-box { margin-bottom: 25px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
     
-    .driver-mini { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+    .driver-mini { 
+        display: flex; align-items: center; gap: 12px; margin-bottom: 15px; 
+        position: relative; /* Pro pozicování */
+    }
     .driver-mini img { 
         width: 50px; height: 50px; border-radius: 50%; object-fit: cover; 
         border: 2px solid rgba(255,255,255,0.1); 
     }
-    
+    .driver-text { display: flex; flex-direction: column; }
+
+    /* SOCIAL ICONS (TOP RIGHT) */
+    .driver-socials {
+        margin-left: auto; /* Odstrčí se doprava */
+        display: flex; gap: 10px;
+    }
+    .social-mini-link {
+        color: var(--text-muted);
+        transition: 0.2s;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,0.05);
+        width: 32px; height: 32px; border-radius: 50%;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .social-mini-link:hover {
+        color: #fff; background: var(--primary); border-color: var(--primary); transform: translateY(-2px);
+    }
+    .social-mini-icon { width: 18px; height: 18px; fill: currentColor; }
+
+    /* BIO & CAR INFO */
     .bio-text p { margin-bottom: 10px; text-align: justify; font-size: 13px; opacity: 0.9; }
     .bio-text p:last-child { margin-bottom: 0; }
-
-    /* SEPARATOR */
-    .section-divider {
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-        margin: 20px 0;
-    }
-
-    .car-features {
-        display: flex; gap: 20px; margin-top: 15px; justify-content: center;
-    }
-    .feature-item {
-        display: flex; flex-direction: column; align-items: center; gap: 5px;
-        font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);
-    }
-    .feature-icon {
-        width: 24px; height: 24px; fill: var(--primary); opacity: 0.9;
-    }
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); margin: 20px 0; }
+    .car-features { display: flex; gap: 20px; margin-top: 15px; justify-content: center; }
+    .feature-item { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+    .feature-icon { width: 24px; height: 24px; fill: var(--primary); opacity: 0.9; }
 
     /* STEPS VISUALS */
     .step-container { margin-bottom: 25px; animation: fadeIn 0.4s ease; }
     .step-container.hidden { display: none; }
-    .step-header {
-      font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.08em;
-      margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
-    }
-    .step-num {
-      background: rgba(255,255,255,0.9); color: #0f172a;
-      width: 20px; height: 20px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;
-    }
+    .step-header { font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .step-num { background: rgba(255,255,255,0.9); color: #0f172a; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
 
     /* FORMS & ADDONS */
-    select, input {
-      width: 100%; border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.2);
-      padding: 12px; background: rgba(15, 23, 42, 0.6); color: #fff; font-size: 14px; outline: none;
-      transition: border-color 0.2s;
-    }
+    select, input { width: 100%; border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.2); padding: 12px; background: rgba(15, 23, 42, 0.6); color: #fff; font-size: 14px; outline: none; transition: border-color 0.2s; }
     select:focus, input:focus { border-color: var(--primary); }
     option:disabled { color: #9ca3af; background-color: #1e293b; }
-
     .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
-    
-    .radio-item, .addon-item {
-      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-      background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer;
-      border: 1px solid transparent; transition: 0.2s;
-    }
+    .radio-item, .addon-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
     .radio-item:hover, .addon-item:hover { background: rgba(255,255,255,0.06); }
     .radio-item.active, .addon-item.active { border-color: var(--primary); background: rgba(190, 18, 60, 0.1); }
     .radio-item input, .addon-item input { width: auto; margin: 0; accent-color: var(--primary); }
-    
     .addon-label { flex: 1; font-size: 13px; color: #e2e8f0; }
     .addon-price { font-size: 12px; font-weight: 700; color: #fbbf24; }
-    .addon-category { 
-        font-size: 11px; text-transform: uppercase; color: var(--text-muted); 
-        margin: 10px 0 4px 0; letter-spacing: 0.05em; font-weight: 700;
-    }
+    .addon-category { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin: 10px 0 4px 0; letter-spacing: 0.05em; font-weight: 700; }
 
     /* CAR GALLERY */
-    .car-gallery-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px;
-    }
-    .gallery-thumb {
-      width: 100%; aspect-ratio: 16/9; object-fit: cover; cursor: pointer;
-      transition: transform 0.2s, filter 0.2s;
-      border: 2px solid #ffffff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
+    .car-gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+    .gallery-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; cursor: pointer; transition: transform 0.2s, filter 0.2s; border: 2px solid #ffffff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
     .gallery-thumb:hover { transform: scale(1.05); filter: brightness(1.2); z-index: 1; border-color: var(--primary); }
 
     /* LIGHTBOX */
-    .lightbox {
-      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
-      z-index: 9999; justify-content: center; align-items: center;
-      backdrop-filter: blur(5px); animation: fadeIn 0.3s ease;
-    }
-    .lightbox-content-wrapper {
-      position: relative; width: 60%; max-width: 1000px;
-      display: flex; justify-content: center; align-items: center;
-    }
-    .lightbox img {
-      width: 100%; height: auto; max-height: 85vh; object-fit: contain;
-      border-radius: 12px; border: 2px solid rgba(255,255,255,0.2);
-      box-shadow: 0 0 50px rgba(0,0,0,0.9);
-    }
-    .nav-btn {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.5); color: white; border: none;
-      width: 50px; height: 50px; border-radius: 50%; font-size: 24px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s; z-index: 10001;
-    }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); animation: fadeIn 0.3s ease; }
+    .lightbox-content-wrapper { position: relative; width: 60%; max-width: 1000px; display: flex; justify-content: center; align-items: center; }
+    .lightbox img { width: 100%; height: auto; max-height: 85vh; object-fit: contain; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+    .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 10001; }
     .nav-btn:hover { background: var(--primary); }
     .nav-prev { left: -70px; } .nav-next { right: -70px; } 
-    .lightbox-close-hint {
-      position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.7);
-      font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em;
-      cursor: pointer; background: rgba(0,0,0,0.5); padding: 8px 12px; border-radius: 8px;
-    }
+    .lightbox-close-hint { position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.7); font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; background: rgba(0,0,0,0.5); padding: 8px 12px; border-radius: 8px; }
     .lightbox-close-hint:hover { color: #fff; background: var(--primary); }
 
     /* CAR VISUAL & STATS */
-    .car-visual {
-      position: relative; margin: 10px auto; border-radius: 24px; overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.05); background: radial-gradient(circle, #1e293b 0%, #020617 60%);
-      max-width: 340px;
-    }
+    .car-visual { position: relative; margin: 10px auto; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: radial-gradient(circle, #1e293b 0%, #020617 60%); max-width: 340px; }
     .car-visual img { width: 100%; display: block; opacity: 0.9; }
-
-    .stats-float {
-      position: absolute; top: 15px; left: 15px;
-      background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(8px);
-      padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
-    }
+    .stats-float { position: absolute; top: 15px; left: 15px; background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(8px); padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
     .stat-row { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; }
     .stat-num { font-size: 16px; font-weight: 700; color: #fff; }
     .stat-num.free { color: #34d399; } 
 
     /* SEATS */
-    .seat-grid {
-      position: absolute; top: 43%; left: 30%; right: 35%; bottom: 25%;
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
-    }
-    .seat {
-      position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: var(--seat-bg); border-radius: 8px; border: 1px solid var(--seat-border);
-      color: rgba(255,255,255,0.8); cursor: pointer; transition: 0.2s all; padding: 4px;
-    }
+    .seat-grid { position: absolute; top: 43%; left: 30%; right: 35%; bottom: 25%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .seat { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--seat-bg); border-radius: 8px; border: 1px solid var(--seat-border); color: rgba(255,255,255,0.8); cursor: pointer; transition: 0.2s all; padding: 4px; }
     .seat.disabled { opacity: 0.3; cursor: not-allowed; }
     .seat:not(.booked):not(.selected):not(.disabled):not(.driver-seat) { background: var(--free-bg); border-color: var(--free-border); }
     .seat:not(.booked):not(.selected):not(.disabled):not(.driver-seat):hover { background: rgba(16, 185, 129, 0.4); }
@@ -227,29 +172,15 @@
 
     /* CONFIRM & SUCCESS */
     .btn-block { margin-top: 20px; }
-    .btn-main {
-      width: 100%; padding: 14px; border-radius: 12px; border: none;
-      background: var(--primary); color: #fff; font-size: 15px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer;
-      transition: 0.2s; box-shadow: 0 4px 15px rgba(190, 18, 60, 0.3);
-    }
+    .btn-main { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--primary); color: #fff; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(190, 18, 60, 0.3); }
     .btn-main:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
     .btn-main:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; }
     .price-display { text-align: center; font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 10px; min-height: 24px; }
 
-    .success-box {
-      margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.03);
-      border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);
-      display: none; animation: fadeIn 0.5s;
-    }
+    .success-box { margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); display: none; animation: fadeIn 0.5s; }
     .success-title { text-align: center; color: #fff; font-weight: 600; margin-bottom: 15px; }
     .social-btns { display: flex; flex-direction: column; gap: 10px; }
-    .social-btn {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      padding: 12px; border-radius: 10px; text-decoration: none; color: #fff;
-      font-weight: 600; font-size: 14px; transition: 0.2s;
-      border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
-    }
+    .social-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; border-radius: 10px; text-decoration: none; color: #fff; font-weight: 600; font-size: 14px; transition: 0.2s; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
     .social-btn:hover { filter: brightness(1.1); }
     .social-btn.wa { background: #15803d; border-color: #166534; }
     .social-btn.ms { background: #0369a1; border-color: #075985; }
@@ -259,22 +190,12 @@
 
     .message { text-align: center; margin-top: 10px; font-size: 13px; min-height: 20px; }
     .message.error { color: #f87171; }
-    
-    /* FOOTER & LEGAL */
     .legal-links { margin-top: 20px; text-align: center; font-size: 11px; color: #64748b; }
     .legal-links a { color: #64748b; text-decoration: underline; margin: 0 8px; }
-    
-    .footer-disclaimer {
-        margin-top: 15px; text-align: center; font-size: 10px; color: #475569;
-        max-width: 80%; margin-left: auto; margin-right: auto; line-height: 1.4;
-    }
+    .footer-disclaimer { margin-top: 15px; text-align: center; font-size: 10px; color: #475569; max-width: 80%; margin-left: auto; margin-right: auto; line-height: 1.4; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    
-    @media (max-width: 600px) {
-        .nav-btn { display: none; }
-        .lightbox-content-wrapper { width: 95%; }
-    }
+    @media (max-width: 600px) { .nav-btn { display: none; } .lightbox-content-wrapper { width: 95%; } }
   </style>
 </head>
 
@@ -291,9 +212,18 @@
         <div class="info-box">
           <div class="driver-mini">
             <img src="driver-photo.jpg" alt="Aleš">
-            <div>
+            <div class="driver-text">
               <strong>Aleš Krajina</strong><br>
               <span style="color:var(--primary)">Pohodová jízda</span>
+            </div>
+            
+            <div class="driver-socials">
+                <a id="lnkInsta" href="#" target="_blank" class="social-mini-link" style="display:none" title="Instagram">
+                    <svg class="social-mini-icon" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+                </a>
+                <a id="lnkFb" href="#" target="_blank" class="social-mini-link" style="display:none" title="Facebook">
+                    <svg class="social-mini-icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5 3.66 9.15 8.44 9.9v-7H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33v7a10 10 0 0 0 8.44-9.9c0-5.53-4.5-10.02-10-10.02z"/></svg>
+                </a>
             </div>
           </div>
           
@@ -335,7 +265,7 @@
           <img src="02.png" class="gallery-thumb" alt="Arteon Rear">
           <img src="03.png" class="gallery-thumb" alt="Interior">
           <img src="04.png" class="gallery-thumb" alt="Trunk">
-          <img src="05.jpg" class="gallery-thumb" alt="Cockpit">
+          <img src="05.png" class="gallery-thumb" alt="Cockpit">
           <img src="06.png" class="gallery-thumb" alt="Side">
         </div>
 
@@ -489,7 +419,9 @@
     let config = {
         whatsapp: "+41767775898",
         messenger: "https://www.facebook.com/messages/t/ales.krajina",
-        email: "ales.krajina@outlook.com"
+        email: "ales.krajina@outlook.com",
+        instagram: "https://www.instagram.com/ak.in.motion_/",
+        facebook_profile: "" 
     };
 
     const SEAT_IDS = ["VIP", "MB", "DJ"]; 
@@ -541,6 +473,19 @@
                 if(data.whatsapp) config.whatsapp = data.whatsapp;
                 if(data.messenger) config.messenger = data.messenger;
                 if(data.email) config.email = data.email;
+                if(data.instagram) config.instagram = data.instagram;
+                if(data.facebook_profile) config.facebook_profile = data.facebook_profile;
+                
+                // Update Social Icons UI
+                const instaBtn = document.getElementById("lnkInsta");
+                const fbBtn = document.getElementById("lnkFb");
+                
+                if(config.instagram) { instaBtn.href = config.instagram; instaBtn.style.display = "flex"; }
+                if(config.facebook_profile) { fbBtn.href = config.facebook_profile; fbBtn.style.display = "flex"; }
+            } else {
+                // If doc doesn't exist yet, show default insta if we have it hardcoded
+                const instaBtn = document.getElementById("lnkInsta");
+                if(config.instagram) { instaBtn.href = config.instagram; instaBtn.style.display = "flex"; }
             }
         } catch (e) {
             console.warn("DB config load failed, using defaults.");
@@ -551,7 +496,6 @@
       const q = await getDocs(collection(db, "trips"));
       const list = [];
       
-      // AUTO-HIDE OLD TRIPS LOGIC
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
 
@@ -559,7 +503,6 @@
         const t = d.data();
         const tripDate = new Date(t.trip_date);
         
-        // Zobrazit jen pokud je datum >= včera
         if (tripDate >= yesterday) {
             list.push({ id: d.id, date: t.trip_date, from: t.from_city||"?", to: t.to_city||"?" });
         }
@@ -577,26 +520,35 @@
     }
 
     // EMAIL AUTOMATION FUNCTION
-    function sendEmailNotification(summary, customerEmail) {
-        // Odeslat vlastníkovi
+    function sendEmailNotification(summary, customerEmail, customerName, tripInfo, addonsText, totalPrice) {
+        
+        // 1. EMAIL PRO MAJITELE (ALEŠE) - Použije plný text zprávy
         const templateParamsOwner = {
             to_email: config.email,
-            subject: `Nová rezervace: ${currentTripObj.date}`,
+            subject: `Nová rezervace: ${currentTripObj.date} (${customerName || 'Neznámý'})`,
             message: summary
         };
-        // Tady volej EmailJS
-        emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParamsOwner)
+        emailjs.send("service_ilwube6", "template_v454mth", templateParamsOwner)
             .then(() => console.log("Email owner sent"))
             .catch(e => console.error("Email owner failed", e));
 
-        // Odeslat zákazníkovi (pokud vyplnil email)
+        // 2. EMAIL PRO ZÁKAZNÍKA (POKUD VYPLNIL EMAIL) - Použije hezčí text
         if (customerEmail && customerEmail.includes("@")) {
+            
+            const customerMsg = `Ahoj ${customerName || "cestovateli"},\n\n` +
+                                `potvrzuji přijetí tvé rezervace na cestu ${tripInfo}.\n\n` +
+                                `Detaily:\n` +
+                                `Cena celkem: ${totalPrice} CHF\n` +
+                                `${addonsText ? 'Služby navíc: ' + addonsText + '\n' : ''}` +
+                                `\nBrzy se ti ozvu s přesným časem a místem setkání.\n\n` +
+                                `Těším se na cestu,\nAleš`;
+
             const templateParamsCust = {
                 to_email: customerEmail,
                 subject: "Potvrzení rezervace - Arteon Ride",
-                message: summary
+                message: customerMsg
             };
-            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParamsCust)
+            emailjs.send("service_ilwube6", "template_v454mth", templateParamsCust)
                 .then(() => console.log("Email customer sent"))
                 .catch(e => console.error("Email customer failed", e));
         }
@@ -609,7 +561,7 @@
           seat_code: seat,
           stop_city: stopCity,
           price_chf: price,
-          addons: addons, // Uložit pole vybraných služeb
+          addons: addons, 
           customer_name: name || null,
           customer_phone: phone || null,
           customer_email: email || null,
@@ -650,7 +602,6 @@
                updateStatusAndPrice();
             });
 
-            // Init checked state
             if(item.checked && !item.disabled) selectedAddons.add(item.id);
 
             const spanText = document.createElement("span");
@@ -677,9 +628,7 @@
       const step3 = document.getElementById("step3");
       const step5 = document.getElementById("step5");
       
-      // Krok 1 Check
       if (currentTripId) {
-        // Pokud je plno, blokovat
         const isFull = bookedSeats.size >= 3;
         if (isFull) {
             step2.classList.add("hidden"); step3.classList.add("hidden"); step5.classList.add("hidden");
@@ -698,7 +647,7 @@
       
       if (currentStop) {
           step3.classList.remove("hidden");
-          step5.classList.remove("hidden"); // Zobrazit Addons
+          step5.classList.remove("hidden"); 
       } else {
           step3.classList.add("hidden");
           step5.classList.add("hidden");
@@ -744,7 +693,6 @@
       const baseSeatPrice = STOP_PRICES[currentStop] || 0;
       const seatCount = selectedSeats.size;
       
-      // Calc Addons
       let addonsTotal = 0;
       ADDONS.forEach(a => {
           if(selectedAddons.has(a.id)) addonsTotal += (a.price || 0);
@@ -772,7 +720,6 @@
       const stopLocative = STOP_NAMES_LOCATIVE[stop] || stop;
       const seatsStr = seatsArr.join(", ");
       
-      // Seznam vybraných služeb (jen ty co něco stojí nebo jsou důležité)
       let selectedAddonLabels = [];
       ADDONS.forEach(a => {
           if(selectedAddons.has(a.id) && !a.disabled) selectedAddonLabels.push(a.label);
@@ -790,7 +737,8 @@
       if(name) msg += `\nJméno: ${name}`;
       if(phone) msg += `\nTel: ${phone}`;
       msg += `\n\nProsím potvrď, že to platí. Děkuji.`;
-      return msg;
+      
+      return { msg, selectedAddonLabels, finalTotal };
     }
 
     function showSuccess(summaryText) {
@@ -858,7 +806,7 @@
     // --- INIT ---
     document.addEventListener("DOMContentLoaded", async () => {
       fetchContactSettings();
-      renderAddons(); // Vyrenderovat checkboxy
+      renderAddons(); 
 
       // Setup Lightbox
       const thumbs = document.querySelectorAll('.gallery-thumb');
@@ -905,7 +853,7 @@
           setMessage("Ověřuji obsazenost...");
           bookedSeats = await fetchBookedSeats(currentTripId);
           setMessage("");
-          updateStepsVisibility(); // Re-check FULL status
+          updateStepsVisibility(); 
           updateSeatVisuals();
           updateStatusAndPrice();
         }
@@ -949,7 +897,6 @@
         const basePrice = STOP_PRICES[currentStop];
         const seatsArr = [...selectedSeats];
         
-        // Calc addons
         let addonsTotal = 0;
         let addonsArr = [];
         ADDONS.forEach(a => {
@@ -968,18 +915,21 @@
           
           bookedSeats = await fetchBookedSeats(currentTripId);
           
-          const summary = buildSummaryText({
+          const summaryData = buildSummaryText({
             trip: currentTripObj, stop: currentStop, seats: seatsArr, basePrice, name, phone, addonsTotal
           });
           
-          // ODESLAT EMAIL AUTOMATICKY
-          sendEmailNotification(summary, email);
+          const fullMsg = summaryData.msg;
+          const addonsText = summaryData.selectedAddonLabels.join(", ");
+          
+          // ODESLAT EMAIL AUTOMATICKY (Owner + Customer)
+          sendEmailNotification(fullMsg, email, name, formatTripLabel(currentTripObj), addonsText, summaryData.finalTotal);
 
           selectedSeats.clear();
           updateSeatVisuals();
           updateStatusAndPrice();
           setMessage("");
-          showSuccess(summary);
+          showSuccess(fullMsg);
         } catch(e) {
           console.error(e);
           setMessage("Chyba: Sedadlo už je možná obsazené.", "error");

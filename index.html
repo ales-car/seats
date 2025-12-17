@@ -6,6 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="driver-wheel-icon.png" />
 
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+     // ZDE VLOŽTE SVŮJ PUBLIC KEY Z EMAILJS (Account -> General -> Public Key)
+     (function(){
+        emailjs.init("su3dGUSnWheulaTcr"); 
+     })();
+  </script>
+
   <style>
     /* =========================================
        CSS (Dark Theme)
@@ -75,23 +83,33 @@
       display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;
     }
 
-    /* FORMS */
+    /* FORMS & ADDONS */
     select, input {
       width: 100%; border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.2);
       padding: 12px; background: rgba(15, 23, 42, 0.6); color: #fff; font-size: 14px; outline: none;
       transition: border-color 0.2s;
     }
     select:focus, input:focus { border-color: var(--primary); }
+    option:disabled { color: #9ca3af; background-color: #1e293b; }
 
-    .radio-group { display: flex; flex-direction: column; gap: 8px; }
-    .radio-item {
+    .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+    
+    .radio-item, .addon-item {
       display: flex; align-items: center; gap: 10px; padding: 10px 12px;
       background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer;
       border: 1px solid transparent; transition: 0.2s;
     }
-    .radio-item:hover { background: rgba(255,255,255,0.06); }
-    .radio-item.active { border-color: var(--primary); background: rgba(190, 18, 60, 0.1); }
-    .radio-item input { width: auto; margin: 0; accent-color: var(--primary); }
+    .radio-item:hover, .addon-item:hover { background: rgba(255,255,255,0.06); }
+    .radio-item.active, .addon-item.active { border-color: var(--primary); background: rgba(190, 18, 60, 0.1); }
+    
+    .radio-item input, .addon-item input { width: auto; margin: 0; accent-color: var(--primary); }
+    
+    .addon-label { flex: 1; font-size: 13px; color: #e2e8f0; }
+    .addon-price { font-size: 12px; font-weight: 700; color: #fbbf24; }
+    .addon-category { 
+        font-size: 11px; text-transform: uppercase; color: var(--text-muted); 
+        margin: 10px 0 4px 0; letter-spacing: 0.05em; font-weight: 700;
+    }
 
     /* INFO & GALLERY */
     .info-box { margin-bottom: 20px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
@@ -99,7 +117,6 @@
     .driver-mini { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .driver-mini img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); }
 
-    /* CAR GALLERY THUMBNAILS */
     .car-gallery-grid {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px;
     }
@@ -108,9 +125,7 @@
       transition: transform 0.2s, filter 0.2s;
       border: 2px solid #ffffff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
-    .gallery-thumb:hover {
-      transform: scale(1.05); filter: brightness(1.2); z-index: 1; border-color: var(--primary);
-    }
+    .gallery-thumb:hover { transform: scale(1.05); filter: brightness(1.2); z-index: 1; border-color: var(--primary); }
 
     /* LIGHTBOX */
     .lightbox {
@@ -135,8 +150,7 @@
       transition: background 0.2s; z-index: 10001;
     }
     .nav-btn:hover { background: var(--primary); }
-    .nav-prev { left: -70px; } 
-    .nav-next { right: -70px; } 
+    .nav-prev { left: -70px; } .nav-next { right: -70px; } 
     .lightbox-close-hint {
       position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.7);
       font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em;
@@ -144,16 +158,14 @@
     }
     .lightbox-close-hint:hover { color: #fff; background: var(--primary); }
 
-    /* CAR VISUAL (RIGHT) */
+    /* CAR VISUAL & STATS */
     .car-visual {
       position: relative; margin: 10px auto; border-radius: 24px; overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.05);
-      background: radial-gradient(circle, #1e293b 0%, #020617 60%);
+      border: 1px solid rgba(255,255,255,0.05); background: radial-gradient(circle, #1e293b 0%, #020617 60%);
       max-width: 340px;
     }
     .car-visual img { width: 100%; display: block; opacity: 0.9; }
 
-    /* FLOATING STATS */
     .stats-float {
       position: absolute; top: 15px; left: 15px;
       background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(8px);
@@ -291,13 +303,14 @@
         </div>
 
         <div class="step-container hidden" id="step3">
-          <div class="step-header"><div class="step-num">3</div> O MĚ (NEPOVINNÉ)</div>
+          <div class="step-header"><div class="step-num">3</div> O MĚ</div>
           <div style="display:flex; flex-direction:column; gap:10px;">
-            <input type="text" id="custName" placeholder="Tvé jméno (Např. Jakub)" />
-            <input type="tel" id="custPhone" placeholder="Telefon (+420...)" />
+            <input type="text" id="custName" placeholder="Tvé jméno (Doporučeno)" />
+            <input type="tel" id="custPhone" placeholder="Telefon (Doporučeno)" />
+            <input type="email" id="custEmail" placeholder="Tvůj Email (Pro potvrzení)" />
           </div>
           <div style="margin-top:10px; font-size:11px; color:#64748b;">
-            Zrychlí to komunikaci.
+            Pokud vyplníš email, přijde ti automatické potvrzení.
           </div>
         </div>
 
@@ -341,6 +354,12 @@
           <div><span class="dot booked"></span>Obsazeno</div>
         </div>
 
+        <div class="step-container hidden" id="step5" style="margin-top:20px;">
+            <div class="step-header"><div class="step-num">5</div> DODATKOVÉ SLUŽBY</div>
+            <div class="checkbox-group" id="addonsList">
+                </div>
+        </div>
+
         <div class="btn-block">
           <div class="price-display" id="priceDisplay"></div>
           <button id="confirmBtn" class="btn-main" disabled>Potvrdit výběr</button>
@@ -373,7 +392,6 @@
     
     <div id="lightbox" class="lightbox">
         <div class="lightbox-close-hint" id="closeLightboxBtn">Zavřít (Esc)</div>
-        
         <div class="lightbox-content-wrapper">
           <button class="nav-btn nav-prev" id="prevBtn">❮</button>
           <img id="lightboxImg" src="" alt="Full view">
@@ -411,11 +429,30 @@
     const STOP_PRICES = { praha: 50, brno: 70, ostrava: 80 };
     const STOP_NAMES_LOCATIVE = { praha: "Praze", brno: "Brně", ostrava: "Ostravě" };
 
+    // DEFINICE DODATKOVÝCH SLUŽEB
+    const ADDONS = [
+        { category: "Výzvednutí & Flexibilita" },
+        { id: "pickup", label: "Výzvednutí v rámci města Zürich (dle domluvy)", price: 0 },
+        { id: "detour30", label: "Zajížďka do cca 30 min (+10 CHF)", price: 10 },
+        { id: "detour60", label: "Zajížďka do cca 60 min (+20 CHF)", price: 20 },
+        
+        { category: "Občerstvení & Komfort" },
+        { id: "water", label: "Voda zdarma, nealko k dispozici", price: 0, checked: true, disabled: true },
+        { id: "prosecco", label: "Courtesy prosecco / champagne na vyžádání", price: 0 },
+        
+        { category: "Technologie" },
+        { id: "tech", label: "Wi-Fi hotspot, nabíječky, tablet", price: 0, checked: true, disabled: true },
+        
+        { category: "Praktičnost" },
+        { id: "extra", label: "Extra zavazadla, pets, dětská sedačka (po domluvě)", price: 0 }
+    ];
+
     let trips = [];
     let currentTripId = "";
     let currentTripObj = null;
     let currentStop = "";
     let selectedSeats = new Set();
+    let selectedAddons = new Set();
     let bookedSeats = new Set(); 
     let currentSummaryText = ""; 
 
@@ -446,9 +483,19 @@
     async function fetchTrips() {
       const q = await getDocs(collection(db, "trips"));
       const list = [];
+      
+      // AUTO-HIDE OLD TRIPS LOGIC
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
       q.forEach(d => {
         const t = d.data();
-        list.push({ id: d.id, date: t.trip_date, from: t.from_city||"?", to: t.to_city||"?" });
+        const tripDate = new Date(t.trip_date);
+        
+        // Zobrazit jen pokud je datum >= včera
+        if (tripDate >= yesterday) {
+            list.push({ id: d.id, date: t.trip_date, from: t.from_city||"?", to: t.to_city||"?" });
+        }
       });
       list.sort((a,b) => new Date(a.date) - new Date(b.date));
       return list;
@@ -462,35 +509,133 @@
       return s;
     }
 
-    async function createBookings({ tripId, stopCity, price, seats, name, phone }) {
+    // EMAIL AUTOMATION FUNCTION
+    function sendEmailNotification(summary, customerEmail) {
+        // Odeslat vlastníkovi
+        const templateParamsOwner = {
+            to_email: config.email,
+            subject: `Nová rezervace: ${currentTripObj.date}`,
+            message: summary
+        };
+        // Tady volej EmailJS
+        emailjs.send("service_ilwube6", "template_v454mth", templateParamsOwner)
+            .then(() => console.log("Email owner sent"))
+            .catch(e => console.error("Email owner failed", e));
+
+        // Odeslat zákazníkovi (pokud vyplnil email)
+        if (customerEmail && customerEmail.includes("@")) {
+            const templateParamsCust = {
+                to_email: customerEmail,
+                subject: "Potvrzení rezervace - Arteon Ride",
+                message: summary
+            };
+            emailjs.send("Yservice_ilwube6", "template_v454mth", templateParamsCust)
+                .then(() => console.log("Email customer sent"))
+                .catch(e => console.error("Email customer failed", e));
+        }
+    }
+
+    async function createBookings({ tripId, stopCity, price, seats, addons, name, phone, email }) {
       const promises = seats.map(seat => {
         return addDoc(collection(db, "bookings"), {
           trip_id: tripId,
           seat_code: seat,
           stop_city: stopCity,
           price_chf: price,
+          addons: addons, // Uložit pole vybraných služeb
           customer_name: name || null,
           customer_phone: phone || null,
+          customer_email: email || null,
           created_at: new Date().toISOString()
         });
       });
       await Promise.all(promises);
     }
 
+    function renderAddons() {
+        const container = document.getElementById("addonsList");
+        container.innerHTML = "";
+        
+        ADDONS.forEach(item => {
+            if(item.category) {
+                const cat = document.createElement("div");
+                cat.className = "addon-category";
+                cat.textContent = item.category;
+                container.appendChild(cat);
+                return;
+            }
+            
+            const label = document.createElement("label");
+            label.className = "addon-item";
+            if(item.disabled) label.style.opacity = "0.7";
+            
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = item.id;
+            checkbox.dataset.price = item.price;
+            
+            if(item.checked) checkbox.checked = true;
+            if(item.disabled) checkbox.disabled = true;
+            
+            checkbox.addEventListener("change", () => {
+               if(checkbox.checked) selectedAddons.add(item.id);
+               else selectedAddons.delete(item.id);
+               updateStatusAndPrice();
+            });
+
+            // Init checked state
+            if(item.checked && !item.disabled) selectedAddons.add(item.id);
+
+            const spanText = document.createElement("span");
+            spanText.className = "addon-label";
+            spanText.textContent = item.label;
+            
+            label.appendChild(checkbox);
+            label.appendChild(spanText);
+            
+            if(item.price > 0) {
+                const spanPrice = document.createElement("span");
+                spanPrice.className = "addon-price";
+                spanPrice.textContent = `+${item.price} CHF`;
+                label.appendChild(spanPrice);
+            }
+            
+            container.appendChild(label);
+        });
+    }
+
     // WIZARD UI LOGIC
     function updateStepsVisibility() {
       const step2 = document.getElementById("step2");
       const step3 = document.getElementById("step3");
+      const step5 = document.getElementById("step5");
+      
+      // Krok 1 Check
       if (currentTripId) {
+        // Pokud je plno, blokovat
+        const isFull = bookedSeats.size >= 3;
+        if (isFull) {
+            step2.classList.add("hidden"); step3.classList.add("hidden"); step5.classList.add("hidden");
+            setMessage("Tato jízda je plně obsazena.", "error");
+            return;
+        }
         step2.classList.remove("hidden");
         const stopTitle = document.getElementById("stopHeaderTitle");
         if(currentTripObj.from === "Zurich") stopTitle.textContent = "KDE VYSTUPUJI?";
         else stopTitle.textContent = "KDE NASTUPUJI?";
+        setMessage("");
       } else {
-        step2.classList.add("hidden"); step3.classList.add("hidden"); return;
+        step2.classList.add("hidden"); step3.classList.add("hidden"); step5.classList.add("hidden");
+        return;
       }
-      if (currentStop) step3.classList.remove("hidden");
-      else step3.classList.add("hidden");
+      
+      if (currentStop) {
+          step3.classList.remove("hidden");
+          step5.classList.remove("hidden"); // Zobrazit Addons
+      } else {
+          step3.classList.add("hidden");
+          step5.classList.add("hidden");
+      }
     }
 
     function updateSeatVisuals() {
@@ -528,27 +673,53 @@
       if (!currentStop) {
         priceEl.textContent = "Vyber zastávku (Krok 2)"; confirmBtn.disabled = true; return;
       }
-      const basePrice = STOP_PRICES[currentStop] || 0;
+      
+      const baseSeatPrice = STOP_PRICES[currentStop] || 0;
       const seatCount = selectedSeats.size;
+      
+      // Calc Addons
+      let addonsTotal = 0;
+      ADDONS.forEach(a => {
+          if(selectedAddons.has(a.id)) addonsTotal += (a.price || 0);
+      });
+
       if (seatCount > 0) {
-        const total = seatCount * basePrice;
-        priceEl.textContent = `${seatCount} × ${basePrice} CHF = ${total} CHF`;
+        const seatsTotal = seatCount * baseSeatPrice;
+        const finalTotal = seatsTotal + addonsTotal;
+        
+        let txt = `${seatCount} × ${baseSeatPrice} CHF`;
+        if(addonsTotal > 0) txt += ` + ${addonsTotal} CHF služby`;
+        txt += ` = ${finalTotal} CHF`;
+        
+        priceEl.textContent = txt;
         confirmBtn.disabled = false;
       } else {
         priceEl.textContent = "Vyber sedadla (Krok 4)"; confirmBtn.disabled = true;
       }
     }
 
-    function buildSummaryText({ trip, stop, seats, basePrice, name, phone }) {
-      // HANDLE BOTH ARRAY AND SET
+    function buildSummaryText({ trip, stop, seats, basePrice, name, phone, addonsTotal }) {
       let seatsArr = Array.isArray(seats) ? seats : Array.from(seats);
-      const total = seatsArr.length * basePrice;
+      const seatsTotal = seatsArr.length * basePrice;
+      const finalTotal = seatsTotal + addonsTotal;
       const stopLocative = STOP_NAMES_LOCATIVE[stop] || stop;
       const seatsStr = seatsArr.join(", ");
       
+      // Seznam vybraných služeb (jen ty co něco stojí nebo jsou důležité)
+      let selectedAddonLabels = [];
+      ADDONS.forEach(a => {
+          if(selectedAddons.has(a.id) && !a.disabled) selectedAddonLabels.push(a.label);
+      });
+
       let msg = `Ahoj Aleši,\n\nrád bych si objednal cestu ${trip.date} – ${trip.from} → ${trip.to}.\n`;
       msg += `Nástup v ${stopLocative}, sedadla: ${seatsStr}.\n`;
-      msg += `Cena: ${seatsArr.length} × ${basePrice} CHF = ${total} CHF.\n`;
+      
+      if(selectedAddonLabels.length > 0) {
+          msg += `Extra služby: ${selectedAddonLabels.join(", ")}.\n`;
+      }
+      
+      msg += `Celkem: ${finalTotal} CHF.\n`;
+      
       if(name) msg += `\nJméno: ${name}`;
       if(phone) msg += `\nTel: ${phone}`;
       msg += `\n\nProsím potvrď, že to platí. Děkuji.`;
@@ -603,9 +774,24 @@
         if(e.key === 'ArrowLeft') prevImage();
     }
 
+    // NOVÁ FUNKCE: Check availability
+    async function checkAllTripsAvailability() {
+        for(const t of trips) {
+            const seats = await fetchBookedSeats(t.id);
+            if(seats.size >= 3) {
+                const opt = document.querySelector(`option[value="${t.id}"]`);
+                if(opt) {
+                    opt.disabled = true;
+                    opt.textContent += " (PLNO)";
+                }
+            }
+        }
+    }
+
     // --- INIT ---
     document.addEventListener("DOMContentLoaded", async () => {
       fetchContactSettings();
+      renderAddons(); // Vyrenderovat checkboxy
 
       // Setup Lightbox
       const thumbs = document.querySelectorAll('.gallery-thumb');
@@ -632,6 +818,8 @@
           opt.value = t.id; opt.textContent = formatTripLabel(t);
           sel.appendChild(opt);
         });
+        
+        await checkAllTripsAvailability();
         setMessage("");
       } catch(e) { console.error(e); setMessage("Chyba připojení.", "error"); }
 
@@ -641,14 +829,19 @@
         currentTripObj = trips.find(t => t.id === currentTripId);
         currentStop = ""; selectedSeats.clear(); bookedSeats.clear();
         document.querySelectorAll('input[name="stop"]').forEach(r => r.checked = false);
+        
         updateStepsVisibility();
+        updateSeatVisuals();
+        updateStatusAndPrice();
+
         if(currentTripId) {
           setMessage("Ověřuji obsazenost...");
           bookedSeats = await fetchBookedSeats(currentTripId);
           setMessage("");
+          updateStepsVisibility(); // Re-check FULL status
+          updateSeatVisuals();
+          updateStatusAndPrice();
         }
-        updateSeatVisuals();
-        updateStatusAndPrice();
       });
 
       document.querySelectorAll('input[name="stop"]').forEach(radio => {
@@ -684,23 +877,37 @@
         if(!currentTripId || !currentStop || selectedSeats.size === 0) return;
         const name = document.getElementById("custName").value.trim();
         const phone = document.getElementById("custPhone").value.trim();
-        const basePrice = STOP_PRICES[currentStop];
+        const email = document.getElementById("custEmail").value.trim();
         
-        // CORRECTION HERE: Convert Set to Array
-        const seatsArr = [...selectedSeats]; 
+        const basePrice = STOP_PRICES[currentStop];
+        const seatsArr = [...selectedSeats];
+        
+        // Calc addons
+        let addonsTotal = 0;
+        let addonsArr = [];
+        ADDONS.forEach(a => {
+            if(selectedAddons.has(a.id)) {
+                addonsTotal += (a.price || 0);
+                addonsArr.push(a.id);
+            }
+        });
 
         setMessage("Ukládám...");
         try {
           await createBookings({
-            tripId: currentTripId, stopCity: currentStop, price: basePrice, seats: seatsArr, name, phone
+            tripId: currentTripId, stopCity: currentStop, price: basePrice, 
+            seats: seatsArr, addons: addonsArr, name, phone, email
           });
+          
           bookedSeats = await fetchBookedSeats(currentTripId);
           
-          // Pass the ARRAY here, not the Set
           const summary = buildSummaryText({
-            trip: currentTripObj, stop: currentStop, seats: seatsArr, basePrice, name, phone
+            trip: currentTripObj, stop: currentStop, seats: seatsArr, basePrice, name, phone, addonsTotal
           });
           
+          // ODESLAT EMAIL AUTOMATICKY
+          sendEmailNotification(summary, email);
+
           selectedSeats.clear();
           updateSeatVisuals();
           updateStatusAndPrice();

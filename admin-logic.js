@@ -15,10 +15,12 @@ const firebaseConfig = {
 
 const SESSION_ADMIN_PIN = "arteon_admin_pin";
 
-// ROUTE MAPPING
+// ROUTE MAPPING - Rozšířeno o kratší trasy
 const ROUTE_MAPPING = {
     "ZO": { route_id: 1, from: "Zurich", to: "Ostrava" },
-    "OZ": { route_id: 2, from: "Ostrava", to: "Zurich" }
+    "OZ": { route_id: 2, from: "Ostrava", to: "Zurich" },
+    "ZP": { route_id: 3, from: "Zurich", to: "Praha" },
+    "PZ": { route_id: 4, from: "Praha", to: "Zurich" }
 };
 
 // --- Firebase Initialization ---

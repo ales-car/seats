@@ -70,55 +70,75 @@
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     }
 
-    /* INFO BOX & SOCIALS */
+    /* === NOVÉ STYLY PRO BIO A AUTO === */
     .info-box { margin-bottom: 25px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
     
-    .driver-mini { 
-        display: flex; align-items: center; gap: 12px; margin-bottom: 15px; 
-        position: relative; /* Pro pozicování */
-    }
-    .driver-mini img { 
-        width: 50px; height: 50px; border-radius: 50%; object-fit: cover; 
-        border: 2px solid rgba(255,255,255,0.1); 
-    }
+    .driver-mini { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; position: relative; }
+    .driver-mini img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
     .driver-text { display: flex; flex-direction: column; }
+    .driver-name { font-size: 16px; font-weight: 700; color: #fff; }
+    .driver-tag { font-size: 12px; color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* SOCIAL ICONS (TOP RIGHT) */
-    .driver-socials {
-        margin-left: auto; /* Odstrčí se doprava */
-        display: flex; gap: 10px;
-    }
+    /* Social Icons */
+    .driver-socials { margin-left: auto; display: flex; gap: 8px; }
     .social-mini-link {
-        color: var(--text-muted);
-        transition: 0.2s;
-        display: flex; align-items: center; justify-content: center;
-        background: rgba(255,255,255,0.05);
-        width: 32px; height: 32px; border-radius: 50%;
-        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text-muted); transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,0.05); width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1);
     }
-    .social-mini-link:hover {
-        color: #fff; background: var(--primary); border-color: var(--primary); transform: translateY(-2px);
-    }
+    .social-mini-link:hover { color: #fff; background: var(--primary); border-color: var(--primary); transform: translateY(-2px); }
     .social-mini-icon { width: 18px; height: 18px; fill: currentColor; }
 
-    /* BIO & CAR INFO */
-    .bio-text p { margin-bottom: 10px; text-align: justify; font-size: 13px; opacity: 0.9; }
+    /* Bio Typography */
+    .bio-highlight { display: block; color: #fff; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .bio-text p { margin-bottom: 12px; font-size: 13px; opacity: 0.9; }
     .bio-text p:last-child { margin-bottom: 0; }
-    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); margin: 20px 0; }
-    .car-features { display: flex; gap: 20px; margin-top: 15px; justify-content: center; }
-    .feature-item { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
-    .feature-icon { width: 24px; height: 24px; fill: var(--primary); opacity: 0.9; }
 
-    /* STEPS VISUALS */
+    /* Fun Fact Pill */
+    .fun-fact-box {
+        margin-top: 15px; padding: 12px 16px; border-radius: 12px;
+        background: rgba(190, 18, 60, 0.1); border: 1px solid rgba(190, 18, 60, 0.25);
+        color: #fecdd3; font-size: 12px; display: flex; gap: 10px; align-items: flex-start;
+    }
+    .fun-fact-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* CAR CARD - SAMOSTATNÁ KARTA */
+    .car-card {
+        margin-top: 30px;
+        background: rgba(30, 41, 59, 0.35); /* Tmavší podklad */
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 18px;
+    }
+    .car-header {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 15px; font-weight: 700; color: #fff;
+        text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;
+    }
+    .car-model { font-size: 13px; color: var(--primary); font-weight: 600; margin-bottom: 12px; display: block; }
+    
+    .car-specs-list { list-style: none; padding: 0; margin: 0 0 15px 0; }
+    .car-specs-list li { margin-bottom: 6px; font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+    .check-icon { color: var(--primary); font-weight: bold; font-size: 14px; }
+
+    .car-features-mini { display: flex; gap: 15px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px; }
+    .feature-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); flex: 1; }
+    .feature-icon { width: 20px; height: 20px; fill: #e2e8f0; opacity: 0.8; }
+
+    /* GALERIE */
+    .car-gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 30px; margin-top: 10px; }
+    .gallery-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; cursor: pointer; transition: transform 0.2s, filter 0.2s; border: 2px solid #ffffff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    .gallery-thumb:hover { transform: scale(1.05); filter: brightness(1.2); z-index: 1; border-color: var(--primary); }
+
+    /* WIZARD & REST */
     .step-container { margin-bottom: 25px; animation: fadeIn 0.4s ease; }
     .step-container.hidden { display: none; }
     .step-header { font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
     .step-num { background: rgba(255,255,255,0.9); color: #0f172a; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
 
-    /* FORMS & ADDONS */
     select, input { width: 100%; border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.2); padding: 12px; background: rgba(15, 23, 42, 0.6); color: #fff; font-size: 14px; outline: none; transition: border-color 0.2s; }
     select:focus, input:focus { border-color: var(--primary); }
     option:disabled { color: #9ca3af; background-color: #1e293b; }
+    
     .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
     .radio-item, .addon-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
     .radio-item:hover, .addon-item:hover { background: rgba(255,255,255,0.06); }
@@ -128,22 +148,17 @@
     .addon-price { font-size: 12px; font-weight: 700; color: #fbbf24; }
     .addon-category { font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin: 10px 0 4px 0; letter-spacing: 0.05em; font-weight: 700; }
 
-    /* CAR GALLERY */
-    .car-gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
-    .gallery-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; cursor: pointer; transition: transform 0.2s, filter 0.2s; border: 2px solid #ffffff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-    .gallery-thumb:hover { transform: scale(1.05); filter: brightness(1.2); z-index: 1; border-color: var(--primary); }
-
     /* LIGHTBOX */
-    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); animation: fadeIn 0.3s ease; }
-    .lightbox-content-wrapper { position: relative; width: 60%; max-width: 1000px; display: flex; justify-content: center; align-items: center; }
-    .lightbox img { width: 100%; height: auto; max-height: 85vh; object-fit: contain; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 0 50px rgba(0,0,0,0.9); }
-    .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 10001; }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); animation: fadeIn 0.3s ease; }
+    .lightbox-content-wrapper { position: relative; width: 70%; max-width: 1000px; display: flex; justify-content: center; align-items: center; }
+    .lightbox img { width: 100%; height: auto; max-height: 85vh; object-fit: contain; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+    .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.1); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 10001; }
     .nav-btn:hover { background: var(--primary); }
-    .nav-prev { left: -70px; } .nav-next { right: -70px; } 
-    .lightbox-close-hint { position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.7); font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; background: rgba(0,0,0,0.5); padding: 8px 12px; border-radius: 8px; }
+    .nav-prev { left: -80px; } .nav-next { right: -80px; } 
+    .lightbox-close-hint { position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.7); font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 8px; }
     .lightbox-close-hint:hover { color: #fff; background: var(--primary); }
 
-    /* CAR VISUAL & STATS */
+    /* RIGHT COLUMN */
     .car-visual { position: relative; margin: 10px auto; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); background: radial-gradient(circle, #1e293b 0%, #020617 60%); max-width: 340px; }
     .car-visual img { width: 100%; display: block; opacity: 0.9; }
     .stats-float { position: absolute; top: 15px; left: 15px; background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(8px); padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
@@ -151,7 +166,6 @@
     .stat-num { font-size: 16px; font-weight: 700; color: #fff; }
     .stat-num.free { color: #34d399; } 
 
-    /* SEATS */
     .seat-grid { position: absolute; top: 43%; left: 30%; right: 35%; bottom: 25%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
     .seat { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--seat-bg); border-radius: 8px; border: 1px solid var(--seat-border); color: rgba(255,255,255,0.8); cursor: pointer; transition: 0.2s all; padding: 4px; }
     .seat.disabled { opacity: 0.3; cursor: not-allowed; }
@@ -163,14 +177,12 @@
     .seat-label { font-size: 10px; font-weight: 700; margin-top: 2px; }
     .seat-icon { width: 24px; opacity: 0.8; }
 
-    /* LEGEND */
     .legend { display: flex; gap: 15px; justify-content: center; margin-top: 15px; font-size: 12px; color: var(--text-muted); }
     .dot { width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; display: inline-block; }
     .dot.free { background: var(--free-bg); border: 1px solid var(--free-border); }
     .dot.booked { background: var(--booked-bg); border: 1px solid var(--booked-border); }
     .dot.selected { background: var(--selected-bg); border: 1px solid var(--selected-border); }
 
-    /* CONFIRM & SUCCESS */
     .btn-block { margin-top: 20px; }
     .btn-main { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--primary); color: #fff; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(190, 18, 60, 0.3); }
     .btn-main:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
@@ -213,8 +225,8 @@
           <div class="driver-mini">
             <img src="driver-photo.jpg" alt="Aleš">
             <div class="driver-text">
-              <strong>Aleš Krajina</strong><br>
-              <span style="color:var(--primary)">Pohodová jízda</span>
+              <span class="driver-name">Aleš Krajina</span>
+              <span class="driver-tag">POHODOVÁ JÍZDA</span>
             </div>
             
             <div class="driver-socials">
@@ -228,22 +240,30 @@
           </div>
           
           <div class="bio-text">
-              <p>Jezdím pravidelně mezi Švýcarskem a Českem a nabízím klidnou a pohodovou spolujízdu na základě domluvy. Nejde o taxislužbu, ale o komfortní sdílení cesty.</p>
-              <p>Jezdím plynule a bezpečně, auto mám vždy čisté a dobře vybavené. Každý si může zvolit, jak cestu pojme – někdo chce klid, někdo hudbu, někdo si rád popovídá. Všechno je o domluvě a pohodě.</p>
-              <p>Mimo řízení mám blízko k pohybu a přírodě – tanec mě drží v energii, hory mi pomáhají vypnout hlavu. Zajímá mě i osobní rozvoj a psychologie, takže respekt a klid beru jako samozřejmost.</p>
-              <p><i>Fun fact: díky tanci jsem se jednou dostal k jednomu stolu s jedním z nejbohatších lidí v Česku – dlouhá historka na cestu 😄</i></p>
-              <p>Cílem je, aby cesta nebyla jen nutný přesun, ale příjemná část dne. Když tě zajímá trasa, vyzvednutí nebo detaily k cestě, klidně napiš a domluvíme se.</p>
+              <span class="bio-highlight">Nejde o taxislužbu, ale o klidné sdílení cesty na domluvě.</span>
+              <p>Pohodová spolujízda mezi Švýcarskem a Českem. Jezdím plynule a bezpečně. Auto je čisté, tiché a dobře vybavené. Hudba, ticho nebo povídání – podle dohody.</p>
+              <span class="bio-highlight">Cílem je, aby cesta nebyla jen přesun, ale příjemná část dne.</span>
           </div>
 
-          <div class="section-divider"></div>
+          <div class="fun-fact-box">
+              <span class="fun-fact-icon">💡</span>
+              <span><strong>Fun fact:</strong> Díky tanci jsem se jednou dostal ke stolu jednoho z nejbohatších lidí v Česku 😄</span>
+          </div>
 
-          <div class="car-info">
-              <strong>O autě:</strong>
-              <div style="margin-top:5px; opacity:0.9;">
-                  Volkswagen Arteon Shooting Brake, 147 kW diesel – prostorné a tiché prémiové kombi s pohodlnými sedadly, dobrým odhlučněním a dostatkem místa na nohy i zavazadla. Ideální na dlouhé a klidné cesty.
+          <div class="car-card">
+              <div class="car-header">
+                  🚗 Auto, kterým pojedeš
               </div>
+              <span class="car-model">Volkswagen Arteon Shooting Brake</span>
               
-              <div class="car-features">
+              <ul class="car-specs-list">
+                  <li><span class="check-icon">✓</span> 147 kW diesel · automat</li>
+                  <li><span class="check-icon">✓</span> Tiché prémiové kombi</li>
+                  <li><span class="check-icon">✓</span> Hodně místa na nohy i zavazadla</li>
+                  <li><span class="check-icon">✓</span> Pohodlné i na dlouhé trasy</li>
+              </ul>
+
+              <div class="car-features-mini">
                   <div class="feature-item">
                       <svg class="feature-icon" viewBox="0 0 24 24"><path d="M20 12V7H4V12H20M20 7C22.76 7 25 9.24 25 12H4C4 9.24 6.24 7 9 7M2 12V17H22V12H2M2 17C2 18.11 2.9 19 4 19V21H20V19C21.11 19 22 18.11 22 17H2Z"/></svg>
                       Komfort
@@ -257,6 +277,9 @@
                       Prostor
                   </div>
               </div>
+              <div style="font-size:10px; color:#64748b; margin-top:10px; text-align:right;">
+                  (viz rozložení vpravo →)
+              </div>
           </div>
         </div>
 
@@ -265,7 +288,7 @@
           <img src="02.png" class="gallery-thumb" alt="Arteon Rear">
           <img src="03.png" class="gallery-thumb" alt="Interior">
           <img src="04.png" class="gallery-thumb" alt="Trunk">
-          <img src="05.jpg" class="gallery-thumb" alt="Cockpit">
+          <img src="05.png" class="gallery-thumb" alt="Cockpit">
           <img src="06.png" class="gallery-thumb" alt="Side">
         </div>
 
@@ -421,7 +444,7 @@
         messenger: "https://www.facebook.com/messages/t/ales.krajina",
         email: "ales.krajina@outlook.com",
         instagram: "https://www.instagram.com/ak.in.motion_/",
-        facebook_profile: "" 
+        facebook_profile: ""
     };
 
     const SEAT_IDS = ["VIP", "MB", "DJ"]; 
@@ -483,7 +506,6 @@
                 if(config.instagram) { instaBtn.href = config.instagram; instaBtn.style.display = "flex"; }
                 if(config.facebook_profile) { fbBtn.href = config.facebook_profile; fbBtn.style.display = "flex"; }
             } else {
-                // If doc doesn't exist yet, show default insta if we have it hardcoded
                 const instaBtn = document.getElementById("lnkInsta");
                 if(config.instagram) { instaBtn.href = config.instagram; instaBtn.style.display = "flex"; }
             }
@@ -522,7 +544,7 @@
     // EMAIL AUTOMATION FUNCTION
     function sendEmailNotification(summary, customerEmail, customerName, tripInfo, addonsText, totalPrice) {
         
-        // 1. EMAIL PRO MAJITELE (ALEŠE) - Použije plný text zprávy
+        // 1. EMAIL PRO MAJITELE (ALEŠE)
         const templateParamsOwner = {
             to_email: config.email,
             subject: `Nová rezervace: ${currentTripObj.date} (${customerName || 'Neznámý'})`,
@@ -532,7 +554,7 @@
             .then(() => console.log("Email owner sent"))
             .catch(e => console.error("Email owner failed", e));
 
-        // 2. EMAIL PRO ZÁKAZNÍKA (POKUD VYPLNIL EMAIL) - Použije hezčí text
+        // 2. EMAIL PRO ZÁKAZNÍKA (POKUD VYPLNIL EMAIL)
         if (customerEmail && customerEmail.includes("@")) {
             
             const customerMsg = `Ahoj ${customerName || "cestovateli"},\n\n` +

@@ -435,8 +435,9 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, addDoc, query, where, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+    // 1) FIREBASE CONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyAi6MYAsAnqJg_5XwQC7b6TAI1ywrrADsM",
       authDomain: "car-seats-booking.firebaseapp.com",
@@ -450,9 +451,12 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const OWNER_WHATSAPP = "+41767775898";
-    const OWNER_MESSENGER = "https://www.facebook.com/messages/t/ales.krajina"; 
-    const OWNER_EMAIL = "ales.krajina@outlook.com"; 
+    // 2) CONTACT INFO (Načítají se z DB, toto jsou záložní hodnoty)
+    let config = {
+        whatsapp: "+41767775898",
+        messenger: "https://www.facebook.com/messages/t/ales.krajina",
+        email: "ales.krajina@outlook.com"
+    };
 
     const SEAT_IDS = ["VIP", "MB", "DJ"]; 
     const STOP_PRICES = { praha: 50, brno: 70, ostrava: 80 };
@@ -474,7 +478,61 @@
 
     function formatTripLabel(t) { return `${t.date} – ${t.from} → ${t.to}`; }
 
-    // WIZARD LOGIC
+    // --- LOGIC ---
+
+    // 3) NOVÁ FUNKCE: NAČTENÍ KONTAKTŮ Z DB
+    async function fetchContactSettings() {
+        try {
+            const docRef = doc(db, "settings", "public_contact");
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if(data.whatsapp) config.whatsapp = data.whatsapp;
+                if(data.messenger) config.messenger = data.messenger;
+                if(data.email) config.email = data.email;
+                console.log("Kontakty načteny z DB:", config);
+            }
+        } catch (e) {
+            console.warn("Nepodařilo se načíst kontakty z DB, používám výchozí.", e);
+        }
+    }
+
+    async function fetchTrips() {
+      const q = await getDocs(collection(db, "trips"));
+      const list = [];
+      q.forEach(d => {
+        const t = d.data();
+        list.push({ id: d.id, date: t.trip_date, from: t.from_city||"?", to: t.to_city||"?" });
+      });
+      list.sort((a,b) => new Date(a.date) - new Date(b.date));
+      return list;
+    }
+
+    async function fetchBookedSeats(tripId) {
+      const q = query(collection(db, "bookings"), where("trip_id", "==", tripId));
+      const snap = await getDocs(q);
+      const s = new Set();
+      snap.forEach(d => s.add(d.data().seat_code));
+      return s;
+    }
+
+    async function createBookings({ tripId, stopCity, price, seats, name, phone }) {
+      const promises = seats.map(seat => {
+        return addDoc(collection(db, "bookings"), {
+          trip_id: tripId,
+          seat_code: seat,
+          stop_city: stopCity,
+          price_chf: price,
+          customer_name: name || null,
+          customer_phone: phone || null,
+          created_at: new Date().toISOString()
+        });
+      });
+      await Promise.all(promises);
+    }
+
+    // WIZARD UI LOGIC
     function updateStepsVisibility() {
       const step2 = document.getElementById("step2");
       const step3 = document.getElementById("step3");
@@ -536,40 +594,6 @@
       }
     }
 
-    async function fetchTrips() {
-      const q = await getDocs(collection(db, "trips"));
-      const list = [];
-      q.forEach(d => {
-        const t = d.data();
-        list.push({ id: d.id, date: t.trip_date, from: t.from_city||"?", to: t.to_city||"?" });
-      });
-      list.sort((a,b) => new Date(a.date) - new Date(b.date));
-      return list;
-    }
-
-    async function fetchBookedSeats(tripId) {
-      const q = query(collection(db, "bookings"), where("trip_id", "==", tripId));
-      const snap = await getDocs(q);
-      const s = new Set();
-      snap.forEach(d => s.add(d.data().seat_code));
-      return s;
-    }
-
-    async function createBookings({ tripId, stopCity, price, seats, name, phone }) {
-      const promises = seats.map(seat => {
-        return addDoc(collection(db, "bookings"), {
-          trip_id: tripId,
-          seat_code: seat,
-          stop_city: stopCity,
-          price_chf: price,
-          customer_name: name || null,
-          customer_phone: phone || null,
-          created_at: new Date().toISOString()
-        });
-      });
-      await Promise.all(promises);
-    }
-
     function buildSummaryText({ trip, stop, seats, basePrice, name, phone }) {
       const total = seats.length * basePrice;
       const stopLocative = STOP_NAMES_LOCATIVE[stop] || stop;
@@ -588,17 +612,22 @@
       const box = document.getElementById("successBox");
       const btn = document.getElementById("confirmBtn");
       btn.style.display = "none";
+      
       const waBtn = document.getElementById("waBtn");
       const emBtn = document.getElementById("emBtn");
-      const waPhone = OWNER_WHATSAPP.replace(/\D/g, ""); 
+      
+      // ZDE SE POUŽÍVAJÍ DATA Z DB (config)
+      const waPhone = config.whatsapp.replace(/\D/g, ""); 
       waBtn.href = `https://wa.me/${waPhone}?text=${encodeURIComponent(summaryText)}`;
-      emBtn.href = `mailto:${OWNER_EMAIL}?subject=Rezervace Arteon&body=${encodeURIComponent(summaryText)}`;
+      
+      emBtn.href = `mailto:${config.email}?subject=Rezervace Arteon&body=${encodeURIComponent(summaryText)}`;
+      
       box.style.display = "block";
       box.scrollIntoView({ behavior: 'smooth' });
     }
 
     // === LIGHTBOX LOGIC ===
-    let galleryImages = []; // Array of sources
+    let galleryImages = [];
     let currentImgIndex = 0;
 
     function openLightbox(index) {
@@ -634,30 +663,19 @@
     // --- INIT ---
     document.addEventListener("DOMContentLoaded", async () => {
       
+      // 1. Spustíme načítání kontaktů na pozadí
+      fetchContactSettings();
+
       // Setup Lightbox
       const thumbs = document.querySelectorAll('.gallery-thumb');
       galleryImages = Array.from(thumbs).map(img => img.src);
-      
-      thumbs.forEach((thumb, index) => {
-          thumb.addEventListener('click', () => openLightbox(index));
-      });
-
+      thumbs.forEach((thumb, index) => thumb.addEventListener('click', () => openLightbox(index)));
       document.getElementById('closeLightboxBtn').addEventListener('click', closeLightbox);
-      
-      // Close on background click
       document.getElementById('lightbox').addEventListener('click', (e) => {
-          if(e.target.id === 'lightbox' || e.target.classList.contains('lightbox-content-wrapper')) {
-              closeLightbox();
-          }
+          if(e.target.id === 'lightbox' || e.target.classList.contains('lightbox-content-wrapper')) closeLightbox();
       });
-
-      document.getElementById('nextBtn').addEventListener('click', (e) => {
-          e.stopPropagation(); nextImage();
-      });
-      document.getElementById('prevBtn').addEventListener('click', (e) => {
-          e.stopPropagation(); prevImage();
-      });
-
+      document.getElementById('nextBtn').addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
+      document.getElementById('prevBtn').addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
 
       // Load Trips
       setMessage("Načítám jízdy...");
@@ -711,13 +729,14 @@
         });
       });
 
+      // MESSENGER CLICK (použije config z DB)
       document.getElementById("msBtn").addEventListener("click", (e) => {
         e.preventDefault(); 
         navigator.clipboard.writeText(currentSummaryText).then(() => {
             alert("Text zprávy zkopírován! V Messengeru ho vložte (Ctrl+V).");
-            window.open(OWNER_MESSENGER, '_blank');
+            window.open(config.messenger, '_blank');
         }).catch(() => {
-            window.open(OWNER_MESSENGER, '_blank');
+            window.open(config.messenger, '_blank');
         });
       });
 
